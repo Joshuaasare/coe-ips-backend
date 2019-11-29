@@ -24,10 +24,10 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 const db = {
-  host: dbParams.HOST,
-  user: dbParams.USER,
-  password: dbParams.PASSWORD,
-  database: dbParams.DATABASE
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 };
 app.use(connection(mysql, db, "request"));
 
