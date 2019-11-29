@@ -23,20 +23,13 @@ const app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
-const db =
-  process.env.NODE_ENV === "production"
-    ? {
-        socketPath: dbParams.HOST,
-        user: dbParams.USER,
-        password: dbParams.PASSWORD,
-        database: dbParams.DATABASE
-      }
-    : {
-        host: dbParams.HOST,
-        user: dbParams.USER,
-        password: dbParams.PASSWORD,
-        database: dbParams.DATABASE
-      };
+const db = {
+  socktPath: dbParams.HOST,
+  user: dbParams.USER,
+  password: dbParams.PASSWORD,
+  database: dbParams.DATABASE
+};
+
 app.use(connection(mysql, db, "request"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
