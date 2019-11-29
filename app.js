@@ -48,7 +48,7 @@ app.use("/", AuthRoutes);
 // app.use('/', TransactionRoutes);
 // app.use('/', AdminRoutes);
 
-// catch all 404 and forward to error handler
+// catch all different 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
 });
