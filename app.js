@@ -24,12 +24,11 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 const db = {
-  socktPath: dbParams.SOCKET_PATH,
+  host: dbParams.HOST,
   user: dbParams.USER,
   password: dbParams.PASSWORD,
   database: dbParams.DATABASE
 };
-
 app.use(connection(mysql, db, "request"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
