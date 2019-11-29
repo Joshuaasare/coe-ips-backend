@@ -24,7 +24,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 const db = {
-  socktPath: dbParams.HOST,
+  socktPath: dbParams.SOCKET_PATH,
   user: dbParams.USER,
   password: dbParams.PASSWORD,
   database: dbParams.DATABASE
