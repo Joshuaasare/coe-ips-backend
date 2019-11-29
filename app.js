@@ -17,9 +17,11 @@ const AuthRoutes = require("./routes/auth-routes");
 // const TransactionRoutes = require('./routes/transaction-routes');
 // const AdminRoutes = require('./routes/admin-routes');
 
+const cors = require("cors");
 const app = express();
 // view engine setup
 
+app.use(cors());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
