@@ -1,22 +1,22 @@
-const express = require('express');
+const express = require("express");
 
 const router = express.Router();
 
 /* GET home page. */
-router.get('/', (req, res) => {
-  res.render('index', { title: 'Express' });
+router.get("/", (req, res) => {
+  res.render("index", { title: "Express" });
 });
 
-router.get('/view_users', (req, resp, next) => {
+router.get("/view_users", (req, resp, next) => {
   try {
     req.getConnection((err, conn) => {
       if (err) {
-        console.error('SQL Connection error: ', err);
+        console.error("SQL Connection error: ", err);
         return err;
       }
-      conn.query('select * from users', (err, rows) => {
+      conn.query("select * from user", (err, rows) => {
         if (err) {
-          console.error('SQL error: ', err);
+          console.error("SQL error: ", err);
           return next(err);
         }
         return resp.json(rows);
