@@ -18,8 +18,10 @@ const AuthRoutes = require("./routes/auth-routes");
 // const AdminRoutes = require('./routes/admin-routes');
 
 const app = express();
-
+const cors = require("cors");
 // view engine setup
+
+app.use(cors());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
