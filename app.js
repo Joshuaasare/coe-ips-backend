@@ -17,8 +17,8 @@ const AuthRoutes = require("./routes/auth-routes");
 // const TransactionRoutes = require('./routes/transaction-routes');
 // const AdminRoutes = require('./routes/admin-routes');
 
-const app = express();
 const cors = require("cors");
+const app = express();
 // view engine setup
 
 app.use(cors());
@@ -48,7 +48,7 @@ app.use("/", AuthRoutes);
 // app.use('/', TransactionRoutes);
 // app.use('/', AdminRoutes);
 
-// catch all different 404 and forward to error handler
+// catch all 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
 });
