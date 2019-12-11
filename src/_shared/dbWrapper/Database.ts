@@ -13,4 +13,13 @@ export class Database {
   endDbConnection(): void {
     this.dbConnectionInstance.end();
   }
+
+  get(query: string): any {
+    return new Promise((resolve, reject) => {
+      this.dbConnectionInstance.query(query, (err: Error, rows) => {
+        if (err) reject(err);
+        resolve(rows);
+      });
+    });
+  }
 }

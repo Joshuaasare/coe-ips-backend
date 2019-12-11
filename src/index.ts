@@ -2,6 +2,8 @@ import express, { Express } from "express";
 import "reflect-metadata";
 import bodyParser from "body-parser";
 
+import "dotenv";
+
 import "./controllers/RootController";
 
 import { AppRouter } from "./_shared/AppRouter";
