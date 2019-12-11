@@ -2,11 +2,13 @@ import express, { Express } from "express";
 import "reflect-metadata";
 import bodyParser from "body-parser";
 
-import "dotenv";
+import dotenv from "dotenv";
 
 import "./controllers/RootController";
 
 import { AppRouter } from "./_shared/AppRouter";
+
+dotenv.config();
 const app: Express = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
