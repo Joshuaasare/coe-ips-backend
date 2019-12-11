@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "target": "es6",
+    // "baseUrl": ".",
+    "target": "ES5",
     "module": "commonjs",
-    "lib": ["esnext"],
+    // "lib": ["esnext"],
     "esModuleInterop": true,
-    "sourceMap": true,
-    "moduleResolution": "node",
+    // "sourceMap": true,
+    // "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "outDir": "./dist",
-    "resolveJsonModule": true,
-    "strictNullChecks": false,
-    "skipLibCheck": true,
+    // "resolveJsonModule": true,
+    // "strictNullChecks": false,
+    // "skipLibCheck": true,
     "rootDir": "./src"
   }
 }
