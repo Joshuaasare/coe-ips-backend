@@ -1,1 +1,2 @@
-export * from "./RootController";
+export * from "./MiscController";
+export * from "./StudentController";

@@ -1,18 +1,21 @@
 export const globals = {
   databaseParams:
-    process.env.NODE_ENV === "development"
+    process.env.NODE_ENV === "production"
       ? {
-          host: "34.69.157.249",
-          user: "root",
-          password: "Gari and ajalo",
-          database: "coe_ips"
+          host: process.env.DB_HOST,
+          user: process.env.DB_USER,
+          password: process.env.DB_PASSWORD,
+          database: process.env.DB_NAME
         }
       : {
           host: "127.0.0.1",
           user: "root",
           password: "",
           database: "coe_ips"
-        }
+        },
+  school: {
+    ACAD_YEAR: 2019
+  }
 };
 
 export enum Methods {
