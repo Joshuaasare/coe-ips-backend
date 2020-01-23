@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { get, controller } from "../_shared/decorators";
+import { get, use, controller } from "../_shared/decorators";
 import MiscService from "../features/Misc";
-import { use } from "../_shared/decorators/use";
 import { useAuthentication, useAuthorization } from "../_shared/middlewares";
 
 @controller("")
@@ -16,7 +15,7 @@ class MiscController {
     return MiscService.getAllUsers(req, res);
   }
 
-  @get("/authenticate")
+  @get("/testAuth")
   @use(useAuthentication())
   testAuthenticated(req: Request, res: Response) {
     return MiscService.testAuthenticated(req, res);

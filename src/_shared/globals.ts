@@ -15,6 +15,21 @@ export const globals = {
         },
   school: {
     ACAD_YEAR: 2019
+  },
+
+  JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
+  SALT_ROUNDS: 10
+};
+
+export const constants = {
+  errors: {
+    JSON_WEB_TOKEN_ERROR: "JsonWebTokenError"
+  },
+  user_type_id: {
+    STUDENT: 1,
+    COMPANY: 2,
+    COORDINATOR: 3,
+    ADMIN: 4
   }
 };
 

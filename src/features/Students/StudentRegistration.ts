@@ -1,16 +1,17 @@
 import { Request, Response } from "express";
 import { Database, PostRows } from "../../_shared/dbWrapper/Database";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { checkIfUserExists } from "../../_shared/services";
+import { RequestWithDbConnection } from "../..";
 
 const saltRounds = 10;
 
 export const registerStudent = async (
-  req: Request,
+  req: RequestWithDbConnection,
   res: Response
 ): Promise<any> => {
   try {
-    const dbInstance: Database = new Database();
+    const dbInstance: Database = req.dbInstance;
     const {
       surname,
       password,
@@ -25,7 +26,7 @@ export const registerStudent = async (
       otherNames,
       programme,
       yearOfStudy
-    } = req.body;
+    } = req.body.data;
 
     const hash = await bcrypt.hash(password, saltRounds);
     const checkEmailAddressQuery = `select * from user where email = ?`;
@@ -99,16 +100,17 @@ export const registerStudent = async (
       studentData
     );
 
-    dbInstance.endDbConnection();
     res.status(200).send({ data: response });
     return;
   } catch (error) {
     console.error(`Internal error`);
     console.log(error.code);
     if (error.code === "ER_DUP_ENTRY") {
-      return res.status(409).send({ error: "User already exist" });
+      return res.status(409).send({ error: { message: "User already exist" } });
     }
 
-    return res.status(422).send({ error: "Could not process request" });
+    return res
+      .status(422)
+      .send({ error: { message: "Could not process request" } });
   }
 };

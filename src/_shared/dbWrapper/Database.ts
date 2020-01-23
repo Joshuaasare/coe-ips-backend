@@ -1,7 +1,7 @@
 import msql from "mysql2";
 import { globals } from "../globals";
 
-export interface PostRows {
+export interface PostRows extends Error {
   insertId?: number;
 }
 
@@ -15,6 +15,7 @@ export class Database {
   }
 
   endDbConnection(): void {
+    console.log("ending connection");
     this.dbConnectionInstance.end();
   }
 
@@ -43,6 +44,7 @@ export class Database {
     preparedQuery: string,
     params: Array<Array<string | number | boolean>>
   ): any {
+    let lastInsertedRow = null;
     return new Promise((resolve, reject) => {
       const runQuery = (statement: any, i: number) => {
         //console.log('i is ', i, 'params are ', params[i])
@@ -55,13 +57,14 @@ export class Database {
            * so it is only in the callback that we can know if each query was successful
            * TODO: look for a faster way, maybe??
            */
-          statement.execute(params[i], (err: Error) => {
+          statement.execute(params[i], (err: Error, results, fields) => {
+            lastInsertedRow = results;
             if (err) {
               console.log("rejects here", err);
               reject(err);
             } else runQuery(statement, ++i);
           });
-        } else resolve();
+        } else resolve(lastInsertedRow);
       };
 
       this.dbConnectionInstance.prepare(
@@ -91,7 +94,7 @@ export class Database {
     });
   }
 
-  runPostQuery(query: string, values: Object): Promise<PostRows & Error> {
+  runPostQuery(query: string, values: Object): Promise<PostRows> {
     return new Promise((resolve, reject) => {
       this.dbConnectionInstance.query(
         query,
