@@ -10,11 +10,6 @@ class MiscController {
     res.send("hello world");
   }
 
-  @get("/users")
-  getUsers(req: Request, res: Response) {
-    return MiscService.getAllUsers(req, res);
-  }
-
   @get("/testAuth")
   @use(useAuthentication())
   testAuthenticated(req: Request, res: Response) {

@@ -11,7 +11,20 @@ export class Database {
   constructor() {
     if (!this.dbConnectionInstance) {
       this.dbConnectionInstance = msql.createConnection(globals.databaseParams);
+      this.handleDisconnect();
     }
+  }
+
+  handleDisconnect() {
+    this.dbConnectionInstance.connect(function(err) {
+      if (err) {
+        console.log("error when connecting to db:", err);
+      }
+    });
+
+    this.dbConnectionInstance.on("error", function(err) {
+      console.log("db error", err);
+    });
   }
 
   endDbConnection(): void {

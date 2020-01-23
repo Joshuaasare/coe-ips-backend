@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { controller, post, get, use, put } from "../_shared/decorators";
 import { IRequestWithUser, useAuthentication } from "../_shared/middlewares";
 import StudentService from "../features/Students/service";

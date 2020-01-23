@@ -55,7 +55,7 @@ export const registerStudent = async (
       dbInstance
     );
 
-    if (!user || user.length === 0) {
+    if (!(user.length === 0)) {
       res.status(409).send({ error: "User already exist" });
       return;
     }
