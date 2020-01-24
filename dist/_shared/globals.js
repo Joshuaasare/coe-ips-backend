@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.globals = {
     databaseParams: process.env.NODE_ENV === "production"
         ? {
-            host: "34.69.157.249",
-            user: "root",
-            password: "Gari and ajalo",
-            database: "coe_ips"
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+            socketPath: "/cloudsq/" + process.env.CONNECTION_NAME
         }
         : {
             host: "127.0.0.1",
