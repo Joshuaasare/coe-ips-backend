@@ -65,7 +65,6 @@ exports.getCurrentStudent = function (req, res) { return __awaiter(void 0, void 
                 //   mainCompanyLocationQuery,
                 //   [student[0].company_location_id]
                 // );
-                console.log("student in new", student);
                 if (student.length === 0) {
                     return [2 /*return*/, res.status(404).send({
                             error: {

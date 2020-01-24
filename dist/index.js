@@ -30,7 +30,9 @@ app.use(function (req, res, next) {
     req.dbInstance = dbInstance;
     next();
 });
-require("./controllers");
+require("./controllers/AuthController");
+require("./controllers/StudentController");
+require("./controllers/MiscController");
 var AppRouter_1 = require("./_shared/AppRouter");
 app.use(cors_1.default());
 app.use(body_parser_1.default.urlencoded({ extended: true }));

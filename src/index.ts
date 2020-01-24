@@ -38,7 +38,9 @@ app.use(function(
   next();
 });
 
-import "./controllers";
+import "./controllers/AuthController";
+import "./controllers/StudentController";
+import "./controllers/MiscController";
 
 import { AppRouter } from "./_shared/AppRouter";
 

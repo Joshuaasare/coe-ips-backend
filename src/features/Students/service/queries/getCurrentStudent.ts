@@ -81,8 +81,6 @@ export const getCurrentStudent = async (
     //   [student[0].company_location_id]
     // );
 
-    console.log("student in new", student);
-
     if (student.length === 0) {
       return res.status(404).send({
         error: {
