@@ -6,7 +6,7 @@ exports.globals = {
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
-            socketPath: "/cloudsq/" + process.env.CONNECTION_NAME
+            socketPath: "/cloudsql/" + process.env.CONNECTION_NAME
         }
         : {
             host: "127.0.0.1",
