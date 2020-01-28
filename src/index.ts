@@ -41,6 +41,7 @@ app.use(function(
 import "./controllers/AuthController";
 import "./controllers/StudentController";
 import "./controllers/MiscController";
+import "./controllers/CoordinatorController";
 
 import { AppRouter } from "./_shared/AppRouter";
 

@@ -11,6 +11,12 @@ export async function getEntityRecordFromKey(
   return rows;
 }
 
+export async function getAllRecords(entity: string, dbInstance: Database) {
+  const query = `select * from ${entity}`;
+  const rows = await dbInstance.runPreparedSelectQuery(query, []);
+  return rows;
+}
+
 //This type of query is used when we want to fetch the last insert Id
 export async function insertEntityRecord(
   entity: string,

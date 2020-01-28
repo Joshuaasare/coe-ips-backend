@@ -15,8 +15,8 @@ export function useAuthentication(): RequestHandler {
     res: Response,
     next: NextFunction
   ) {
-    const token = req.headers.authorization.replace("Bearer ", "");
     try {
+      const token = req.headers.authorization.replace("Bearer ", "");
       const payload: any = jwt.verify(token, globals.JWT_SECRET_KEY);
       console.log(payload);
       req.user = payload;

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Database } from "../../_shared/dbWrapper/Database";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { globals } from "../../_shared/globals";
+import { globals, constants } from "../../_shared/globals";
 import { IRequestWithUser } from "../../_shared/middlewares";
 import {
   getEntityRecordFromKey,
@@ -77,7 +77,7 @@ export const verifyUser = async (
     };
 
     switch (userDetails.userTypeId) {
-      case 1:
+      case constants.user_type_id.STUDENT:
         //student
         const studentQuery = `student.index_number as student_index_number, 
         student.surname as student_surname, 
@@ -114,6 +114,9 @@ export const verifyUser = async (
         userDetails.mainDepartment = student[0].main_department_name;
         userDetails.subDepartment = student[0].sub_department_name;
 
+        break;
+
+      case constants.user_type_id.COORDINATOR:
         break;
       default:
         break;
