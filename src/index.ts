@@ -42,6 +42,7 @@ import "./controllers/AuthController";
 import "./controllers/StudentController";
 import "./controllers/MiscController";
 import "./controllers/CoordinatorController";
+import "./controllers/TaskController";
 
 import { AppRouter } from "./_shared/AppRouter";
 

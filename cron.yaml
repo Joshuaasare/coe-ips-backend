@@ -4,4 +4,4 @@ cron:
     schedule: 1 of jan 00:00
   - description: "set company contact status to false every 10mins"
     url: /cron/set-company-not-contacted
-    schedule: every 10 mins
+    schedule: every 5 mins
