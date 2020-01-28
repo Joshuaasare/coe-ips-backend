@@ -33,6 +33,8 @@ app.use(function (req, res, next) {
 require("./controllers/AuthController");
 require("./controllers/StudentController");
 require("./controllers/MiscController");
+require("./controllers/CoordinatorController");
+require("./controllers/TaskController");
 var AppRouter_1 = require("./_shared/AppRouter");
 app.use(cors_1.default());
 app.use(body_parser_1.default.urlencoded({ extended: true }));

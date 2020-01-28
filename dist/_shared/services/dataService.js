@@ -52,6 +52,22 @@ function getEntityRecordFromKey(entity, column, params, dbInstance) {
     });
 }
 exports.getEntityRecordFromKey = getEntityRecordFromKey;
+function getAllRecords(entity, dbInstance) {
+    return __awaiter(this, void 0, void 0, function () {
+        var query, rows;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    query = "select * from " + entity;
+                    return [4 /*yield*/, dbInstance.runPreparedSelectQuery(query, [])];
+                case 1:
+                    rows = _a.sent();
+                    return [2 /*return*/, rows];
+            }
+        });
+    });
+}
+exports.getAllRecords = getAllRecords;
 //This type of query is used when we want to fetch the last insert Id
 function insertEntityRecord(entity, columns, escapes, params, dbInstance) {
     return __awaiter(this, void 0, void 0, function () {

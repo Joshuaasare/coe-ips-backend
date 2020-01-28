@@ -48,7 +48,7 @@ exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                _c.trys.push([0, 8, , 9]);
+                _c.trys.push([0, 9, , 10]);
                 dbInstance = req.dbInstance;
                 _a = req.body.data, email = _a.email, password = _a.password, userTypeId = _a.userTypeId;
                 query = "select * from user where email = ? AND user_type_id = ?";
@@ -100,9 +100,10 @@ exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void
                 };
                 _b = userDetails.userTypeId;
                 switch (_b) {
-                    case 1: return [3 /*break*/, 4];
+                    case globals_1.constants.user_type_id.STUDENT: return [3 /*break*/, 4];
+                    case globals_1.constants.user_type_id.COORDINATOR: return [3 /*break*/, 6];
                 }
-                return [3 /*break*/, 6];
+                return [3 /*break*/, 7];
             case 4:
                 studentQuery = "student.index_number as student_index_number, \n        student.surname as student_surname, \n        student.other_names as student_other_names, \n        student.phone as student_phone, \n        student.email as student_email, \n        student.year_of_study as student_year_of_study,\n        student.acad_year as student_acad_year, \n        student.address as student_address, \n        student.google_place_id as student_google_place_id";
                 subDepartmentQuery = "sub_department.id as sub_department_id, \n        sub_department.name as sub_department_name";
@@ -122,10 +123,11 @@ exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void
                 userDetails.address = student[0].student_address;
                 userDetails.mainDepartment = student[0].main_department_name;
                 userDetails.subDepartment = student[0].sub_department_name;
-                return [3 /*break*/, 7];
-            case 6: return [3 /*break*/, 7];
-            case 7: return [2 /*return*/, res.status(200).send({ data: userDetails })];
-            case 8:
+                return [3 /*break*/, 8];
+            case 6: return [3 /*break*/, 8];
+            case 7: return [3 /*break*/, 8];
+            case 8: return [2 /*return*/, res.status(200).send({ data: userDetails })];
+            case 9:
                 error_1 = _c.sent();
                 console.error("Internal error");
                 console.log(error_1);
@@ -133,7 +135,7 @@ exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void
                     return [2 /*return*/, res.status(409).send({ error: "User already exist" })];
                 }
                 return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
-            case 9: return [2 /*return*/];
+            case 10: return [2 /*return*/];
         }
     });
 }); };

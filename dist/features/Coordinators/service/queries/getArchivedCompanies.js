@@ -35,41 +35,49 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var globals_1 = require("../globals");
-var Database_1 = require("../dbWrapper/Database");
-var services_1 = require("../services");
-function useAuthentication() {
-    return function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            var token, payload, dbInstance, checkUserQuery;
-            return __generator(this, function (_a) {
-                try {
-                    token = req.headers.authorization.replace("Bearer ", "");
-                    payload = jsonwebtoken_1.default.verify(token, globals_1.globals.JWT_SECRET_KEY);
-                    console.log(payload);
-                    req.user = payload;
-                    dbInstance = new Database_1.Database();
-                    checkUserQuery = "select * from user where id = ?";
-                    if (!services_1.checkIfUserExists(dbInstance, checkUserQuery, [payload.userId])) {
-                        return [2 /*return*/, res.status(401).send({ error: "Authentication Failed" })];
-                    }
-                    next();
-                }
-                catch (error) {
-                    console.log(error);
-                    if (error.name && error.name === globals_1.constants.errors.JSON_WEB_TOKEN_ERROR) {
-                        return [2 /*return*/, res.status(401).send({ error: "user could not be verified" })];
-                    }
-                    return [2 /*return*/, res.status(422).send({ error: "request could not be proccessed" })];
-                }
-                return [2 /*return*/];
-            });
-        });
-    };
-}
-exports.useAuthentication = useAuthentication;
+var services_1 = require("../../../../_shared/services");
+exports.getArchivedCompanies = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var dbInstance, companies, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                dbInstance = req.dbInstance;
+                return [4 /*yield*/, services_1.getAllRecords("company_archive", dbInstance)];
+            case 1:
+                companies = _a.sent();
+                console.log(companies[0]);
+                return [2 /*return*/, res.status(200).send({ data: companies })];
+            case 2:
+                error_1 = _a.sent();
+                console.log("internal error", error_1);
+                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getArchivedCompaniesWithContactMade = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var dbInstance, archivedCompanyQuery, contactMadeQuery, join1, mainQuery, companies, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                dbInstance = req.dbInstance;
+                archivedCompanyQuery = "company_archive.id as company_archive_id,\n    company_archive.name,\n    company_archive.email,\n    company_archive.postal_address,\n    company_archive.phone";
+                contactMadeQuery = "company_archive_contact_made.contact_made as contact_made,\n    company_archive_contact_made.acad_year as acad_year";
+                join1 = "(company_archive left join company_archive_contact_made on company_archive.id = company_archive_contact_made.company_archive_id)";
+                mainQuery = "select " + archivedCompanyQuery + ", " + contactMadeQuery + " from " + join1;
+                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [])];
+            case 1:
+                companies = _a.sent();
+                console.log(companies[0]);
+                return [2 /*return*/, res.status(200).send({ data: companies })];
+            case 2:
+                error_2 = _a.sent();
+                console.log("internal error", error_2);
+                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };

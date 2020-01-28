@@ -35,36 +35,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var globals_1 = require("../globals");
-var Database_1 = require("../dbWrapper/Database");
-var services_1 = require("../services");
-function useAuthentication() {
+function useCronAuthentication() {
     return function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var token, payload, dbInstance, checkUserQuery;
             return __generator(this, function (_a) {
                 try {
-                    token = req.headers.authorization.replace("Bearer ", "");
-                    payload = jsonwebtoken_1.default.verify(token, globals_1.globals.JWT_SECRET_KEY);
-                    console.log(payload);
-                    req.user = payload;
-                    dbInstance = new Database_1.Database();
-                    checkUserQuery = "select * from user where id = ?";
-                    if (!services_1.checkIfUserExists(dbInstance, checkUserQuery, [payload.userId])) {
+                    if (!req.get("X-Appengine-Cron")) {
                         return [2 /*return*/, res.status(401).send({ error: "Authentication Failed" })];
                     }
                     next();
                 }
                 catch (error) {
-                    console.log(error);
-                    if (error.name && error.name === globals_1.constants.errors.JSON_WEB_TOKEN_ERROR) {
-                        return [2 /*return*/, res.status(401).send({ error: "user could not be verified" })];
-                    }
+                    console.log("error");
                     return [2 /*return*/, res.status(422).send({ error: "request could not be proccessed" })];
                 }
                 return [2 /*return*/];
@@ -72,4 +55,4 @@ function useAuthentication() {
         });
     };
 }
-exports.useAuthentication = useAuthentication;
+exports.useCronAuthentication = useCronAuthentication;
