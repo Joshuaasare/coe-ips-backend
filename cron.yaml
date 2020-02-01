@@ -1,4 +1,4 @@
 cron:
   - description: "Set company contact status to false every year"
     url: /cron/set-company-not-contacted
-    schedule: 1 of jan 00:00
+    schedule: 5 of jan 00:00

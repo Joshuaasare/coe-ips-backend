@@ -18,7 +18,7 @@ export function useAuthentication(): RequestHandler {
     try {
       const token = req.headers.authorization.replace("Bearer ", "");
       const payload: any = jwt.verify(token, globals.JWT_SECRET_KEY);
-      console.log(payload);
+      // console.log(payload);
       req.user = payload;
       const dbInstance = new Database();
       const checkUserQuery = `select * from user where id = ?`;

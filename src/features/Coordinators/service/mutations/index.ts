@@ -1,1 +1,4 @@
 export * from "./setCompaniesContactMade";
+export * from "./deleteCompanyArchive";
+export * from "./sendPlacementRequest";
+export * from "./updateCompanyArchive";

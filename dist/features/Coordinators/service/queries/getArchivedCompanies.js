@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var services_1 = require("../../../../_shared/services");
+var globals_1 = require("../../../../_shared/globals");
 exports.getArchivedCompanies = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var dbInstance, companies, error_1;
     return __generator(this, function (_a) {
@@ -44,10 +45,9 @@ exports.getArchivedCompanies = function (req, res) { return __awaiter(void 0, vo
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 dbInstance = req.dbInstance;
-                return [4 /*yield*/, services_1.getAllRecords("company_archive", dbInstance)];
+                return [4 /*yield*/, services_1.getAllRecords("company_archive", dbInstance, true)];
             case 1:
                 companies = _a.sent();
-                console.log(companies[0]);
                 return [2 /*return*/, res.status(200).send({ data: companies })];
             case 2:
                 error_1 = _a.sent();
@@ -58,20 +58,22 @@ exports.getArchivedCompanies = function (req, res) { return __awaiter(void 0, vo
     });
 }); };
 exports.getArchivedCompaniesWithContactMade = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, archivedCompanyQuery, contactMadeQuery, join1, mainQuery, companies, error_2;
+    var dbInstance, archivedCompanyQuery, contactMadeQuery, join1, condition, mainQuery, companies, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 dbInstance = req.dbInstance;
-                archivedCompanyQuery = "company_archive.id as company_archive_id,\n    company_archive.name,\n    company_archive.email,\n    company_archive.postal_address,\n    company_archive.phone";
-                contactMadeQuery = "company_archive_contact_made.contact_made as contact_made,\n    company_archive_contact_made.acad_year as acad_year";
+                archivedCompanyQuery = "company_archive.id as id,\n    company_archive.name,\n    company_archive.email,\n    company_archive.postal_address,\n    company_archive.phone";
+                contactMadeQuery = "company_archive_contact_made.contact_made as contact_made,\n    company_archive_contact_made.acad_year as acad_year,\n    company_archive_contact_made.request_letter_url as request_letter_url";
                 join1 = "(company_archive left join company_archive_contact_made on company_archive.id = company_archive_contact_made.company_archive_id)";
-                mainQuery = "select " + archivedCompanyQuery + ", " + contactMadeQuery + " from " + join1;
-                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [])];
+                condition = "acad_year = ? AND is_deleted = 0";
+                mainQuery = "select " + archivedCompanyQuery + ", " + contactMadeQuery + " from " + join1 + " where " + condition;
+                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [
+                        globals_1.globals.school.ACAD_YEAR
+                    ])];
             case 1:
                 companies = _a.sent();
-                console.log(companies[0]);
                 return [2 /*return*/, res.status(200).send({ data: companies })];
             case 2:
                 error_2 = _a.sent();

@@ -51,7 +51,7 @@ function useAuthentication() {
                 try {
                     token = req.headers.authorization.replace("Bearer ", "");
                     payload = jsonwebtoken_1.default.verify(token, globals_1.globals.JWT_SECRET_KEY);
-                    console.log(payload);
+                    // console.log(payload);
                     req.user = payload;
                     dbInstance = new Database_1.Database();
                     checkUserQuery = "select * from user where id = ?";

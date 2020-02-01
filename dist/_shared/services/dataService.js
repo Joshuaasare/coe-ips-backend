@@ -36,13 +36,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function getEntityRecordFromKey(entity, column, params, dbInstance) {
+function getEntityRecordFromKey(entity, column, params, dbInstance, hasDeletedColumn) {
+    if (hasDeletedColumn === void 0) { hasDeletedColumn = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var query, rows;
+        var deletedCondition, query, rows;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    query = "select * from " + entity + " where " + column + " = ?";
+                    deletedCondition = hasDeletedColumn ? " AND is_deleted = 0" : "";
+                    query = "select * from " + entity + " where " + column + " = ? " + deletedCondition;
                     return [4 /*yield*/, dbInstance.runPreparedSelectQuery(query, params)];
                 case 1:
                     rows = _a.sent();
@@ -52,13 +54,15 @@ function getEntityRecordFromKey(entity, column, params, dbInstance) {
     });
 }
 exports.getEntityRecordFromKey = getEntityRecordFromKey;
-function getAllRecords(entity, dbInstance) {
+function getAllRecords(entity, dbInstance, hasDeletedColumn) {
+    if (hasDeletedColumn === void 0) { hasDeletedColumn = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var query, rows;
+        var deletedCondition, query, rows;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    query = "select * from " + entity;
+                    deletedCondition = hasDeletedColumn ? " where is_deleted = 0" : "";
+                    query = "select * from " + entity + " " + deletedCondition;
                     return [4 /*yield*/, dbInstance.runPreparedSelectQuery(query, [])];
                 case 1:
                     rows = _a.sent();

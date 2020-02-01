@@ -24,6 +24,15 @@ var CoordinatorController = /** @class */ (function () {
     CoordinatorController.prototype.archivedCompaniesWithContactMadeController = function (req, res) {
         service_1.default.queries.getArchivedCompaniesWithContactMade(req, res);
     };
+    CoordinatorController.prototype.deleteCompanyArchiveController = function (req, res) {
+        service_1.default.mutations.deleteCompanyArchive(req, res);
+    };
+    CoordinatorController.prototype.sendPlacementRequestController = function (req, res) {
+        service_1.default.mutations.sendPlacementRequest(req, res);
+    };
+    CoordinatorController.prototype.updateCompanyArchiveController = function (req, res) {
+        service_1.default.mutations.updateCompanyArchive(req, res);
+    };
     __decorate([
         decorators_1.get("/archived-companies"),
         decorators_1.use(middlewares_1.useAuthentication()),
@@ -33,10 +42,32 @@ var CoordinatorController = /** @class */ (function () {
     ], CoordinatorController.prototype, "archivedCompaniesController", null);
     __decorate([
         decorators_1.get("/archived-companies-contact-made"),
+        decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "archivedCompaniesWithContactMadeController", null);
+    __decorate([
+        decorators_1.del("/delete-company-archive"),
+        decorators_1.use(middlewares_1.useAuthentication()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], CoordinatorController.prototype, "deleteCompanyArchiveController", null);
+    __decorate([
+        decorators_1.put("/placement-request"),
+        decorators_1.use(middlewares_1.useAuthentication()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], CoordinatorController.prototype, "sendPlacementRequestController", null);
+    __decorate([
+        decorators_1.put("/update-company-archive"),
+        decorators_1.use(middlewares_1.useAuthentication()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], CoordinatorController.prototype, "updateCompanyArchiveController", null);
     CoordinatorController = __decorate([
         decorators_1.controller("/coordinator")
     ], CoordinatorController);

@@ -1,4 +1,5 @@
 import { Database } from "../dbWrapper/Database";
+import isObject from "lodash/isObject";
 
 export async function checkIfUserExists(
   dbInstance: Database,
@@ -10,4 +11,21 @@ export async function checkIfUserExists(
     values
   );
   return !(rows.length === 0);
+}
+
+export function arrayHasData(data?: Array<any>) {
+  return data && data.length;
+}
+
+/**
+ * isEmpty function that will return false for primitive values
+ * like numbers and strings, unlike the lodash version
+ */
+export function isEmpty(val: any) {
+  return (
+    val === null ||
+    val === "" ||
+    (Array.isArray(val) && !val.length) ||
+    (isObject(val) && !Object.keys(val).length)
+  );
 }

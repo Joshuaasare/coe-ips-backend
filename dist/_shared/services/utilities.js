@@ -35,7 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var isObject_1 = __importDefault(require("lodash/isObject"));
 function checkIfUserExists(dbInstance, query, values) {
     return __awaiter(this, void 0, void 0, function () {
         var rows;
@@ -50,3 +54,18 @@ function checkIfUserExists(dbInstance, query, values) {
     });
 }
 exports.checkIfUserExists = checkIfUserExists;
+function arrayHasData(data) {
+    return data && data.length;
+}
+exports.arrayHasData = arrayHasData;
+/**
+ * isEmpty function that will return false for primitive values
+ * like numbers and strings, unlike the lodash version
+ */
+function isEmpty(val) {
+    return (val === null ||
+        val === "" ||
+        (Array.isArray(val) && !val.length) ||
+        (isObject_1.default(val) && !Object.keys(val).length));
+}
+exports.isEmpty = isEmpty;

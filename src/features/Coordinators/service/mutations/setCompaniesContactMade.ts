@@ -14,10 +14,12 @@ export const setCompanyContactStatusToFalse = async (
 
     const allCompanyData = [];
 
+    const currDate = new Date();
+
     forEach(companies, company => {
       const singleCompanyData = [
         company.id,
-        globals.school.ACAD_YEAR,
+        currDate.getFullYear(),
         0,
         Date.parse(`${new Date()}`),
         Date.parse(`${new Date()}`)

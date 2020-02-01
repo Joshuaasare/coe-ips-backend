@@ -4,15 +4,22 @@ export async function getEntityRecordFromKey(
   entity: string,
   column: string,
   params: Array<string | number | boolean>,
-  dbInstance: Database
+  dbInstance: Database,
+  hasDeletedColumn: boolean = false
 ): Promise<Array<Object>> {
-  const query = `select * from ${entity} where ${column} = ?`;
+  const deletedCondition = hasDeletedColumn ? ` AND is_deleted = 0` : "";
+  const query = `select * from ${entity} where ${column} = ? ${deletedCondition}`;
   const rows = await dbInstance.runPreparedSelectQuery(query, params);
   return rows;
 }
 
-export async function getAllRecords(entity: string, dbInstance: Database) {
-  const query = `select * from ${entity}`;
+export async function getAllRecords(
+  entity: string,
+  dbInstance: Database,
+  hasDeletedColumn: boolean = false
+) {
+  const deletedCondition = hasDeletedColumn ? ` where is_deleted = 0` : "";
+  const query = `select * from ${entity} ${deletedCondition}`;
   const rows = await dbInstance.runPreparedSelectQuery(query, []);
   return rows;
 }

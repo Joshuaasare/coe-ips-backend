@@ -9,8 +9,7 @@ export const getArchivedCompanies = async (
 ): Promise<any> => {
   try {
     const { dbInstance } = req;
-    const companies = await getAllRecords("company_archive", dbInstance);
-    console.log(companies[0]);
+    const companies = await getAllRecords("company_archive", dbInstance, true);
     return res.status(200).send({ data: companies });
   } catch (error) {
     console.log(`internal error`, error);
@@ -24,24 +23,24 @@ export const getArchivedCompaniesWithContactMade = async (
 ): Promise<any> => {
   try {
     const { dbInstance } = req;
-    const archivedCompanyQuery = `company_archive.id as company_archive_id,
+    const archivedCompanyQuery = `company_archive.id as id,
     company_archive.name,
     company_archive.email,
     company_archive.postal_address,
     company_archive.phone`;
 
     const contactMadeQuery = `company_archive_contact_made.contact_made as contact_made,
-    company_archive_contact_made.acad_year as acad_year`;
+    company_archive_contact_made.acad_year as acad_year,
+    company_archive_contact_made.request_letter_url as request_letter_url`;
 
     const join1 = `(company_archive left join company_archive_contact_made on company_archive.id = company_archive_contact_made.company_archive_id)`;
-    // const join2 = `(company_archive right join company_archive_contact_made on company_archive.id = company_archive_contact_made.company_archive_id)`;
 
-    // const mainQuery = `select ${archivedCompanyQuery}, ${contactMadeQuery} from ${join1} UNION
-    // select ${archivedCompanyQuery}, ${contactMadeQuery} from ${join2} `;
+    const condition = `acad_year = ? AND is_deleted = 0`;
 
-    const mainQuery = `select ${archivedCompanyQuery}, ${contactMadeQuery} from ${join1}`;
-    const companies = await dbInstance.runPreparedSelectQuery(mainQuery, []);
-    console.log(companies[0]);
+    const mainQuery = `select ${archivedCompanyQuery}, ${contactMadeQuery} from ${join1} where ${condition}`;
+    const companies = await dbInstance.runPreparedSelectQuery(mainQuery, [
+      globals.school.ACAD_YEAR
+    ]);
     return res.status(200).send({ data: companies });
   } catch (error) {
     console.log(`internal error`, error);

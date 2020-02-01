@@ -4,3 +4,6 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./setCompaniesContactMade"));
+__export(require("./deleteCompanyArchive"));
+__export(require("./sendPlacementRequest"));
+__export(require("./updateCompanyArchive"));

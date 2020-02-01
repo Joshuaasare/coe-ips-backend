@@ -35,44 +35,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var services_1 = require("../../../../_shared/services");
-var forEach_1 = __importDefault(require("lodash/forEach"));
-exports.setCompanyContactStatusToFalse = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, companies, allCompanyData_1, currDate_1, query, result, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+var globals_1 = require("../../../../_shared/globals");
+exports.updateCompanyArchive = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var dbInstance, _a, id, name_1, email, phone, postalAddress, requestLetterUrl, compData, query1, updated, compArchiveContactMadeData, query2, error_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _b.trys.push([0, 4, , 5]);
                 dbInstance = req.dbInstance;
-                return [4 /*yield*/, services_1.getAllRecords("company_archive", dbInstance)];
+                _a = req.body.data, id = _a.id, name_1 = _a.name, email = _a.email, phone = _a.phone, postalAddress = _a.postalAddress, requestLetterUrl = _a.requestLetterUrl;
+                console.log(req.body.data);
+                compData = [
+                    name_1,
+                    phone,
+                    email,
+                    postalAddress,
+                    Date.parse("" + new Date()),
+                    id
+                ];
+                query1 = "update company_archive set name = ?, phone = ?, email = ?, postal_address = ?,\n    last_modified = ? where id = ?";
+                return [4 /*yield*/, services_1.updateEntityRecord(query1, [compData], dbInstance)];
             case 1:
-                companies = _a.sent();
-                allCompanyData_1 = [];
-                currDate_1 = new Date();
-                forEach_1.default(companies, function (company) {
-                    var singleCompanyData = [
-                        company.id,
-                        currDate_1.getFullYear(),
-                        0,
-                        Date.parse("" + new Date()),
-                        Date.parse("" + new Date())
-                    ];
-                    allCompanyData_1.push(singleCompanyData);
-                });
-                query = "Insert into company_archive_contact_made\n    (company_archive_id, acad_year, contact_made,created_at, last_modified)\n    values (?,?,?,?,?)";
-                return [4 /*yield*/, dbInstance.runPreparedQuery(query, allCompanyData_1)];
+                updated = _b.sent();
+                if (!!services_1.isEmpty(requestLetterUrl)) return [3 /*break*/, 3];
+                compArchiveContactMadeData = [
+                    requestLetterUrl,
+                    Date.parse("" + new Date()),
+                    id,
+                    globals_1.globals.school.ACAD_YEAR
+                ];
+                query2 = "update company_archive_contact_made set request_letter_url = ?,\n    last_modified = ? where company_archive_id = ? and acad_year = ?";
+                return [4 /*yield*/, services_1.updateEntityRecord(query2, [compArchiveContactMadeData], dbInstance)];
             case 2:
-                result = _a.sent();
-                return [2 /*return*/, res.status(200).send({ result: result, data: allCompanyData_1 })];
-            case 3:
-                error_1 = _a.sent();
+                _b.sent();
+                _b.label = 3;
+            case 3: return [2 /*return*/, res.status(200).send({ data: "Successful" })];
+            case 4:
+                error_1 = _b.sent();
                 console.log("internal error", error_1);
                 return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
-            case 4: return [2 /*return*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
