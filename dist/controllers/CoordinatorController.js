@@ -24,6 +24,9 @@ var CoordinatorController = /** @class */ (function () {
     CoordinatorController.prototype.archivedCompaniesWithContactMadeController = function (req, res) {
         service_1.default.queries.getArchivedCompaniesWithContactMade(req, res);
     };
+    CoordinatorController.prototype.getSubDepartmentsController = function (req, res) {
+        service_1.default.queries.getSubDepartments(req, res);
+    };
     CoordinatorController.prototype.deleteCompanyArchiveController = function (req, res) {
         service_1.default.mutations.deleteCompanyArchive(req, res);
     };
@@ -42,11 +45,16 @@ var CoordinatorController = /** @class */ (function () {
     ], CoordinatorController.prototype, "archivedCompaniesController", null);
     __decorate([
         decorators_1.get("/archived-companies-contact-made"),
-        decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "archivedCompaniesWithContactMadeController", null);
+    __decorate([
+        decorators_1.get("/sub-departments"),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], CoordinatorController.prototype, "getSubDepartmentsController", null);
     __decorate([
         decorators_1.del("/delete-company-archive"),
         decorators_1.use(middlewares_1.useAuthentication()),

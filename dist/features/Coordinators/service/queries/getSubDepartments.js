@@ -37,21 +37,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var services_1 = require("../../../../_shared/services");
-exports.deleteCompanyArchive = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, ids, query, lastDeleted, error_1;
+exports.getSubDepartments = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var dbInstance, subDepartments, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 dbInstance = req.dbInstance;
-                ids = req.query.ids
-                    .split(",")
-                    .map(function (id) { return [parseInt(id, 10)]; });
-                query = "update company_archive set is_deleted = 1 where id = ?";
-                return [4 /*yield*/, services_1.updateEntityRecord(query, ids, dbInstance)];
+                return [4 /*yield*/, services_1.getAllRecords("sub_department", dbInstance, false)];
             case 1:
-                lastDeleted = _a.sent();
-                return [2 /*return*/, res.status(200).send({ data: lastDeleted })];
+                subDepartments = _a.sent();
+                return [2 /*return*/, res.status(200).send({ data: subDepartments })];
             case 2:
                 error_1 = _a.sent();
                 console.log("internal error", error_1);

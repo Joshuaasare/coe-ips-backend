@@ -13,23 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var decorators_1 = require("../_shared/decorators");
-var middlewares_1 = require("../_shared/middlewares");
-var service_1 = __importDefault(require("../features/Coordinators/service"));
-var TaskController = /** @class */ (function () {
-    function TaskController() {
+var service_1 = __importDefault(require("../features/Company/service"));
+var CompanyController = /** @class */ (function () {
+    function CompanyController() {
     }
-    TaskController.prototype.setCompanyNotContacted = function (req, res) {
-        service_1.default.mutations.setCompanyContactStatusToFalse(req, res);
+    CompanyController.prototype.registerCompanyController = function (req, res) {
+        service_1.default.mutations.registerCompany(req, res);
     };
     __decorate([
-        decorators_1.get("/set-company-not-contacted"),
-        decorators_1.use(middlewares_1.useCronAuthentication()),
+        decorators_1.post("/register-company"),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
-    ], TaskController.prototype, "setCompanyNotContacted", null);
-    TaskController = __decorate([
-        decorators_1.controller("/cron")
-    ], TaskController);
-    return TaskController;
+    ], CompanyController.prototype, "registerCompanyController", null);
+    CompanyController = __decorate([
+        decorators_1.controller("/company")
+    ], CompanyController);
+    return CompanyController;
 }());

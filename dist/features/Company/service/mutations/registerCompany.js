@@ -42,17 +42,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var globals_1 = require("../../../../_shared/globals");
 var services_1 = require("../../../../_shared/services");
-exports.addStudentCompany = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, dbInstance, _a, studentUserId, name_1, email, contact, address, repName, repContact, repEmail, locationId, acceptanceLetterUrl, locationDetails, website, hash, locationData, userData, insertedLocation, insertedUser, companyData, insertedCompany, updatedStudentData, updateStudentQuery, rows, error_1;
+var forEach_1 = __importDefault(require("lodash/forEach"));
+exports.registerCompany = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var dbInstance, _a, id, name_1, email, contact, postal_address, website, repName, repContact, repEmail, locationId, locationDetails, code, departments, verifyCodeQuery, verifyCodeData, company, hash, locationData, userData, insertedLocation, insertedUser_1, companyData, insertedCompany, departmentsData_1, updateCompanyData, updateCompanyQuery, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 6, , 7]);
-                user = req.user, dbInstance = req.dbInstance;
-                console.log(req.body);
-                _a = req.body.data, studentUserId = _a.studentUserId, name_1 = _a.name, email = _a.email, contact = _a.contact, address = _a.address, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, locationId = _a.locationId, acceptanceLetterUrl = _a.acceptanceLetterUrl, locationDetails = _a.locationDetails, website = _a.website;
-                return [4 /*yield*/, bcryptjs_1.default.hash(contact, globals_1.globals.SALT_ROUNDS)];
+                _b.trys.push([0, 8, , 9]);
+                dbInstance = req.dbInstance;
+                console.log(req.body.data);
+                _a = req.body.data, id = _a.id, name_1 = _a.name, email = _a.email, contact = _a.contact, postal_address = _a.postal_address, website = _a.website, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, locationId = _a.locationId, locationDetails = _a.locationDetails, code = _a.code, departments = _a.departments;
+                verifyCodeQuery = "select * from company_archive_contact_made  where acad_year = ? AND company_archive_id = ?";
+                verifyCodeData = [globals_1.globals.school.ACAD_YEAR, id];
+                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(verifyCodeQuery, verifyCodeData)];
             case 1:
+                company = _b.sent();
+                console.log(company[0]);
+                if (!company[0] || (company[0] && company[0].contact_made === 0)) {
+                    return [2 /*return*/, res.status(404).send({ data: "Company has not been contacted" })];
+                }
+                if (company[0] && company[0].responded === 1) {
+                    return [2 /*return*/, res.status(409).send({ data: "Company has already responded" })];
+                }
+                if (company[0].code !== parseInt(code, 10)) {
+                    return [2 /*return*/, res.status(401).send({ data: "Not Authenticated" })];
+                }
+                return [4 /*yield*/, bcryptjs_1.default.hash(contact, globals_1.globals.SALT_ROUNDS)];
+            case 2:
                 hash = _b.sent();
                 locationData = [
                     locationDetails.name,
@@ -70,19 +86,19 @@ exports.addStudentCompany = function (req, res) { return __awaiter(void 0, void 
                     Date.parse("" + new Date())
                 ];
                 return [4 /*yield*/, services_1.insertEntityRecord("location", "name,address,latitude,longitude,created_at, last_modified", "?,?,?,?,?,?", [locationData], dbInstance)];
-            case 2:
+            case 3:
                 insertedLocation = _b.sent();
                 return [4 /*yield*/, services_1.insertEntityRecord("user", "user_type_id,email,password,created_at, last_modified", "?,?,?,?,?", [userData], dbInstance)];
-            case 3:
-                insertedUser = _b.sent();
+            case 4:
+                insertedUser_1 = _b.sent();
                 companyData = [
-                    insertedUser.insertId,
+                    insertedUser_1.insertId,
                     name_1,
                     email,
                     contact,
                     globals_1.globals.school.ACAD_YEAR,
                     insertedLocation.insertId,
-                    address,
+                    postal_address,
                     website,
                     repName,
                     repContact,
@@ -90,28 +106,35 @@ exports.addStudentCompany = function (req, res) { return __awaiter(void 0, void 
                     Date.parse("" + new Date()),
                     Date.parse("" + new Date())
                 ];
-                return [4 /*yield*/, services_1.insertEntityRecord("company", "user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at, last_modified", "?,?,?,?,?,?,?,?,?,?,?,?,?", [companyData], dbInstance)];
-            case 4:
-                insertedCompany = _b.sent();
-                updatedStudentData = [
-                    acceptanceLetterUrl,
-                    Date.parse("" + new Date()),
-                    true,
-                    false,
-                    insertedUser.insertId,
-                    Date.parse("" + new Date()),
-                    studentUserId
-                ];
-                updateStudentQuery = "update student set acceptance_letter_url = ?, \n    internship_placement_date = ?, registered_company = ?, want_placement = ?, \n    company_id = ?, last_modified = ? where user_id = ?";
-                return [4 /*yield*/, services_1.updateEntityRecord(updateStudentQuery, [updatedStudentData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord("company", "user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at,last_modified", "?,?,?,?,?,?,?,?,?,?,?,?,?", [companyData], dbInstance)];
             case 5:
-                rows = _b.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                insertedCompany = _b.sent();
+                departmentsData_1 = [];
+                forEach_1.default(departments, function (department) {
+                    var dep = [
+                        insertedUser_1.insertId,
+                        department.id,
+                        globals_1.globals.school.ACAD_YEAR,
+                        department.number,
+                        Date.parse("" + new Date()),
+                        Date.parse("" + new Date())
+                    ];
+                    departmentsData_1.push(dep);
+                });
+                return [4 /*yield*/, services_1.insertEntityRecord("company_sub_department", "company_id,sub_department_id,acad_year,number_needed,created_at,last_modified", "?,?,?,?,?,?", departmentsData_1, dbInstance)];
             case 6:
+                _b.sent();
+                updateCompanyData = [globals_1.globals.school.ACAD_YEAR, id];
+                updateCompanyQuery = "update company_archive_contact_made set responded = 1 where\n    acad_year = ? AND company_archive_id = ?";
+                return [4 /*yield*/, services_1.updateEntityRecord(updateCompanyQuery, [updateCompanyData], dbInstance)];
+            case 7:
+                _b.sent();
+                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+            case 8:
                 error_1 = _b.sent();
                 console.log("internal error", error_1);
                 return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
-            case 7: return [2 /*return*/];
+            case 9: return [2 /*return*/];
         }
     });
 }); };

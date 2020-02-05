@@ -35,6 +35,7 @@ require("./controllers/StudentController");
 require("./controllers/MiscController");
 require("./controllers/CoordinatorController");
 require("./controllers/TaskController");
+require("./controllers/CompanyController");
 var AppRouter_1 = require("./_shared/AppRouter");
 app.use(cors_1.default());
 app.use(body_parser_1.default.urlencoded({ extended: true }));

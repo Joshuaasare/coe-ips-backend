@@ -51,6 +51,7 @@ exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void
                 _c.trys.push([0, 9, , 10]);
                 dbInstance = req.dbInstance;
                 _a = req.body.data, email = _a.email, password = _a.password, userTypeId = _a.userTypeId;
+                console.log(req.body.data);
                 query = "select * from user where email = ? AND user_type_id = ?";
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(query, [
                         email,
@@ -130,7 +131,6 @@ exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void
             case 9:
                 error_1 = _c.sent();
                 console.error("Internal error");
-                console.log(error_1);
                 if (error_1.code === "ER_DUP_ENTRY") {
                     return [2 /*return*/, res.status(409).send({ error: "User already exist" })];
                 }
@@ -169,6 +169,7 @@ exports.resetPassword = function (req, res) { return __awaiter(void 0, void 0, v
                 return [2 /*return*/, res.status(200).send({ data: "successful" })];
             case 4:
                 error_2 = _b.sent();
+                console.log(error_2);
                 return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
             case 5: return [2 /*return*/];
         }

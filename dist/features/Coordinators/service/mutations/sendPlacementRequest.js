@@ -58,7 +58,7 @@ exports.sendPlacementRequest = function (req, res) { return __awaiter(void 0, vo
             console.log(ids_1);
             (function sendMail(index) {
                 return __awaiter(this, void 0, void 0, function () {
-                    var id, companyArchiveQuery, contactMadeQuery, join1, condition, mainQuery, company, mailOptions;
+                    var id, companyArchiveQuery, contactMadeQuery, join1, condition, mainQuery, company, code_1, mailOptions;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
@@ -82,6 +82,7 @@ exports.sendPlacementRequest = function (req, res) { return __awaiter(void 0, vo
                                     !services_1.isEmpty(company[0].request_letter_url) &&
                                     !services_1.isEmpty(company[0].email)) {
                                     console.log("send mail");
+                                    code_1 = Math.floor(Math.random() * 8999 + 1000);
                                     mailOptions = {
                                         from: "knustcoeindustrialtraining@gmail.com",
                                         to: company[0].email,
@@ -93,7 +94,10 @@ exports.sendPlacementRequest = function (req, res) { return __awaiter(void 0, vo
                                             "\nKwame Nkrumah University of Science and Technology" +
                                             "\nPrivate Mail Bag, University Post Office Kumasi, Ghana" +
                                             "\nTel: 024 2235674; 020 0960067; 0507970658\n\n" +
-                                            'Please Visit "coeips.netlify.com" to register and select the number of students for each department needed',
+                                            'Please Visit "coeips.netlify.com" to register and select the number of students for each department needed\n' +
+                                            "Use " +
+                                            code_1 +
+                                            " as verification code to upload",
                                         attachments: [
                                             {
                                                 filename: "Placement Request Letter.pdf",
@@ -111,9 +115,9 @@ exports.sendPlacementRequest = function (req, res) { return __awaiter(void 0, vo
                                                         console.log(err);
                                                         return [3 /*break*/, 3];
                                                     case 1:
-                                                        data = [id];
+                                                        data = [code_1, id];
                                                         console.log(info);
-                                                        query = "update company_archive_contact_made set contact_made = 1 where id = ?";
+                                                        query = "update company_archive_contact_made set contact_made = 1 , code = ? where id = ?";
                                                         return [4 /*yield*/, services_1.updateEntityRecord(query, [data], dbInstance_1)];
                                                     case 2:
                                                         updated = _a.sent();

@@ -8,8 +8,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mutations = __importStar(require("./mutations"));
-var queries = __importStar(require("./queries"));
 exports.default = {
-    mutations: mutations,
-    queries: queries
+    mutations: mutations
 };
