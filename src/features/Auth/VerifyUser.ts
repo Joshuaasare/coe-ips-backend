@@ -24,6 +24,7 @@ export const verifyUser = async (
       password: string;
       userTypeId: number;
     } = req.body.data;
+    console.log(req.body.data);
     const query = `select * from user where email = ? AND user_type_id = ?`;
     const user: Array<any> = await dbInstance.runPreparedSelectQuery(query, [
       email,
@@ -124,7 +125,6 @@ export const verifyUser = async (
     return res.status(200).send({ data: userDetails });
   } catch (error) {
     console.error(`Internal error`);
-    console.log(error);
     if (error.code === "ER_DUP_ENTRY") {
       return res.status(409).send({ error: "User already exist" });
     }
@@ -158,6 +158,7 @@ export const resetPassword = async (req: IRequestWithUser, res: Response) => {
     await updateEntityRecord(updatePasswordQuery, [userData], dbInstance);
     return res.status(200).send({ data: "successful" });
   } catch (error) {
+    console.log(error);
     return res.status(422).send({ error: "Could not process request" });
   }
 };

@@ -50,6 +50,7 @@ export const sendPlacementRequest = async (
         !isEmpty(company[0].email)
       ) {
         console.log("send mail");
+        const code = Math.floor(Math.random() * 8999 + 1000);
         const mailOptions = {
           from: "knustcoeindustrialtraining@gmail.com", // sender address
           to: company[0].email, // list of receivers
@@ -62,7 +63,11 @@ export const sendPlacementRequest = async (
             "\nKwame Nkrumah University of Science and Technology" +
             "\nPrivate Mail Bag, University Post Office Kumasi, Ghana" +
             "\nTel: 024 2235674; 020 0960067; 0507970658\n\n" +
-            'Please Visit "coeips.netlify.com" to register and select the number of students for each department needed',
+            'Please Visit "coeips.netlify.com" to register and select the number of students for each department needed\n' +
+            "Use " +
+            code +
+            " as verification code to upload",
+
           attachments: [
             {
               filename: "Placement Request Letter.pdf",
@@ -75,9 +80,9 @@ export const sendPlacementRequest = async (
           if (err) {
             console.log(err);
           } else {
-            const data = [id];
+            const data = [code, id];
             console.log(info);
-            const query = `update company_archive_contact_made set contact_made = 1 where id = ?`;
+            const query = `update company_archive_contact_made set contact_made = 1 , code = ? where id = ?`;
             const updated = await updateEntityRecord(query, [data], dbInstance);
             sendMail(++index);
           }

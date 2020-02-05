@@ -12,12 +12,16 @@ class CoordinatorController {
   }
 
   @get("/archived-companies-contact-made")
-  @use(useAuthentication())
   archivedCompaniesWithContactMadeController(
     req: IRequestWithUser,
     res: Response
   ) {
     CoordinatorService.queries.getArchivedCompaniesWithContactMade(req, res);
+  }
+
+  @get("/sub-departments")
+  getSubDepartmentsController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.queries.getSubDepartments(req, res);
   }
 
   @del("/delete-company-archive")

@@ -43,6 +43,7 @@ import "./controllers/StudentController";
 import "./controllers/MiscController";
 import "./controllers/CoordinatorController";
 import "./controllers/TaskController";
+import "./controllers/CompanyController";
 
 import { AppRouter } from "./_shared/AppRouter";
 

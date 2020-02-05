@@ -68,19 +68,21 @@ export const addStudentCompany = async (
       name,
       email,
       contact,
+      globals.school.ACAD_YEAR,
       insertedLocation.insertId,
       address,
       website,
       repName,
       repContact,
       repEmail,
+      Date.parse(`${new Date()}`),
       Date.parse(`${new Date()}`)
     ];
 
     const insertedCompany = await insertEntityRecord(
       "company",
-      "user_id,name,email,phone,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at",
-      "?,?,?,?,?,?,?,?,?,?,?",
+      "user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at, last_modified",
+      "?,?,?,?,?,?,?,?,?,?,?,?,?",
       [companyData],
       dbInstance
     );

@@ -27,7 +27,8 @@ export const getArchivedCompaniesWithContactMade = async (
     company_archive.name,
     company_archive.email,
     company_archive.postal_address,
-    company_archive.phone`;
+    company_archive.phone,
+    company_archive.website`;
 
     const contactMadeQuery = `company_archive_contact_made.contact_made as contact_made,
     company_archive_contact_made.acad_year as acad_year,
