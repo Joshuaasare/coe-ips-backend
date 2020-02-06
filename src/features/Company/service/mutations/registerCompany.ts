@@ -42,10 +42,6 @@ export const registerCompany = async (req: IRequestWithUser, res: Response) => {
       return res.status(404).send({ data: "Company has not been contacted" });
     }
 
-    if (company[0] && company[0].responded === 1) {
-      return res.status(409).send({ data: "Company has already responded" });
-    }
-
     if (company[0].code !== parseInt(code, 10)) {
       return res.status(401).send({ data: "Not Authenticated" });
     }
