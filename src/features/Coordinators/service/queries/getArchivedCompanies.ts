@@ -34,11 +34,12 @@ export const getArchivedCompaniesWithContactMade = async (
     company_archive_contact_made.acad_year as acad_year,
     company_archive_contact_made.request_letter_url as request_letter_url`;
 
-    const join1 = `(company_archive left join company_archive_contact_made on company_archive.id = company_archive_contact_made.company_archive_id)`;
+    const join1 = `(company_archive right join company_archive_contact_made on company_archive.id = company_archive_contact_made.company_archive_id)`;
 
     const condition = `acad_year = ? AND is_deleted = 0`;
+    const order = `order by company_archive.name`;
 
-    const mainQuery = `select ${archivedCompanyQuery}, ${contactMadeQuery} from ${join1} where ${condition}`;
+    const mainQuery = `select ${archivedCompanyQuery}, ${contactMadeQuery} from ${join1} where ${condition} ${order}`;
     const companies = await dbInstance.runPreparedSelectQuery(mainQuery, [
       globals.school.ACAD_YEAR
     ]);

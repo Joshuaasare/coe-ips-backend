@@ -18,6 +18,9 @@ var service_1 = __importDefault(require("../features/Coordinators/service"));
 var CoordinatorController = /** @class */ (function () {
     function CoordinatorController() {
     }
+    CoordinatorController.prototype.addCompanyArchiveController = function (req, res) {
+        service_1.default.mutations.addCompanyArchive(req, res);
+    };
     CoordinatorController.prototype.archivedCompaniesController = function (req, res) {
         service_1.default.queries.getArchivedCompanies(req, res);
     };
@@ -36,6 +39,13 @@ var CoordinatorController = /** @class */ (function () {
     CoordinatorController.prototype.updateCompanyArchiveController = function (req, res) {
         service_1.default.mutations.updateCompanyArchive(req, res);
     };
+    __decorate([
+        decorators_1.post("/add-company-archive"),
+        decorators_1.use(middlewares_1.useAuthentication()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], CoordinatorController.prototype, "addCompanyArchiveController", null);
     __decorate([
         decorators_1.get("/archived-companies"),
         decorators_1.use(middlewares_1.useAuthentication()),

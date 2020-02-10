@@ -1,5 +1,5 @@
 import msql from "mysql2";
-import { globals } from "../globals";
+import { globals, constants } from "../globals";
 
 export interface PostRows extends Error {
   insertId?: number;
@@ -75,6 +75,47 @@ export class Database {
             if (err) {
               console.log("rejects here", err);
               reject(err);
+            } else runQuery(statement, ++i);
+          });
+        } else resolve(lastInsertedRow);
+      };
+
+      this.dbConnectionInstance.prepare(
+        preparedQuery,
+        (err: Error, statement: any) => {
+          if (err) reject(err);
+          // for each element in the array, execute....
+          else runQuery(statement, 0);
+        }
+      );
+    });
+  }
+
+  runPreparedQueryForCron(
+    preparedQuery: string,
+    params: Array<Array<string | number | boolean>>
+  ): any {
+    let lastInsertedRow = null;
+    return new Promise((resolve, reject) => {
+      const runQuery = (statement: any, i: number) => {
+        //console.log('i is ', i, 'params are ', params[i])
+        if (params[i]) {
+          /**
+           * we have to use this kind of recursive calls
+           * because we need to run the queries for as many parameters
+           * as there are. Unfortunately, the function that executes the query
+           * is not sequential and does not return a promise. Instead it expects a callback
+           * so it is only in the callback that we can know if each query was successful
+           * TODO: look for a faster way, maybe??
+           */
+          statement.execute(params[i], (err, results, fields) => {
+            lastInsertedRow = results;
+            if (err) {
+              if (err.code === constants.errors.SQL_DUP_ENTRY) {
+                runQuery(statement, ++i);
+              } else {
+                reject(err);
+              }
             } else runQuery(statement, ++i);
           });
         } else resolve(lastInsertedRow);

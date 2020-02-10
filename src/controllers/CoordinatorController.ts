@@ -1,10 +1,16 @@
-import { get, controller, use, put, del } from "../_shared/decorators";
+import { get, controller, use, put, del, post } from "../_shared/decorators";
 import { useAuthentication, IRequestWithUser } from "../_shared/middlewares";
 import { Response } from "express";
 import CoordinatorService from "../features/Coordinators/service";
 
 @controller("/coordinator")
 class CoordinatorController {
+  @post("/add-company-archive")
+  @use(useAuthentication())
+  addCompanyArchiveController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.mutations.addCompanyArchive(req, res);
+  }
+
   @get("/archived-companies")
   @use(useAuthentication())
   archivedCompaniesController(req: IRequestWithUser, res: Response) {

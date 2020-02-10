@@ -58,7 +58,7 @@ exports.getArchivedCompanies = function (req, res) { return __awaiter(void 0, vo
     });
 }); };
 exports.getArchivedCompaniesWithContactMade = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, archivedCompanyQuery, contactMadeQuery, join1, condition, mainQuery, companies, error_2;
+    var dbInstance, archivedCompanyQuery, contactMadeQuery, join1, condition, order, mainQuery, companies, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -66,9 +66,10 @@ exports.getArchivedCompaniesWithContactMade = function (req, res) { return __awa
                 dbInstance = req.dbInstance;
                 archivedCompanyQuery = "company_archive.id as id,\n    company_archive.name,\n    company_archive.email,\n    company_archive.postal_address,\n    company_archive.phone,\n    company_archive.website";
                 contactMadeQuery = "company_archive_contact_made.contact_made as contact_made,\n    company_archive_contact_made.acad_year as acad_year,\n    company_archive_contact_made.request_letter_url as request_letter_url";
-                join1 = "(company_archive left join company_archive_contact_made on company_archive.id = company_archive_contact_made.company_archive_id)";
+                join1 = "(company_archive right join company_archive_contact_made on company_archive.id = company_archive_contact_made.company_archive_id)";
                 condition = "acad_year = ? AND is_deleted = 0";
-                mainQuery = "select " + archivedCompanyQuery + ", " + contactMadeQuery + " from " + join1 + " where " + condition;
+                order = "order by company_archive.name";
+                mainQuery = "select " + archivedCompanyQuery + ", " + contactMadeQuery + " from " + join1 + " where " + condition + " " + order;
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [
                         globals_1.globals.school.ACAD_YEAR
                     ])];

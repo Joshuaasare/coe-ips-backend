@@ -1,5 +1,7 @@
 import { Database } from "../dbWrapper/Database";
 import isObject from "lodash/isObject";
+import { IRequestWithUser } from "../middlewares";
+import { Response } from "express";
 
 export async function checkIfUserExists(
   dbInstance: Database,

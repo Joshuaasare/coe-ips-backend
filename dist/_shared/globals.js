@@ -15,14 +15,17 @@ exports.globals = {
             database: "coe_ips"
         },
     school: {
-        ACAD_YEAR: 2019
+        ACAD_YEAR: 2019,
+        DEFAULT_COMPANY_CODE: 2425
     },
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
-    SALT_ROUNDS: 10
+    SALT_ROUNDS: 10,
+    GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
 };
 exports.constants = {
     errors: {
-        JSON_WEB_TOKEN_ERROR: "JsonWebTokenError"
+        JSON_WEB_TOKEN_ERROR: "JsonWebTokenError",
+        SQL_DUP_ENTRY: "ER_DUP_ENTRY"
     },
     user_type_id: {
         STUDENT: 1,

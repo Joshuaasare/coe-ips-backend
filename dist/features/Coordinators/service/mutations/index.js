@@ -7,3 +7,4 @@ __export(require("./setCompaniesContactMade"));
 __export(require("./deleteCompanyArchive"));
 __export(require("./sendPlacementRequest"));
 __export(require("./updateCompanyArchive"));
+__export(require("./addCompanyArchive"));

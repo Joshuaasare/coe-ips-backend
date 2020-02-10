@@ -84,6 +84,47 @@ var Database = /** @class */ (function () {
             });
         });
     };
+    Database.prototype.runPreparedQueryForCron = function (preparedQuery, params) {
+        var _this = this;
+        var lastInsertedRow = null;
+        return new Promise(function (resolve, reject) {
+            var runQuery = function (statement, i) {
+                //console.log('i is ', i, 'params are ', params[i])
+                if (params[i]) {
+                    /**
+                     * we have to use this kind of recursive calls
+                     * because we need to run the queries for as many parameters
+                     * as there are. Unfortunately, the function that executes the query
+                     * is not sequential and does not return a promise. Instead it expects a callback
+                     * so it is only in the callback that we can know if each query was successful
+                     * TODO: look for a faster way, maybe??
+                     */
+                    statement.execute(params[i], function (err, results, fields) {
+                        lastInsertedRow = results;
+                        if (err) {
+                            if (err.code === globals_1.constants.errors.SQL_DUP_ENTRY) {
+                                runQuery(statement, ++i);
+                            }
+                            else {
+                                reject(err);
+                            }
+                        }
+                        else
+                            runQuery(statement, ++i);
+                    });
+                }
+                else
+                    resolve(lastInsertedRow);
+            };
+            _this.dbConnectionInstance.prepare(preparedQuery, function (err, statement) {
+                if (err)
+                    reject(err);
+                // for each element in the array, execute....
+                else
+                    runQuery(statement, 0);
+            });
+        });
+    };
     Database.prototype.runPreparedSelectQuery = function (preparedQuery, params) {
         var _this = this;
         return new Promise(function (resolve, reject) {
