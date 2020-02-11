@@ -115,9 +115,9 @@ exports.sendPlacementRequest = function (req, res) { return __awaiter(void 0, vo
                                                         console.log(err);
                                                         return [3 /*break*/, 3];
                                                     case 1:
-                                                        data = [code_1, id];
+                                                        data = [code_1, id, globals_1.globals.school.ACAD_YEAR];
                                                         console.log(info);
-                                                        query = "update company_archive_contact_made set contact_made = 1 , code = ? where id = ?";
+                                                        query = "update company_archive_contact_made set contact_made = 1 , code = ? where company_archive_id = ? AND acad_year = ?";
                                                         return [4 /*yield*/, services_1.updateEntityRecord(query, [data], dbInstance_1)];
                                                     case 2:
                                                         updated = _a.sent();

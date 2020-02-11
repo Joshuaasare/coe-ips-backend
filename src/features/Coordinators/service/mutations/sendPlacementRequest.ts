@@ -80,9 +80,9 @@ export const sendPlacementRequest = async (
           if (err) {
             console.log(err);
           } else {
-            const data = [code, id];
+            const data = [code, id, globals.school.ACAD_YEAR];
             console.log(info);
-            const query = `update company_archive_contact_made set contact_made = 1 , code = ? where id = ?`;
+            const query = `update company_archive_contact_made set contact_made = 1 , code = ? where company_archive_id = ? AND acad_year = ?`;
             const updated = await updateEntityRecord(query, [data], dbInstance);
             sendMail(++index);
           }
