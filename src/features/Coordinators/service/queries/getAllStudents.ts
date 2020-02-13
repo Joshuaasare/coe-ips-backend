@@ -14,18 +14,24 @@ export const getAllStudents = async (req: IRequestWithUser, res: Response) => {
     student.internship_start_date, student.internship_evaluation_date,student.internship_completion_date,
     student.supervisor_name, student.supervisor_contact,student.supervisor_email`;
 
+    const locationQuery = `location.id as location_id, location.name as location_name,
+    location.address as location_address, location.district, location.region`;
+
     const subDepartmentQuery = `sub_department.id as sub_department_id, 
     sub_department.name as sub_department_name`;
 
     const mainDepartmentQuery = `main_department.id as main_department_id,
     main_department.name as main_department_name`;
 
+    const myCondition = `student.user_id != 1820 AND student.user_id != 1821 AND student.user_id != 1822 AND student.user_id != 1823`;
+
     const join1 = `(sub_department inner join student on student.sub_department_id = sub_department.id)`;
     const join2 = `(main_department inner join ${join1} on main_department.id = sub_department.main_department_id)`;
-    const condition = `student.acad_year = ? `;
+    const join3 = `(location inner join ${join2} on student.location_id = location.id)`;
+    const condition = `student.acad_year = ? AND student.user_id != 1820 AND ${myCondition} `;
 
-    const mainQuery = `select ${studentQuery}, ${subDepartmentQuery}, ${mainDepartmentQuery}
-     from ${join2} where ${condition}`;
+    const mainQuery = `select ${studentQuery}, ${subDepartmentQuery}, ${mainDepartmentQuery}, ${locationQuery}
+     from ${join3} where ${condition}`;
 
     const students: Array<any> = await dbInstance.runPreparedSelectQuery(
       mainQuery,

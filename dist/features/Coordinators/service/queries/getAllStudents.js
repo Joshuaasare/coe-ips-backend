@@ -38,19 +38,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var globals_1 = require("../../../../_shared/globals");
 exports.getAllStudents = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, studentQuery, subDepartmentQuery, mainDepartmentQuery, join1, join2, condition, mainQuery, students, error_1;
+    var dbInstance, studentQuery, locationQuery, subDepartmentQuery, mainDepartmentQuery, myCondition, join1, join2, join3, condition, mainQuery, students, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 dbInstance = req.dbInstance;
                 studentQuery = "student.user_id, student.index_number,student.surname, \n    student.other_names, student.phone, student.email, student.year_of_study,\n    student.acad_year, student.address , student.location ,student.google_place_id ,\n    student.latitude ,student.longitude ,student.foreign_student, student.want_placement,\n    student.acceptance_letter_url, student.registered_company,student.rejected_placement,\n    student.company_id, student.created_at,student.internship_placement_date ,\n    student.internship_start_date, student.internship_evaluation_date,student.internship_completion_date,\n    student.supervisor_name, student.supervisor_contact,student.supervisor_email";
+                locationQuery = "location.id as location_id, location.name as location_name,\n    location.address as location_address, location.district, location.region";
                 subDepartmentQuery = "sub_department.id as sub_department_id, \n    sub_department.name as sub_department_name";
                 mainDepartmentQuery = "main_department.id as main_department_id,\n    main_department.name as main_department_name";
+                myCondition = "student.user_id != 1820 AND student.user_id != 1821 AND student.user_id != 1822 AND student.user_id != 1823";
                 join1 = "(sub_department inner join student on student.sub_department_id = sub_department.id)";
                 join2 = "(main_department inner join " + join1 + " on main_department.id = sub_department.main_department_id)";
-                condition = "student.acad_year = ? ";
-                mainQuery = "select " + studentQuery + ", " + subDepartmentQuery + ", " + mainDepartmentQuery + "\n     from " + join2 + " where " + condition;
+                join3 = "(location inner join " + join2 + " on student.location_id = location.id)";
+                condition = "student.acad_year = ? AND student.user_id != 1820 AND " + myCondition + " ";
+                mainQuery = "select " + studentQuery + ", " + subDepartmentQuery + ", " + mainDepartmentQuery + ", " + locationQuery + "\n     from " + join3 + " where " + condition;
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [globals_1.globals.school.ACAD_YEAR])];
             case 1:
                 students = _a.sent();
