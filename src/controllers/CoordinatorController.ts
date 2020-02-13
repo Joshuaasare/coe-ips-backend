@@ -11,6 +11,12 @@ class CoordinatorController {
     CoordinatorService.mutations.addCompanyArchive(req, res);
   }
 
+  @get("/students")
+  @use(useAuthentication())
+  getStudentsController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.queries.getAllStudents(req, res);
+  }
+
   @get("/archived-companies")
   @use(useAuthentication())
   archivedCompaniesController(req: IRequestWithUser, res: Response) {

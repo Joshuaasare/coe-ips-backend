@@ -21,6 +21,9 @@ var CoordinatorController = /** @class */ (function () {
     CoordinatorController.prototype.addCompanyArchiveController = function (req, res) {
         service_1.default.mutations.addCompanyArchive(req, res);
     };
+    CoordinatorController.prototype.getStudentsController = function (req, res) {
+        service_1.default.queries.getAllStudents(req, res);
+    };
     CoordinatorController.prototype.archivedCompaniesController = function (req, res) {
         service_1.default.queries.getArchivedCompanies(req, res);
     };
@@ -46,6 +49,13 @@ var CoordinatorController = /** @class */ (function () {
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "addCompanyArchiveController", null);
+    __decorate([
+        decorators_1.get("/students"),
+        decorators_1.use(middlewares_1.useAuthentication()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], CoordinatorController.prototype, "getStudentsController", null);
     __decorate([
         decorators_1.get("/archived-companies"),
         decorators_1.use(middlewares_1.useAuthentication()),

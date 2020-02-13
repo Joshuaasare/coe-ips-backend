@@ -13,4 +13,9 @@ class TaskController {
   setCompanyNotContacted(req: IRequestWithUser, res: Response) {
     CoordinatorService.mutations.setCompanyContactStatusToFalse(req, res);
   }
+
+  @get("/update-location-table")
+  updateLocationTableController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.mutations.updateLocationTable(req, res);
+  }
 }
