@@ -57,7 +57,7 @@ exports.updateLocationTable = function (req, res) { return __awaiter(void 0, voi
                 students_1 = _a.sent();
                 (function updateLocation(index) {
                     return __awaiter(this, void 0, void 0, function () {
-                        var googlePlaceId, locationId, url, resp, ac, result, routeObject, localityObject, subLocalityObject, metropolisObject, regionObject, countryObject, route, locality, name, address, detailedAddress, district, region, locationData, updateQuery;
+                        var googlePlaceId, locationId, url, resp, ac, result, routeObject, localityObject, metropolisObject, regionObject, countryObject, route, locality, regionName, districtName, countryName, name, address, detailedAddress, district, region, locationData, updateQuery;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
@@ -74,7 +74,6 @@ exports.updateLocationTable = function (req, res) { return __awaiter(void 0, voi
                                     result = resp.data.result;
                                     routeObject = ac.find(function (c) { return c.types.includes("route"); });
                                     localityObject = ac.find(function (c) { return c.types.includes("locality"); });
-                                    subLocalityObject = ac.find(function (c) { return c.types.includes("sub_locality"); });
                                     metropolisObject = ac.find(function (c) {
                                         return c.types.includes("administrative_area_level_2");
                                     });
@@ -82,13 +81,17 @@ exports.updateLocationTable = function (req, res) { return __awaiter(void 0, voi
                                         return c.types.includes("administrative_area_level_1");
                                     });
                                     countryObject = ac.find(function (c) { return c.types.includes("country"); });
+                                    console.log(result.formatted_address);
                                     route = routeObject ? routeObject.short_name + "," : "";
                                     locality = localityObject ? localityObject.long_name + "," : "";
+                                    regionName = regionObject ? regionObject.long_name : "";
+                                    districtName = metropolisObject ? metropolisObject.long_name : "";
+                                    countryName = countryObject ? countryObject.long_name : "";
                                     name = result.formatted_address;
-                                    address = result.name + "," + locality + countryObject.long_name;
-                                    detailedAddress = "" + route + locality + metropolisObject.long_name + "," + regionObject.long_name + "," + countryObject.long_name;
-                                    district = metropolisObject.long_name;
-                                    region = regionObject.long_name;
+                                    address = result.name + "," + locality + countryName;
+                                    detailedAddress = "" + route + locality + districtName + "," + regionName + "," + countryName;
+                                    district = districtName;
+                                    region = regionName;
                                     locationData = [
                                         name,
                                         address,

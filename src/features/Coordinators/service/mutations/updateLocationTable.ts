@@ -32,7 +32,7 @@ export const updateLocationTable = async (
 
       const localityObject = ac.find(c => c.types.includes("locality"));
 
-      const subLocalityObject = ac.find(c => c.types.includes("sub_locality"));
+      //   const subLocalityObject = ac.find(c => c.types.includes("sub_locality"));
 
       const metropolisObject = ac.find(c =>
         c.types.includes("administrative_area_level_2")
@@ -44,14 +44,18 @@ export const updateLocationTable = async (
 
       const countryObject = ac.find(c => c.types.includes("country"));
 
+      console.log(result.formatted_address);
       const route = routeObject ? `${routeObject.short_name},` : "";
       const locality = localityObject ? `${localityObject.long_name},` : "";
+      const regionName = regionObject ? regionObject.long_name : "";
+      const districtName = metropolisObject ? metropolisObject.long_name : "";
+      const countryName = countryObject ? countryObject.long_name : "";
 
       const name = result.formatted_address;
-      const address = `${result.name},${locality}${countryObject.long_name}`;
-      const detailedAddress = `${route}${locality}${metropolisObject.long_name},${regionObject.long_name},${countryObject.long_name}`;
-      const district = metropolisObject.long_name;
-      const region = regionObject.long_name;
+      const address = `${result.name},${locality}${countryName}`;
+      const detailedAddress = `${route}${locality}${districtName},${regionName},${countryName}`;
+      const district = districtName;
+      const region = regionName;
 
       const locationData = [
         name,
