@@ -14,13 +14,13 @@ class TaskController {
     CoordinatorService.mutations.setCompanyContactStatusToFalse(req, res);
   }
 
-  @get("/update-location-table")
-  updateLocationTableController(req: IRequestWithUser, res: Response) {
-    CoordinatorService.mutations.updateLocationTable(req, res);
-  }
+  // @get("/update-location-table")
+  // updateLocationTableController(req: IRequestWithUser, res: Response) {
+  //   CoordinatorService.mutations.updateLocationTable(req, res);
+  // }
 
-  @get("/update-company-archive-location")
-  updateCompanyArchiveLocationController(req: IRequestWithUser, res: Response) {
-    CoordinatorService.mutations.updateCompanyArchiveLocation(req, res);
-  }
+  // @get("/update-company-archive-location")
+  // updateCompanyArchiveLocationController(req: IRequestWithUser, res: Response) {
+  //   CoordinatorService.mutations.updateCompanyArchiveLocation(req, res);
+  // }
 }
