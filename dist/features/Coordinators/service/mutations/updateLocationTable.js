@@ -132,7 +132,7 @@ exports.updateCompanyArchiveLocation = function (req, res) { return __awaiter(vo
                 companies_1 = _a.sent();
                 (function updateCompanyLocation(index) {
                     return __awaiter(this, void 0, void 0, function () {
-                        var companyWithLocation, updateQuery, data;
+                        var companyWithLocation, updateQuery, locationId, data;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
@@ -143,7 +143,10 @@ exports.updateCompanyArchiveLocation = function (req, res) { return __awaiter(vo
                                 case 1:
                                     companyWithLocation = _a.sent();
                                     updateQuery = "update company_archive set location_id = ? where id = ?";
-                                    data = [companyWithLocation[0].location_id, companies_1[index].id];
+                                    locationId = companyWithLocation[0]
+                                        ? companyWithLocation[0].id
+                                        : null;
+                                    data = [locationId, companies_1[index].id];
                                     return [4 /*yield*/, services_1.updateEntityRecord(updateQuery, [data], dbInstance_2)];
                                 case 2:
                                     _a.sent();
