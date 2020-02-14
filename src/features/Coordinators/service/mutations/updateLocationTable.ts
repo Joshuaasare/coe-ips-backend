@@ -105,7 +105,9 @@ export const updateCompanyArchiveLocation = async (
       console.log(companyWithLocation);
       const updateQuery = `update company_archive set location_id = ? where id = ?`;
       const locationId =
-        companyWithLocation.length !== 0 ? companyWithLocation[0].id : null;
+        companyWithLocation.length !== 0
+          ? companyWithLocation[0].location_id
+          : null;
       const data = [locationId, companies[index].id];
       await updateEntityRecord(updateQuery, [data], dbInstance);
       updateCompanyLocation(++index);

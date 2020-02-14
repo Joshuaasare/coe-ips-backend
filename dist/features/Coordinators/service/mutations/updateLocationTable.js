@@ -144,7 +144,9 @@ exports.updateCompanyArchiveLocation = function (req, res) { return __awaiter(vo
                                     companyWithLocation = _a.sent();
                                     console.log(companyWithLocation);
                                     updateQuery = "update company_archive set location_id = ? where id = ?";
-                                    locationId = companyWithLocation.length !== 0 ? companyWithLocation[0].id : null;
+                                    locationId = companyWithLocation.length !== 0
+                                        ? companyWithLocation[0].location_id
+                                        : null;
                                     data = [locationId, companies_1[index].id];
                                     return [4 /*yield*/, services_1.updateEntityRecord(updateQuery, [data], dbInstance_2)];
                                 case 2:
