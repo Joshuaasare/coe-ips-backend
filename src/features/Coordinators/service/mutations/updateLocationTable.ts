@@ -2,7 +2,11 @@ import { IRequestWithUser } from "../../../../_shared/middlewares";
 import { Response } from "express";
 import { globals } from "../../../../_shared/globals";
 import axios from "axios";
-import { updateEntityRecord } from "../../../../_shared/services";
+import {
+  updateEntityRecord,
+  getAllRecords,
+  getEntityRecordFromKey
+} from "../../../../_shared/services";
 
 export const updateLocationTable = async (
   req: IRequestWithUser,
@@ -72,6 +76,36 @@ export const updateLocationTable = async (
 
       await updateEntityRecord(updateQuery, [locationData], dbInstance);
       updateLocation(++index);
+    })(0);
+  } catch (error) {
+    console.log(`internal error`, error);
+    return res.status(422).send({ error: "Could not process request" });
+  }
+};
+
+export const updateCompanyArchiveLocation = async (
+  req: IRequestWithUser,
+  res: Response
+) => {
+  try {
+    const { user, dbInstance } = req;
+    const companies = await getAllRecords("company_archive", dbInstance);
+    (async function updateCompanyLocation(index) {
+      if (!companies[index]) {
+        return res.status(200).send({ data: "successful" });
+      }
+
+      const companyWithLocation: any = await getEntityRecordFromKey(
+        "company",
+        "name",
+        [companies[index].name],
+        dbInstance
+      );
+
+      const updateQuery = `update company_archive set location_id = ? where id = ?`;
+      const data = [companyWithLocation[0].location_id, companies[index].id];
+      await updateEntityRecord(updateQuery, [data], dbInstance);
+      updateCompanyLocation(++index);
     })(0);
   } catch (error) {
     console.log(`internal error`, error);

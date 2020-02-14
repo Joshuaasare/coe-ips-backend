@@ -120,3 +120,45 @@ exports.updateLocationTable = function (req, res) { return __awaiter(void 0, voi
         }
     });
 }); };
+exports.updateCompanyArchiveLocation = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, dbInstance_2, companies_1, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                user = req.user, dbInstance_2 = req.dbInstance;
+                return [4 /*yield*/, services_1.getAllRecords("company_archive", dbInstance_2)];
+            case 1:
+                companies_1 = _a.sent();
+                (function updateCompanyLocation(index) {
+                    return __awaiter(this, void 0, void 0, function () {
+                        var companyWithLocation, updateQuery, data;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    if (!companies_1[index]) {
+                                        return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                                    }
+                                    return [4 /*yield*/, services_1.getEntityRecordFromKey("company", "name", [companies_1[index].name], dbInstance_2)];
+                                case 1:
+                                    companyWithLocation = _a.sent();
+                                    updateQuery = "update company_archive set location_id = ? where id = ?";
+                                    data = [companyWithLocation[0].location_id, companies_1[index].id];
+                                    return [4 /*yield*/, services_1.updateEntityRecord(updateQuery, [data], dbInstance_2)];
+                                case 2:
+                                    _a.sent();
+                                    updateCompanyLocation(++index);
+                                    return [2 /*return*/];
+                            }
+                        });
+                    });
+                })(0);
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                console.log("internal error", error_2);
+                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };

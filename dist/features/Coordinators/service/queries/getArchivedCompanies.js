@@ -64,7 +64,7 @@ exports.getArchivedCompaniesWithContactMade = function (req, res) { return __awa
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 dbInstance = req.dbInstance;
-                archivedCompanyQuery = "company_archive.id as id,\n    company_archive.name,\n    company_archive.email,\n    company_archive.postal_address,\n    company_archive.phone,\n    company_archive.website";
+                archivedCompanyQuery = "company_archive.id as id,\n    company_archive.name,\n    company_archive.email,\n    company_archive.postal_address,\n    company_archive.phone,\n    company_archive.website,\n    company_archive.location_id";
                 contactMadeQuery = "company_archive_contact_made.contact_made as contact_made,\n    company_archive_contact_made.acad_year as acad_year,\n    company_archive_contact_made.request_letter_url as request_letter_url";
                 join1 = "(company_archive right join company_archive_contact_made on company_archive.id = company_archive_contact_made.company_archive_id)";
                 condition = "acad_year = ? AND is_deleted = 0";

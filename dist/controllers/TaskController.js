@@ -24,6 +24,9 @@ var TaskController = /** @class */ (function () {
     TaskController.prototype.updateLocationTableController = function (req, res) {
         service_1.default.mutations.updateLocationTable(req, res);
     };
+    TaskController.prototype.updateCompanyArchiveLocationController = function (req, res) {
+        service_1.default.mutations.updateCompanyArchiveLocation(req, res);
+    };
     __decorate([
         decorators_1.get("/set-company-not-contacted"),
         decorators_1.use(middlewares_1.useCronAuthentication()),
@@ -37,6 +40,12 @@ var TaskController = /** @class */ (function () {
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], TaskController.prototype, "updateLocationTableController", null);
+    __decorate([
+        decorators_1.get("/update-company-archive-location"),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], TaskController.prototype, "updateCompanyArchiveLocationController", null);
     TaskController = __decorate([
         decorators_1.controller("/cron")
     ], TaskController);
