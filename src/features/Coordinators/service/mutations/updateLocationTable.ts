@@ -83,7 +83,7 @@ export const updateLocationTable = async (
   }
 };
 
-export const updateCompanyArchiveLocation = async (
+export const resetCompanyArchiveLocation = async (
   req: IRequestWithUser,
   res: Response
 ) => {

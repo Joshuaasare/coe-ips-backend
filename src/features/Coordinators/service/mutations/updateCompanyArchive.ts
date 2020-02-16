@@ -40,7 +40,7 @@ export const updateCompanyArchive = async (
         globals.school.ACAD_YEAR
       ];
       const query2 = `update company_archive_contact_made set request_letter_url = ?,
-    last_modified = ? where company_archive_id = ? and acad_year = ?`;
+      last_modified = ? where company_archive_id = ? and acad_year = ?`;
       await updateEntityRecord(
         query2,
         [compArchiveContactMadeData],

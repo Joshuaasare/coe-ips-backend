@@ -58,18 +58,20 @@ exports.getArchivedCompanies = function (req, res) { return __awaiter(void 0, vo
     });
 }); };
 exports.getArchivedCompaniesWithContactMade = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, archivedCompanyQuery, contactMadeQuery, join1, condition, order, mainQuery, companies, error_2;
+    var dbInstance, archivedCompanyQuery, contactMadeQuery, locationQuery, join1, join2, condition, order, mainQuery, companies, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 dbInstance = req.dbInstance;
-                archivedCompanyQuery = "company_archive.id as id,\n    company_archive.name,\n    company_archive.email,\n    company_archive.postal_address,\n    company_archive.phone,\n    company_archive.website,\n    company_archive.location_id";
+                archivedCompanyQuery = "company_archive.id as id,\n    company_archive.name,\n    company_archive.email,\n    company_archive.postal_address,\n    company_archive.phone,\n    company_archive.website";
                 contactMadeQuery = "company_archive_contact_made.contact_made as contact_made,\n    company_archive_contact_made.acad_year as acad_year,\n    company_archive_contact_made.request_letter_url as request_letter_url";
+                locationQuery = "location.id as location_id, location.name as location_name,\n    location.address as location_address, location.district, location.region,\n    location.latitude as lat, location.longitude as lng";
                 join1 = "(company_archive right join company_archive_contact_made on company_archive.id = company_archive_contact_made.company_archive_id)";
+                join2 = "(location right join " + join1 + " on company_archive.location_id = location.id)";
                 condition = "acad_year = ? AND is_deleted = 0";
                 order = "order by company_archive.name";
-                mainQuery = "select " + archivedCompanyQuery + ", " + contactMadeQuery + " from " + join1 + " where " + condition + " " + order;
+                mainQuery = "select " + archivedCompanyQuery + ", " + contactMadeQuery + ", " + locationQuery + " from " + join2 + " where " + condition + " " + order;
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [
                         globals_1.globals.school.ACAD_YEAR
                     ])];

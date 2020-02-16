@@ -15,7 +15,8 @@ export const getAllStudents = async (req: IRequestWithUser, res: Response) => {
     student.supervisor_name, student.supervisor_contact,student.supervisor_email`;
 
     const locationQuery = `location.id as location_id, location.name as location_name,
-    location.address as location_address, location.district, location.region`;
+    location.address as location_address, location.district, location.region,
+    location.latitude as lat, location.longitude as lng`;
 
     const subDepartmentQuery = `sub_department.id as sub_department_id, 
     sub_department.name as sub_department_name`;
