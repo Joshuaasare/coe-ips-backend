@@ -31,11 +31,26 @@ export const registerStudent = async (
 
     const hash = await bcrypt.hash(password, globals.SALT_ROUNDS);
 
+    const {
+      name: locationName,
+      coords,
+      address,
+      route,
+      locality,
+      subLocality,
+      district,
+      region,
+      country
+    } = locationDetails;
+
     const locationData = [
-      locationDetails.name,
-      locationDetails.address,
-      locationDetails.coords.lat,
-      locationDetails.coords.lng,
+      address,
+      `${locationName},${locality},${country}`,
+      `${route},${locality},${district},${region},${country}`,
+      district,
+      region,
+      coords.lat,
+      coords.lng,
       Date.parse(`${new Date()}`),
       Date.parse(`${new Date()}`)
     ];
@@ -62,8 +77,8 @@ export const registerStudent = async (
 
     const insertedLocation = await insertEntityRecord(
       "location",
-      "name, address,latitude, longitude,created_at, last_modified",
-      "?,?,?,?,?,?",
+      "name, address, detailed_address, district, region, latitude, longitude,created_at, last_modified",
+      "?,?,?,?,?,?,?,?,?",
       [locationData],
       dbInstance
     );
