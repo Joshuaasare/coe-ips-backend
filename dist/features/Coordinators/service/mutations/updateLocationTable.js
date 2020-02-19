@@ -42,16 +42,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var globals_1 = require("../../../../_shared/globals");
 var axios_1 = __importDefault(require("axios"));
 var services_1 = require("../../../../_shared/services");
-exports.updateLocationTable = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+exports.updateLocationTableTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, dbInstance_1, studentQuery, students_1, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 user = req.user, dbInstance_1 = req.dbInstance;
-                studentQuery = "select * from student where acad_year = ?";
+                studentQuery = "select * from student where acad_year = ? AND user_id > ?";
                 return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(studentQuery, [
-                        globals_1.globals.school.ACAD_YEAR
+                        globals_1.globals.school.ACAD_YEAR,
+                        2731
                     ])];
             case 1:
                 students_1 = _a.sent();

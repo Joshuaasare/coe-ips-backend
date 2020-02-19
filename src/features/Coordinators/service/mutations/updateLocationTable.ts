@@ -8,15 +8,16 @@ import {
   getEntityRecordFromKey
 } from "../../../../_shared/services";
 
-export const updateLocationTable = async (
+export const updateLocationTableTask = async (
   req: IRequestWithUser,
   res: Response
 ) => {
   try {
     const { user, dbInstance } = req;
-    const studentQuery = `select * from student where acad_year = ?`;
+    const studentQuery = `select * from student where acad_year = ? AND user_id > ?`;
     const students = await dbInstance.runPreparedSelectQuery(studentQuery, [
-      globals.school.ACAD_YEAR
+      globals.school.ACAD_YEAR,
+      2731
     ]);
 
     (async function updateLocation(index: number) {
