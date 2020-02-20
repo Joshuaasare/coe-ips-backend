@@ -72,7 +72,6 @@ function getAllRecords(entity, dbInstance, hasDeletedColumn) {
     });
 }
 exports.getAllRecords = getAllRecords;
-//This type of query is used when we want to fetch the last insert Id
 function insertEntityRecord(entity, columns, escapes, params, dbInstance) {
     return __awaiter(this, void 0, void 0, function () {
         var query, rows;

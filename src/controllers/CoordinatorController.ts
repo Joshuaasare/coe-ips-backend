@@ -59,4 +59,16 @@ class CoordinatorController {
   updateCompanyArchiveLocationController(req: IRequestWithUser, res: Response) {
     CoordinatorService.mutations.updateCompanyArchiveLocation(req, res);
   }
+
+  @put("/update-student")
+  @use(useAuthentication())
+  updateStudentController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.mutations.updateStudent(req, res);
+  }
+
+  @put("/update-student-location")
+  @use(useAuthentication())
+  updateStudentLocationController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.mutations.updateStudentLocation(req, res);
+  }
 }

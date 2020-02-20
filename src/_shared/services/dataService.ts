@@ -24,7 +24,6 @@ export async function getAllRecords(
   return rows;
 }
 
-//This type of query is used when we want to fetch the last insert Id
 export async function insertEntityRecord(
   entity: string,
   columns: string,

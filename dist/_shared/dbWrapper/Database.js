@@ -46,6 +46,8 @@ var Database = /** @class */ (function () {
      *
      * Array should look like this:
      * ['Taxi Driver', 100]
+     *
+     * returns the last inserted row during insertion
      */
     Database.prototype.runPreparedQuery = function (preparedQuery, params) {
         var _this = this;
@@ -84,6 +86,14 @@ var Database = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Exectutes a prepared Query for a cron/scheduled task
+     * The special case here is if there's a server error relating to
+     * duplicate entry in the database the code just skips to execute t
+     * he query for the next set of params
+     * @param preparedQuery
+     * @param params
+     */
     Database.prototype.runPreparedQueryForCron = function (preparedQuery, params) {
         var _this = this;
         var lastInsertedRow = null;

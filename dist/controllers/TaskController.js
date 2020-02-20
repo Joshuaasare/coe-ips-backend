@@ -15,6 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var decorators_1 = require("../_shared/decorators");
 var middlewares_1 = require("../_shared/middlewares");
 var service_1 = __importDefault(require("../features/Coordinators/service"));
+/**
+ * Task Controller
+ * *This controller contains all routes related to some scheduled tasks
+ */
 var TaskController = /** @class */ (function () {
     function TaskController() {
     }

@@ -6,6 +6,11 @@ import {
 import { Response } from "express";
 import CoordinatorService from "../features/Coordinators/service";
 
+/**
+ * Task Controller
+ * *This controller contains all routes related to some scheduled tasks
+ */
+
 @controller("/cron")
 class TaskController {
   @get("/set-company-not-contacted")

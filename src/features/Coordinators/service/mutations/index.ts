@@ -5,3 +5,4 @@ export * from "./updateCompanyArchive";
 export * from "./addCompanyArchive";
 export * from "./updateLocationTable";
 export * from "./updateCompanyArchiveLocation";
+export * from "./updateStudent";

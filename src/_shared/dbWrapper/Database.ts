@@ -51,6 +51,8 @@ export class Database {
    *
    * Array should look like this:
    * ['Taxi Driver', 100]
+   *
+   * returns the last inserted row during insertion
    */
 
   runPreparedQuery(
@@ -90,6 +92,15 @@ export class Database {
       );
     });
   }
+
+  /**
+   * Exectutes a prepared Query for a cron/scheduled task
+   * The special case here is if there's a server error relating to
+   * duplicate entry in the database the code just skips to execute t
+   * he query for the next set of params
+   * @param preparedQuery
+   * @param params
+   */
 
   runPreparedQueryForCron(
     preparedQuery: string,
