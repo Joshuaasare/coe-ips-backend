@@ -98,6 +98,8 @@ export const updateStudentLocation = async (
       locationId
     ];
 
+    const userData = [email, id];
+
     const query1 = `update student set surname = ?, other_names = ?,
     email = ?, index_number = ?, phone = ?, location = ?, address = ?,
     google_place_id = ?, latitude = ?, longitude = ?, last_modified = ?
@@ -106,8 +108,11 @@ export const updateStudentLocation = async (
     const query2 = `update location set name = ?, address = ?, detailed_address = ?,
     district = ?, region = ?, latitude = ?, longitude = ?, updated_by = ?, last_modified = ? where id = ?`;
 
+    const query3 = `update user set email = ? where id = ?`;
+
     await updateEntityRecord(query1, [studentData], dbInstance);
     await updateEntityRecord(query2, [locationData], dbInstance);
+    await updateEntityRecord(query3, [userData], dbInstance);
 
     return res.status(200).send({ data: "Successful" });
   } catch (error) {
