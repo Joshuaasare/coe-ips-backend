@@ -4,7 +4,9 @@ import { updateEntityRecord } from "../../../../_shared/services";
 
 /**
  * update student without location details
- * TODO: write query such that without location can be resued
+ * TODO: !!!!!! VERY IMPORTANT write query such that without location can be resued!!!!!!!!
+ * !students can update with or without location so
+ * !any change should be made twice
  * @param req request
  * @param res response
  */
@@ -14,6 +16,8 @@ export const updateStudent = async (req: IRequestWithUser, res: Response) => {
     const { data } = req.body;
     console.log(data);
     const { id, surname, otherNames, indexNumber, email, phone } = data;
+
+    const userData = [email, id];
 
     const studentData = [
       surname,
@@ -28,7 +32,10 @@ export const updateStudent = async (req: IRequestWithUser, res: Response) => {
     const query1 = `update student set surname = ?, other_names = ?,
     email = ?, index_number = ?, phone = ?, last_modified = ? where user_id = ? `;
 
+    const query2 = `update user set email = ? where id = ?`;
+
     await updateEntityRecord(query1, [studentData], dbInstance);
+    await updateEntityRecord(query2, [userData], dbInstance);
 
     return res.status(200).send({ data: "Successful" });
   } catch (error) {
