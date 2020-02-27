@@ -39,20 +39,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var services_1 = require("../../../../_shared/services");
 /**
  * update student without location details
- * TODO: write query such that without location can be resued
+ * TODO: !!!!!! VERY IMPORTANT write query such that without location can be resued!!!!!!!!
+ * !students can update with or without location so
+ * !any change should be made twice
  * @param req request
  * @param res response
  */
 exports.updateStudent = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, data, id, surname, otherNames, indexNumber, email, phone, studentData, query1, error_1;
+    var dbInstance, data, id, surname, otherNames, indexNumber, email, phone, userData, studentData, query1, query2, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
                 dbInstance = req.dbInstance;
                 data = req.body.data;
                 console.log(data);
                 id = data.id, surname = data.surname, otherNames = data.otherNames, indexNumber = data.indexNumber, email = data.email, phone = data.phone;
+                userData = [email, id];
                 studentData = [
                     surname,
                     otherNames,
@@ -63,15 +66,19 @@ exports.updateStudent = function (req, res) { return __awaiter(void 0, void 0, v
                     id
                 ];
                 query1 = "update student set surname = ?, other_names = ?,\n    email = ?, index_number = ?, phone = ?, last_modified = ? where user_id = ? ";
+                query2 = "update user set email = ? where id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(query1, [studentData], dbInstance)];
             case 1:
                 _a.sent();
-                return [2 /*return*/, res.status(200).send({ data: "Successful" })];
+                return [4 /*yield*/, services_1.updateEntityRecord(query2, [userData], dbInstance)];
             case 2:
+                _a.sent();
+                return [2 /*return*/, res.status(200).send({ data: "Successful" })];
+            case 3:
                 error_1 = _a.sent();
                 console.log("internal error", error_1);
                 return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
-            case 3: return [2 /*return*/];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
