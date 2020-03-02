@@ -51,6 +51,9 @@ var CoordinatorController = /** @class */ (function () {
     CoordinatorController.prototype.updateStudentLocationController = function (req, res) {
         service_1.default.mutations.updateStudentLocation(req, res);
     };
+    CoordinatorController.prototype.getCompaniesWithSlotsController = function (req, res) {
+        service_1.default.queries.getCompaniesWithSlots(req, res);
+    };
     __decorate([
         decorators_1.post("/add-company-archive"),
         decorators_1.use(middlewares_1.useAuthentication()),
@@ -126,6 +129,13 @@ var CoordinatorController = /** @class */ (function () {
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "updateStudentLocationController", null);
+    __decorate([
+        decorators_1.get("/companies-with-slots"),
+        decorators_1.use(middlewares_1.useAuthentication()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], CoordinatorController.prototype, "getCompaniesWithSlotsController", null);
     CoordinatorController = __decorate([
         decorators_1.controller("/coordinator")
     ], CoordinatorController);

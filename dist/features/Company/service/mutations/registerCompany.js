@@ -44,7 +44,7 @@ var globals_1 = require("../../../../_shared/globals");
 var services_1 = require("../../../../_shared/services");
 var forEach_1 = __importDefault(require("lodash/forEach"));
 exports.registerCompany = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, _a, id, name_1, email, contact, postal_address, website, repName, repContact, repEmail, locationId, locationDetails, code, departments, verifyCodeQuery, verifyCodeData, company, hash, locationData, userData, insertedLocation, insertedUser_1, companyData, insertedCompany, departmentsData_1, updateCompanyData, updateCompanyQuery, error_1;
+    var dbInstance, _a, id, name_1, email, contact, postal_address, website, repName, repContact, repEmail, locationId, locationDetails, code, departments, locationName, coords, address, route, locality, subLocality, district, region, country, google_place_id, verifyCodeQuery, verifyCodeData, company, hash, locationData, userData, insertedLocation, insertedUser_1, companyData, insertedCompany, departmentsData_1, updateCompanyData, updateCompanyQuery, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -52,6 +52,7 @@ exports.registerCompany = function (req, res) { return __awaiter(void 0, void 0,
                 dbInstance = req.dbInstance;
                 console.log(req.body.data);
                 _a = req.body.data, id = _a.id, name_1 = _a.name, email = _a.email, contact = _a.contact, postal_address = _a.postal_address, website = _a.website, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, locationId = _a.locationId, locationDetails = _a.locationDetails, code = _a.code, departments = _a.departments;
+                locationName = locationDetails.name, coords = locationDetails.coords, address = locationDetails.address, route = locationDetails.route, locality = locationDetails.locality, subLocality = locationDetails.subLocality, district = locationDetails.district, region = locationDetails.region, country = locationDetails.country, google_place_id = locationDetails.google_place_id;
                 verifyCodeQuery = "select * from company_archive_contact_made  where acad_year = ? AND company_archive_id = ?";
                 verifyCodeData = [globals_1.globals.school.ACAD_YEAR, id];
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(verifyCodeQuery, verifyCodeData)];
@@ -68,10 +69,13 @@ exports.registerCompany = function (req, res) { return __awaiter(void 0, void 0,
             case 2:
                 hash = _b.sent();
                 locationData = [
-                    locationDetails.name,
-                    locationDetails.address,
-                    locationDetails.coords.lat,
-                    locationDetails.coords.lng,
+                    address,
+                    locationName + "," + locality + "," + country,
+                    route + "," + locality + "," + district + "," + region + "," + country,
+                    district,
+                    region,
+                    coords.lat,
+                    coords.lng,
                     Date.parse("" + new Date()),
                     Date.parse("" + new Date())
                 ];
@@ -82,7 +86,8 @@ exports.registerCompany = function (req, res) { return __awaiter(void 0, void 0,
                     Date.parse("" + new Date()),
                     Date.parse("" + new Date())
                 ];
-                return [4 /*yield*/, services_1.insertEntityRecord("location", "name,address,latitude,longitude,created_at, last_modified", "?,?,?,?,?,?", [locationData], dbInstance)];
+                console.log(locationData);
+                return [4 /*yield*/, services_1.insertEntityRecord("location", "name,address,detailed_address,district,region,latitude,longitude,created_at,last_modified", "?,?,?,?,?,?,?,?,?", [locationData], dbInstance)];
             case 3:
                 insertedLocation = _b.sent();
                 return [4 /*yield*/, services_1.insertEntityRecord("user", "user_type_id,email,password,created_at, last_modified", "?,?,?,?,?", [userData], dbInstance)];

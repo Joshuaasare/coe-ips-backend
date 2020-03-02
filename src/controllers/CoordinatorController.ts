@@ -71,4 +71,10 @@ class CoordinatorController {
   updateStudentLocationController(req: IRequestWithUser, res: Response) {
     CoordinatorService.mutations.updateStudentLocation(req, res);
   }
+
+  @get("/companies-with-slots")
+  @use(useAuthentication())
+  getCompaniesWithSlotsController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.queries.getCompaniesWithSlots(req, res);
+  }
 }

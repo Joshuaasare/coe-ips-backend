@@ -28,6 +28,19 @@ export const registerCompany = async (req: IRequestWithUser, res: Response) => {
       departments
     } = req.body.data;
 
+    const {
+      name: locationName,
+      coords,
+      address,
+      route,
+      locality,
+      subLocality,
+      district,
+      region,
+      country,
+      google_place_id
+    } = locationDetails;
+
     const verifyCodeQuery = `select * from company_archive_contact_made  where acad_year = ? AND company_archive_id = ?`;
 
     const verifyCodeData = [globals.school.ACAD_YEAR, id];
@@ -47,11 +60,15 @@ export const registerCompany = async (req: IRequestWithUser, res: Response) => {
     }
 
     const hash = await bcrypt.hash(contact, globals.SALT_ROUNDS);
+
     const locationData = [
-      locationDetails.name,
-      locationDetails.address,
-      locationDetails.coords.lat,
-      locationDetails.coords.lng,
+      address,
+      `${locationName},${locality},${country}`,
+      `${route},${locality},${district},${region},${country}`,
+      district,
+      region,
+      coords.lat,
+      coords.lng,
       Date.parse(`${new Date()}`),
       Date.parse(`${new Date()}`)
     ];
@@ -64,10 +81,12 @@ export const registerCompany = async (req: IRequestWithUser, res: Response) => {
       Date.parse(`${new Date()}`)
     ];
 
+    console.log(locationData);
+
     const insertedLocation = await insertEntityRecord(
       "location",
-      "name,address,latitude,longitude,created_at, last_modified",
-      "?,?,?,?,?,?",
+      "name,address,detailed_address,district,region,latitude,longitude,created_at,last_modified",
+      "?,?,?,?,?,?,?,?,?",
       [locationData],
       dbInstance
     );
