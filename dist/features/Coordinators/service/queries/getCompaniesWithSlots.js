@@ -44,8 +44,8 @@ exports.getCompaniesWithSlots = function (req, res) { return __awaiter(void 0, v
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 dbInstance_1 = req.dbInstance;
-                companyQuery = "company.user_id as company_id,\n    company.name as name";
-                companySubDepartmentQuery = "company_sub_department.id as company_sub_department_id,\n    company_sub_department.number_needed";
+                companyQuery = "company.user_id as company_id,\n    company.name as name,company.email as email, company.phone as phone,\n    company.placement_letter_url,company.placement_letter_sent";
+                companySubDepartmentQuery = "company_sub_department.id as id, \n    company_sub_department.id as company_sub_department_id,\n    company_sub_department.number_needed";
                 subDepartmentQuery = "sub_department.id as sub_department_id, \n    sub_department.name as sub_department_name";
                 mainDepartmentQuery = "main_department.id as main_department_id,\n    main_department.name as main_department_name";
                 locationQuery = "location.id as location_id, location.name as location_name,\n    location.address as location_address, location.district, location.region,\n    location.latitude as lat, location.longitude as lng";
@@ -54,7 +54,7 @@ exports.getCompaniesWithSlots = function (req, res) { return __awaiter(void 0, v
                 join3 = "(main_department inner join " + join2 + " on sub_department.main_department_id = main_department.id)";
                 join4 = "(location inner join " + join3 + " on company.location_id = location.id)";
                 condition = "company_sub_department.acad_year = ?";
-                mainQuery = "select " + companyQuery + ", " + companySubDepartmentQuery + ", " + subDepartmentQuery + ", \n    " + mainDepartmentQuery + ", " + locationQuery + " from " + join4 + " where " + condition;
+                mainQuery = "select " + companyQuery + ", " + companySubDepartmentQuery + ", " + subDepartmentQuery + ", \n    " + mainDepartmentQuery + ", " + locationQuery + " from " + join4 + " where " + condition + " order by name";
                 return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(mainQuery, [
                         globals_1.globals.school.ACAD_YEAR
                     ])];
@@ -62,27 +62,31 @@ exports.getCompaniesWithSlots = function (req, res) { return __awaiter(void 0, v
                 companies_1 = _a.sent();
                 (function getPlacedStudents(index) {
                     return __awaiter(this, void 0, void 0, function () {
-                        var studentsQuery, studentData, students, studentOptionData, studentOptionQuery, studentOptions;
+                        var studentQuery, studentLocationQuery, join, studentQueryCondition, mainStudentQuery, studentData, students, studentOptionData, studentOptionQuery, studentOptions;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
                                     if (!companies_1[index]) {
                                         return [2 /*return*/, res.status(200).send({ data: companies_1 })];
                                     }
-                                    studentsQuery = "select * from student where company_id = ? AND sub_department_id = ? AND acad_year = ?";
+                                    studentQuery = "student.user_id, student.index_number, \n      student.surname,student.other_names,student.phone,\n      student.email,student.year_of_study,student.acad_year,\n      student.address,student.location,student.google_place_id,\n      student.foreign_student,student.want_placement";
+                                    studentLocationQuery = "location.id as location_id, location.name as location_name,\n      location.address as location_address, location.district, location.region,\n      location.latitude as lat, location.longitude as lng";
+                                    join = "(student inner join location on student.location_id = location.id)";
+                                    studentQueryCondition = "student.company_id = ? AND student.sub_department_id = ? AND student.acad_year = ?";
+                                    mainStudentQuery = "select " + studentQuery + ", " + studentLocationQuery + " from " + join + " where " + studentQueryCondition;
                                     studentData = [
                                         companies_1[index].company_id,
                                         companies_1[index].sub_department_id,
                                         globals_1.globals.school.ACAD_YEAR
                                     ];
-                                    return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(studentsQuery, studentData)];
+                                    return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(mainStudentQuery, studentData)];
                                 case 1:
                                     students = _a.sent();
                                     studentOptionData = [
                                         companies_1[index].sub_department_id,
                                         globals_1.globals.school.ACAD_YEAR
                                     ];
-                                    studentOptionQuery = "select * from student where sub_department_id = ? AND acad_year = ?";
+                                    studentOptionQuery = "select " + studentQuery + ", " + studentLocationQuery + " from " + join + " where want_placement = 1 AND sub_department_id = ? AND acad_year = ?";
                                     return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(studentOptionQuery, studentOptionData)];
                                 case 2:
                                     studentOptions = _a.sent();

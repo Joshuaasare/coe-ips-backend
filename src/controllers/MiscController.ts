@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import { get, use, controller } from "../_shared/decorators";
 import MiscService from "../features/Misc";
-import { useAuthentication, useAuthorization } from "../_shared/middlewares";
+import {
+  useAuthentication,
+  useAuthorization,
+  IRequestWithUser
+} from "../_shared/middlewares";
 
 @controller("")
 class MiscController {

@@ -6,3 +6,6 @@ export * from "./addCompanyArchive";
 export * from "./updateLocationTable";
 export * from "./updateCompanyArchiveLocation";
 export * from "./updateStudent";
+export * from "./addPreviousStudents";
+export * from "./updatePlacement";
+export * from "./updateCompany";

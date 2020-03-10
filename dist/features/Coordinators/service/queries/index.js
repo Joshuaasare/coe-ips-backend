@@ -7,3 +7,4 @@ __export(require("./getArchivedCompanies"));
 __export(require("./getSubDepartments"));
 __export(require("./getAllStudents"));
 __export(require("./getCompaniesWithSlots"));
+__export(require("./getCompanyStudents"));

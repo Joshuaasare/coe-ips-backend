@@ -11,3 +11,6 @@ __export(require("./addCompanyArchive"));
 __export(require("./updateLocationTable"));
 __export(require("./updateCompanyArchiveLocation"));
 __export(require("./updateStudent"));
+__export(require("./addPreviousStudents"));
+__export(require("./updatePlacement"));
+__export(require("./updateCompany"));

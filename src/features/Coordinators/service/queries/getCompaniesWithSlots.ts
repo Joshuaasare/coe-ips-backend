@@ -11,9 +11,11 @@ export const getCompaniesWithSlots = async (
   try {
     const { dbInstance } = req;
     const companyQuery = `company.user_id as company_id,
-    company.name as name`;
+    company.name as name,company.email as email, company.phone as phone,
+    company.placement_letter_url,company.placement_letter_sent`;
 
-    const companySubDepartmentQuery = `company_sub_department.id as company_sub_department_id,
+    const companySubDepartmentQuery = `company_sub_department.id as id, 
+    company_sub_department.id as company_sub_department_id,
     company_sub_department.number_needed`;
 
     const subDepartmentQuery = `sub_department.id as sub_department_id, 
@@ -34,7 +36,7 @@ export const getCompaniesWithSlots = async (
     const condition = `company_sub_department.acad_year = ?`;
 
     const mainQuery = `select ${companyQuery}, ${companySubDepartmentQuery}, ${subDepartmentQuery}, 
-    ${mainDepartmentQuery}, ${locationQuery} from ${join4} where ${condition}`;
+    ${mainDepartmentQuery}, ${locationQuery} from ${join4} where ${condition} order by name`;
 
     const companies = await dbInstance.runPreparedSelectQuery(mainQuery, [
       globals.school.ACAD_YEAR
@@ -44,14 +46,30 @@ export const getCompaniesWithSlots = async (
       if (!companies[index]) {
         return res.status(200).send({ data: companies });
       }
-      const studentsQuery = `select * from student where company_id = ? AND sub_department_id = ? AND acad_year = ?`;
+
+      const studentQuery = `student.user_id, student.index_number, 
+      student.surname,student.other_names,student.phone,
+      student.email,student.year_of_study,student.acad_year,
+      student.address,student.location,student.google_place_id,
+      student.foreign_student,student.want_placement`;
+
+      const studentLocationQuery = `location.id as location_id, location.name as location_name,
+      location.address as location_address, location.district, location.region,
+      location.latitude as lat, location.longitude as lng`;
+
+      const join = `(student inner join location on student.location_id = location.id)`;
+
+      const studentQueryCondition = `student.company_id = ? AND student.sub_department_id = ? AND student.acad_year = ?`;
+
+      const mainStudentQuery = `select ${studentQuery}, ${studentLocationQuery} from ${join} where ${studentQueryCondition}`;
+
       const studentData = [
         companies[index].company_id,
         companies[index].sub_department_id,
         globals.school.ACAD_YEAR
       ];
       const students = await dbInstance.runPreparedSelectQuery(
-        studentsQuery,
+        mainStudentQuery,
         studentData
       );
 
@@ -60,7 +78,7 @@ export const getCompaniesWithSlots = async (
         globals.school.ACAD_YEAR
       ];
 
-      const studentOptionQuery = `select * from student where sub_department_id = ? AND acad_year = ?`;
+      const studentOptionQuery = `select ${studentQuery}, ${studentLocationQuery} from ${join} where want_placement = 1 AND sub_department_id = ? AND acad_year = ?`;
       const studentOptions = await dbInstance.runPreparedSelectQuery(
         studentOptionQuery,
         studentOptionData

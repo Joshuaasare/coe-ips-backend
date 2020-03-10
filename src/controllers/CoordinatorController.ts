@@ -77,4 +77,28 @@ class CoordinatorController {
   getCompaniesWithSlotsController(req: IRequestWithUser, res: Response) {
     CoordinatorService.queries.getCompaniesWithSlots(req, res);
   }
+
+  @put("/update-placement")
+  @use(useAuthentication())
+  updatePlacementController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.mutations.updatePlacement(req, res);
+  }
+
+  @put("/update-company")
+  @use(useAuthentication())
+  updateCompanyController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.mutations.updateCompany(req, res);
+  }
+
+  @put("/update-company-location")
+  @use(useAuthentication())
+  updateCompanyLocationController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.mutations.updateCompanyLocation(req, res);
+  }
+
+  @get("/company-students")
+  @use(useAuthentication())
+  getCompanyStudentsController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.queries.getCompanyStudents(req, res);
+  }
 }
