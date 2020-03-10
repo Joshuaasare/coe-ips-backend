@@ -9,3 +9,4 @@ export * from "./updateStudent";
 export * from "./addPreviousStudents";
 export * from "./updatePlacement";
 export * from "./updateCompany";
+export * from "./sendPlacementLetter";

@@ -101,4 +101,10 @@ class CoordinatorController {
   getCompanyStudentsController(req: IRequestWithUser, res: Response) {
     CoordinatorService.queries.getCompanyStudents(req, res);
   }
+
+  @put("/placement-letter")
+  @use(useAuthentication())
+  sendPlacementLetterController(req: IRequestWithUser, res: Response) {
+    CoordinatorService.mutations.sendPlacementLetter(req, res);
+  }
 }

@@ -9,11 +9,16 @@ export const updateCompany = async (req: IRequestWithUser, res: Response) => {
     const { data } = req.body;
     console.log(data);
 
-    const { id, placementLetterUrl } = data;
+    const { id, email, placementLetterUrl } = data;
 
-    const companyData = [placementLetterUrl, id, globals.school.ACAD_YEAR];
+    const companyData = [
+      email,
+      placementLetterUrl,
+      id,
+      globals.school.ACAD_YEAR
+    ];
 
-    const query1 = `update company set placement_letter_url = ? where user_id = ? AND acad_year = ?`;
+    const query1 = `update company set email = ?, placement_letter_url = ? where user_id = ? AND acad_year = ?`;
 
     await updateEntityRecord(query1, [companyData], dbInstance);
 
@@ -32,9 +37,20 @@ export const updateCompanyLocation = async (
     const { dbInstance, user } = req;
     const { data } = req.body;
 
-    const { id, name, placementLetterUrl, locationId } = data.companyDetails;
+    const {
+      id,
+      name,
+      email,
+      placementLetterUrl,
+      locationId
+    } = data.companyDetails;
 
-    const companyData = [placementLetterUrl, id, globals.school.ACAD_YEAR];
+    const companyData = [
+      email,
+      placementLetterUrl,
+      id,
+      globals.school.ACAD_YEAR
+    ];
 
     const {
       name: locationName,
@@ -62,7 +78,7 @@ export const updateCompanyLocation = async (
       locationId
     ];
 
-    const query1 = `update company set placement_letter_url = ? where user_id = ? AND acad_year = ?`;
+    const query1 = `update company set email = ?, placement_letter_url = ? where user_id = ? AND acad_year = ?`;
     const query2 = `update location set name = ?, address = ?, detailed_address = ?,
     district = ?, region = ?, latitude = ?, longitude = ?, updated_by = ?, last_modified = ? where id = ?`;
 
