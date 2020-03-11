@@ -35,12 +35,102 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var nodemailer_1 = __importDefault(require("nodemailer"));
+var globals_1 = require("../../../../_shared/globals");
+var services_1 = require("../../../../_shared/services");
 exports.sendPlacementLetter = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, dbInstance_1, ids_1, transporter_1;
     return __generator(this, function (_a) {
         try {
+            user = req.user, dbInstance_1 = req.dbInstance;
+            ids_1 = req.body.data.ids;
+            transporter_1 = nodemailer_1.default.createTransport({
+                service: "gmail",
+                auth: {
+                    user: "vacationtraining.knust.coe@gmail.com",
+                    pass: "coe-vac-training-2019"
+                }
+            });
+            console.log(ids_1);
+            (function sendMail(index) {
+                return __awaiter(this, void 0, void 0, function () {
+                    var id, mainQuery, company, mailOptions;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (!ids_1[index]) {
+                                    return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                                }
+                                id = ids_1[index];
+                                mainQuery = "select * from company where user_id = ?";
+                                return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(mainQuery, [id])];
+                            case 1:
+                                company = _a.sent();
+                                console.log(company[0]);
+                                if (company[0].placement_letter_sent === 0 &&
+                                    !services_1.isEmpty(company[0].placement_letter_url) &&
+                                    !services_1.isEmpty(company[0].email)) {
+                                    console.log("send mail");
+                                    mailOptions = {
+                                        from: "knustcoeindustrialtraining@gmail.com",
+                                        to: company[0].email,
+                                        subject: "Industrial Training Placement List",
+                                        text: "Please find attached to this mail a letter containing the list of all students posted to your company" +
+                                            "\n\nIng. Prof. Prince Yaw Andoh, PhD, MGhIE" +
+                                            "\nAssociate Professor/Industrial Liaison" +
+                                            "\nDepartment of Mechanical Engineering" +
+                                            "\nCollege of Engineering" +
+                                            "\nKwame Nkrumah University of Science and Technology" +
+                                            "\nPrivate Mail Bag, University Post Office Kumasi, Ghana" +
+                                            "\nTel: 024 2235674; 020 0960067; 0507970658\n\n",
+                                        attachments: [
+                                            {
+                                                filename: "Placement list letter.pdf",
+                                                path: company[0].placement_letter_url
+                                            }
+                                        ]
+                                    };
+                                    transporter_1.sendMail(mailOptions, function (err, info) {
+                                        return __awaiter(this, void 0, void 0, function () {
+                                            var data, query, updated;
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0:
+                                                        if (!err) return [3 /*break*/, 1];
+                                                        console.log(err);
+                                                        return [3 /*break*/, 3];
+                                                    case 1:
+                                                        data = [id, globals_1.globals.school.ACAD_YEAR];
+                                                        console.log(info);
+                                                        query = "update company set placement_letter_sent = 1 where user_id = ? AND acad_year = ?";
+                                                        return [4 /*yield*/, services_1.updateEntityRecord(query, [data], dbInstance_1)];
+                                                    case 2:
+                                                        updated = _a.sent();
+                                                        sendMail(++index);
+                                                        _a.label = 3;
+                                                    case 3: return [2 /*return*/];
+                                                }
+                                            });
+                                        });
+                                    });
+                                }
+                                else {
+                                    sendMail(++index);
+                                }
+                                return [2 /*return*/];
+                        }
+                    });
+                });
+            })(0);
         }
-        catch (error) { }
+        catch (error) {
+            console.log("internal error", error);
+            return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+        }
         return [2 /*return*/];
     });
 }); };

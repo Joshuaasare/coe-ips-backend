@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var globals_1 = require("../../../../_shared/globals");
 var services_1 = require("../../../../_shared/services");
 exports.updateCompany = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, data, id, placementLetterUrl, companyData, query1, error_1;
+    var dbInstance, data, id, email, placementLetterUrl, companyData, query1, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -47,9 +47,14 @@ exports.updateCompany = function (req, res) { return __awaiter(void 0, void 0, v
                 dbInstance = req.dbInstance;
                 data = req.body.data;
                 console.log(data);
-                id = data.id, placementLetterUrl = data.placementLetterUrl;
-                companyData = [placementLetterUrl, id, globals_1.globals.school.ACAD_YEAR];
-                query1 = "update company set placement_letter_url = ? where user_id = ? AND acad_year = ?";
+                id = data.id, email = data.email, placementLetterUrl = data.placementLetterUrl;
+                companyData = [
+                    email,
+                    placementLetterUrl,
+                    id,
+                    globals_1.globals.school.ACAD_YEAR
+                ];
+                query1 = "update company set email = ?, placement_letter_url = ? where user_id = ? AND acad_year = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(query1, [companyData], dbInstance)];
             case 1:
                 _a.sent();
@@ -63,15 +68,20 @@ exports.updateCompany = function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); };
 exports.updateCompanyLocation = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, user, data, _a, id, name_1, placementLetterUrl, locationId, companyData, _b, locationName, coords, address, route, locality, subLocality, district, region, country, google_place_id, locationData, query1, query2, error_2;
+    var dbInstance, user, data, _a, id, name_1, email, placementLetterUrl, locationId, companyData, _b, locationName, coords, address, route, locality, subLocality, district, region, country, google_place_id, locationData, query1, query2, error_2;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _c.trys.push([0, 3, , 4]);
                 dbInstance = req.dbInstance, user = req.user;
                 data = req.body.data;
-                _a = data.companyDetails, id = _a.id, name_1 = _a.name, placementLetterUrl = _a.placementLetterUrl, locationId = _a.locationId;
-                companyData = [placementLetterUrl, id, globals_1.globals.school.ACAD_YEAR];
+                _a = data.companyDetails, id = _a.id, name_1 = _a.name, email = _a.email, placementLetterUrl = _a.placementLetterUrl, locationId = _a.locationId;
+                companyData = [
+                    email,
+                    placementLetterUrl,
+                    id,
+                    globals_1.globals.school.ACAD_YEAR
+                ];
                 _b = data.locationDetails, locationName = _b.name, coords = _b.coords, address = _b.address, route = _b.route, locality = _b.locality, subLocality = _b.subLocality, district = _b.district, region = _b.region, country = _b.country, google_place_id = _b.google_place_id;
                 locationData = [
                     address,
@@ -85,7 +95,7 @@ exports.updateCompanyLocation = function (req, res) { return __awaiter(void 0, v
                     Date.parse("" + new Date()),
                     locationId
                 ];
-                query1 = "update company set placement_letter_url = ? where user_id = ? AND acad_year = ?";
+                query1 = "update company set email = ?, placement_letter_url = ? where user_id = ? AND acad_year = ?";
                 query2 = "update location set name = ?, address = ?, detailed_address = ?,\n    district = ?, region = ?, latitude = ?, longitude = ?, updated_by = ?, last_modified = ? where id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(query1, [companyData], dbInstance)];
             case 1:

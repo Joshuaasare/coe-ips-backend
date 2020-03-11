@@ -14,3 +14,4 @@ __export(require("./updateStudent"));
 __export(require("./addPreviousStudents"));
 __export(require("./updatePlacement"));
 __export(require("./updateCompany"));
+__export(require("./sendPlacementLetter"));

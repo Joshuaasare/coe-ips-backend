@@ -51,7 +51,7 @@ export const getCompaniesWithSlots = async (
       student.surname,student.other_names,student.phone,
       student.email,student.year_of_study,student.acad_year,
       student.address,student.location,student.google_place_id,
-      student.foreign_student,student.want_placement`;
+      student.foreign_student,student.want_placement,student.company_id`;
 
       const studentLocationQuery = `location.id as location_id, location.name as location_name,
       location.address as location_address, location.district, location.region,

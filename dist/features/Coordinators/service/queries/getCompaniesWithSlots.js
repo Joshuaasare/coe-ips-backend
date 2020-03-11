@@ -69,7 +69,7 @@ exports.getCompaniesWithSlots = function (req, res) { return __awaiter(void 0, v
                                     if (!companies_1[index]) {
                                         return [2 /*return*/, res.status(200).send({ data: companies_1 })];
                                     }
-                                    studentQuery = "student.user_id, student.index_number, \n      student.surname,student.other_names,student.phone,\n      student.email,student.year_of_study,student.acad_year,\n      student.address,student.location,student.google_place_id,\n      student.foreign_student,student.want_placement";
+                                    studentQuery = "student.user_id, student.index_number, \n      student.surname,student.other_names,student.phone,\n      student.email,student.year_of_study,student.acad_year,\n      student.address,student.location,student.google_place_id,\n      student.foreign_student,student.want_placement,student.company_id";
                                     studentLocationQuery = "location.id as location_id, location.name as location_name,\n      location.address as location_address, location.district, location.region,\n      location.latitude as lat, location.longitude as lng";
                                     join = "(student inner join location on student.location_id = location.id)";
                                     studentQueryCondition = "student.company_id = ? AND student.sub_department_id = ? AND student.acad_year = ?";

@@ -66,6 +66,9 @@ var CoordinatorController = /** @class */ (function () {
     CoordinatorController.prototype.getCompanyStudentsController = function (req, res) {
         service_1.default.queries.getCompanyStudents(req, res);
     };
+    CoordinatorController.prototype.sendPlacementLetterController = function (req, res) {
+        service_1.default.mutations.sendPlacementLetter(req, res);
+    };
     __decorate([
         decorators_1.post("/add-company-archive"),
         decorators_1.use(middlewares_1.useAuthentication()),
@@ -176,6 +179,13 @@ var CoordinatorController = /** @class */ (function () {
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "getCompanyStudentsController", null);
+    __decorate([
+        decorators_1.put("/placement-letter"),
+        decorators_1.use(middlewares_1.useAuthentication()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], CoordinatorController.prototype, "sendPlacementLetterController", null);
     CoordinatorController = __decorate([
         decorators_1.controller("/coordinator")
     ], CoordinatorController);
