@@ -3,6 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable no-empty */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-param-reassign */
 var mysql2_1 = __importDefault(require("mysql2"));
 var globals_1 = require("../globals");
 var Database = /** @class */ (function () {
@@ -15,15 +20,12 @@ var Database = /** @class */ (function () {
     Database.prototype.handleDisconnect = function () {
         this.dbConnectionInstance.connect(function (err) {
             if (err) {
-                console.log("error when connecting to db:", err);
             }
         });
-        this.dbConnectionInstance.on("error", function (err) {
-            console.log("db error", err);
-        });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        this.dbConnectionInstance.on('error', function (err) { });
     };
     Database.prototype.endDbConnection = function () {
-        console.log("ending connection");
         this.dbConnectionInstance.end();
     };
     Database.prototype.runQuery = function (query) {
@@ -54,7 +56,7 @@ var Database = /** @class */ (function () {
         var lastInsertedRow = null;
         return new Promise(function (resolve, reject) {
             var runQuery = function (statement, i) {
-                //console.log('i is ', i, 'params are ', params[i])
+                // console.log('i is ', i, 'params are ', params[i])
                 if (params[i]) {
                     /**
                      * we have to use this kind of recursive calls
@@ -64,14 +66,12 @@ var Database = /** @class */ (function () {
                      * so it is only in the callback that we can know if each query was successful
                      * TODO: look for a faster way, maybe??
                      */
-                    statement.execute(params[i], function (err, results, fields) {
+                    statement.execute(params[i], function (err, results) {
                         lastInsertedRow = results;
                         if (err) {
-                            console.log("rejects here", err);
                             reject(err);
                         }
-                        else
-                            runQuery(statement, ++i);
+                        runQuery(statement, ++i);
                     });
                 }
                 else
@@ -99,7 +99,7 @@ var Database = /** @class */ (function () {
         var lastInsertedRow = null;
         return new Promise(function (resolve, reject) {
             var runQuery = function (statement, i) {
-                //console.log('i is ', i, 'params are ', params[i])
+                // console.log('i is ', i, 'params are ', params[i])
                 if (params[i]) {
                     /**
                      * we have to use this kind of recursive calls
@@ -109,7 +109,7 @@ var Database = /** @class */ (function () {
                      * so it is only in the callback that we can know if each query was successful
                      * TODO: look for a faster way, maybe??
                      */
-                    statement.execute(params[i], function (err, results, fields) {
+                    statement.execute(params[i], function (err, results) {
                         lastInsertedRow = results;
                         if (err) {
                             if (err.code === globals_1.constants.errors.SQL_DUP_ENTRY) {
@@ -151,7 +151,6 @@ var Database = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             _this.dbConnectionInstance.query(query, values, function (err, rows) {
                 if (err) {
-                    console.log("sql error" + err);
                     reject(err);
                 }
                 resolve(rows);

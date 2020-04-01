@@ -39,14 +39,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var services_1 = require("../../../../_shared/services");
 var globals_1 = require("../../../../_shared/globals");
 exports.addCompanyArchive = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, _a, name_1, email, phone, website, repName, repEmail, repContact, postalAddress, hasRequestedPlacement, data, insertedCompany, contactMadeData, contactMadeData, error_1;
+    var dbInstance, _a, name_1, email, phone, website, repName, repEmail, repContact, postalAddress, hasRequestedPlacement, data, insertedCompany, contactMadeData_1, contactMadeData, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 6, , 7]);
+                _b.trys.push([0, 5, , 6]);
                 dbInstance = req.dbInstance;
                 _a = req.body.data, name_1 = _a.name, email = _a.email, phone = _a.phone, website = _a.website, repName = _a.repName, repEmail = _a.repEmail, repContact = _a.repContact, postalAddress = _a.postalAddress, hasRequestedPlacement = _a.hasRequestedPlacement;
-                console.log(req.body.data);
                 data = [
                     name_1,
                     email,
@@ -57,42 +56,40 @@ exports.addCompanyArchive = function (req, res) { return __awaiter(void 0, void 
                     repContact,
                     repEmail,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
-                return [4 /*yield*/, services_1.insertEntityRecord("company_archive", "name,email,phone,postal_address,website,representative_name,representative_phone, representative_email, created_at, last_modified", "?,?,?,?,?,?,?,?,?,?", [data], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('company_archive', 'name,email,phone,postal_address,website,representative_name,representative_phone, representative_email, created_at, last_modified', '?,?,?,?,?,?,?,?,?,?', [data], dbInstance)];
             case 1:
                 insertedCompany = _b.sent();
                 if (!(hasRequestedPlacement === 1)) return [3 /*break*/, 3];
-                contactMadeData = [
+                contactMadeData_1 = [
                     insertedCompany.insertId,
                     globals_1.globals.school.ACAD_YEAR,
                     1,
                     globals_1.globals.school.DEFAULT_COMPANY_CODE,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
-                return [4 /*yield*/, services_1.insertEntityRecord("company_archive_contact_made", "company_archive_id, acad_year,contact_made,code,created_at,last_modified", "?,?,?,?,?,?", [contactMadeData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('company_archive_contact_made', 'company_archive_id, acad_year,contact_made,code,created_at,last_modified', '?,?,?,?,?,?', [contactMadeData_1], dbInstance)];
             case 2:
                 _b.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
             case 3:
                 contactMadeData = [
                     insertedCompany.insertId,
                     globals_1.globals.school.ACAD_YEAR,
                     0,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
-                return [4 /*yield*/, services_1.insertEntityRecord("company_archive_contact_made", "company_archive_id, acad_year,contact_made,created_at,last_modified", "?,?,?,?,?", [contactMadeData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('company_archive_contact_made', 'company_archive_id, acad_year,contact_made,created_at,last_modified', '?,?,?,?,?', [contactMadeData], dbInstance)];
             case 4:
                 _b.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
-            case 5: return [3 /*break*/, 7];
-            case 6:
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
+            case 5:
                 error_1 = _b.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
-            case 7: return [2 /*return*/];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

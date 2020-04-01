@@ -23,17 +23,17 @@ var TaskController = /** @class */ (function () {
     function TaskController() {
     }
     TaskController.prototype.setCompanyNotContacted = function (req, res) {
-        service_1.default.mutations.setCompanyContactStatusToFalse(req, res);
+        return service_1.default.mutations.setCompanyContactStatusToFalse(req, res);
     };
     __decorate([
-        decorators_1.get("/set-company-not-contacted"),
+        decorators_1.get('/set-company-not-contacted'),
         decorators_1.use(middlewares_1.useCronAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], TaskController.prototype, "setCompanyNotContacted", null);
     TaskController = __decorate([
-        decorators_1.controller("/cron")
+        decorators_1.controller('/cron')
     ], TaskController);
     return TaskController;
 }());

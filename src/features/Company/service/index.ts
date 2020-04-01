@@ -1,5 +1,5 @@
-import * as mutations from "./mutations";
+import * as mutations from './mutations';
 
 export default {
-  mutations
+  mutations,
 };

@@ -39,130 +39,121 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var globals_1 = require("../../../../_shared/globals");
 var axios_1 = __importDefault(require("axios"));
+var globals_1 = require("../../../../_shared/globals");
 var services_1 = require("../../../../_shared/services");
 exports.updateLocationTableTask = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, dbInstance_1, studentQuery, students_1, error_1;
+    var dbInstance_1, studentQuery, students_1, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                user = req.user, dbInstance_1 = req.dbInstance;
+                dbInstance_1 = req.dbInstance;
                 studentQuery = "select * from student where acad_year = ? AND user_id > ?";
                 return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(studentQuery, [
                         globals_1.globals.school.ACAD_YEAR,
-                        2731
+                        2731,
                     ])];
             case 1:
                 students_1 = _a.sent();
-                (function updateLocation(index) {
-                    return __awaiter(this, void 0, void 0, function () {
-                        var googlePlaceId, locationId, url, resp, ac, result, routeObject, localityObject, metropolisObject, regionObject, countryObject, route, locality, regionName, districtName, countryName, name, address, detailedAddress, district, region, locationData, updateQuery;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (!students_1[index]) {
-                                        return [2 /*return*/, res.status(200).send({ data: "successful" })];
-                                    }
-                                    googlePlaceId = students_1[index].google_place_id;
-                                    locationId = students_1[index].location_id;
-                                    url = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + googlePlaceId + "&key=" + globals_1.globals.GOOGLE_MAPS_API_KEY;
-                                    return [4 /*yield*/, axios_1.default.get(url)];
-                                case 1:
-                                    resp = _a.sent();
-                                    ac = resp.data.result.address_components;
-                                    result = resp.data.result;
-                                    routeObject = ac.find(function (c) { return c.types.includes("route"); });
-                                    localityObject = ac.find(function (c) { return c.types.includes("locality"); });
-                                    metropolisObject = ac.find(function (c) {
-                                        return c.types.includes("administrative_area_level_2");
-                                    });
-                                    regionObject = ac.find(function (c) {
-                                        return c.types.includes("administrative_area_level_1");
-                                    });
-                                    countryObject = ac.find(function (c) { return c.types.includes("country"); });
-                                    console.log(result.formatted_address);
-                                    route = routeObject ? routeObject.short_name + "," : "";
-                                    locality = localityObject ? localityObject.long_name + "," : "";
-                                    regionName = regionObject ? regionObject.long_name : "";
-                                    districtName = metropolisObject ? metropolisObject.long_name : "";
-                                    countryName = countryObject ? countryObject.long_name : "";
-                                    name = result.formatted_address;
-                                    address = result.name + "," + locality + countryName;
-                                    detailedAddress = "" + route + locality + districtName + "," + regionName + "," + countryName;
-                                    district = districtName;
-                                    region = regionName;
-                                    locationData = [
-                                        name,
-                                        address,
-                                        detailedAddress,
-                                        district,
-                                        region,
-                                        locationId
-                                    ];
-                                    console.log(locationData);
-                                    updateQuery = "update location set name = ?, address = ?, detailed_address = ?,\n      district = ?, region = ? where id = ?";
-                                    return [4 /*yield*/, services_1.updateEntityRecord(updateQuery, [locationData], dbInstance_1)];
-                                case 2:
-                                    _a.sent();
-                                    updateLocation(++index);
-                                    return [2 /*return*/];
-                            }
+                return [2 /*return*/, (function updateLocation(index) {
+                        return __awaiter(this, void 0, void 0, function () {
+                            var googlePlaceId, locationId, url, resp, ac, result, routeObject, localityObject, metropolisObject, regionObject, countryObject, route, locality, regionName, districtName, countryName, name, address, detailedAddress, district, region, locationData, updateQuery;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        if (!students_1[index]) {
+                                            return [2 /*return*/, res.status(200).send({ data: 'successful' })];
+                                        }
+                                        googlePlaceId = students_1[index].google_place_id;
+                                        locationId = students_1[index].location_id;
+                                        url = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + googlePlaceId + "&key=" + globals_1.globals.GOOGLE_MAPS_API_KEY;
+                                        return [4 /*yield*/, axios_1.default.get(url)];
+                                    case 1:
+                                        resp = _a.sent();
+                                        ac = resp.data.result.address_components;
+                                        result = resp.data.result;
+                                        routeObject = ac.find(function (c) { return c.types.includes('route'); });
+                                        localityObject = ac.find(function (c) { return c.types.includes('locality'); });
+                                        metropolisObject = ac.find(function (c) {
+                                            return c.types.includes('administrative_area_level_2');
+                                        });
+                                        regionObject = ac.find(function (c) {
+                                            return c.types.includes('administrative_area_level_1');
+                                        });
+                                        countryObject = ac.find(function (c) { return c.types.includes('country'); });
+                                        route = routeObject ? routeObject.short_name + "," : '';
+                                        locality = localityObject ? localityObject.long_name + "," : '';
+                                        regionName = regionObject ? regionObject.long_name : '';
+                                        districtName = metropolisObject ? metropolisObject.long_name : '';
+                                        countryName = countryObject ? countryObject.long_name : '';
+                                        name = result.formatted_address;
+                                        address = result.name + "," + locality + countryName;
+                                        detailedAddress = "" + route + locality + districtName + "," + regionName + "," + countryName;
+                                        district = districtName;
+                                        region = regionName;
+                                        locationData = [
+                                            name,
+                                            address,
+                                            detailedAddress,
+                                            district,
+                                            region,
+                                            locationId,
+                                        ];
+                                        updateQuery = "update location set name = ?, address = ?, detailed_address = ?,\n      district = ?, region = ? where id = ?";
+                                        return [4 /*yield*/, services_1.updateEntityRecord(updateQuery, [locationData], dbInstance_1)];
+                                    case 2:
+                                        _a.sent();
+                                        return [2 /*return*/, updateLocation(++index)];
+                                }
+                            });
                         });
-                    });
-                })(0);
-                return [3 /*break*/, 3];
+                    })(0)];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 exports.resetCompanyArchiveLocation = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, dbInstance_2, companies_1, error_2;
+    var dbInstance_2, companies_1, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                user = req.user, dbInstance_2 = req.dbInstance;
-                return [4 /*yield*/, services_1.getAllRecords("company_archive", dbInstance_2)];
+                dbInstance_2 = req.dbInstance;
+                return [4 /*yield*/, services_1.getAllRecords('company_archive', dbInstance_2)];
             case 1:
                 companies_1 = _a.sent();
-                (function updateCompanyLocation(index) {
-                    return __awaiter(this, void 0, void 0, function () {
-                        var companyWithLocation, updateQuery, locationId, data;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (!companies_1[index]) {
-                                        return [2 /*return*/, res.status(200).send({ data: "successful" })];
-                                    }
-                                    return [4 /*yield*/, services_1.getEntityRecordFromKey("company", "name", [companies_1[index].name], dbInstance_2)];
-                                case 1:
-                                    companyWithLocation = _a.sent();
-                                    console.log(companyWithLocation);
-                                    updateQuery = "update company_archive set location_id = ? where id = ?";
-                                    locationId = companyWithLocation.length !== 0
-                                        ? companyWithLocation[0].location_id
-                                        : null;
-                                    data = [locationId, companies_1[index].id];
-                                    return [4 /*yield*/, services_1.updateEntityRecord(updateQuery, [data], dbInstance_2)];
-                                case 2:
-                                    _a.sent();
-                                    updateCompanyLocation(++index);
-                                    return [2 /*return*/];
-                            }
+                return [2 /*return*/, (function updateCompanyLocation(index) {
+                        return __awaiter(this, void 0, void 0, function () {
+                            var companyWithLocation, updateQuery, locationId, data;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        if (!companies_1[index]) {
+                                            return [2 /*return*/, res.status(200).send({ data: 'successful' })];
+                                        }
+                                        return [4 /*yield*/, services_1.getEntityRecordFromKey('company', 'name', [companies_1[index].name], dbInstance_2)];
+                                    case 1:
+                                        companyWithLocation = _a.sent();
+                                        updateQuery = "update company_archive set location_id = ? where id = ?";
+                                        locationId = companyWithLocation.length !== 0
+                                            ? companyWithLocation[0].location_id
+                                            : null;
+                                        data = [locationId, companies_1[index].id];
+                                        return [4 /*yield*/, services_1.updateEntityRecord(updateQuery, [data], dbInstance_2)];
+                                    case 2:
+                                        _a.sent();
+                                        return [2 /*return*/, updateCompanyLocation(++index)];
+                                }
+                            });
                         });
-                    });
-                })(0);
-                return [3 /*break*/, 3];
+                    })(0)];
             case 2:
                 error_2 = _a.sent();
-                console.log("internal error", error_2);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });

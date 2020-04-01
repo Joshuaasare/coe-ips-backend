@@ -48,17 +48,15 @@ exports.getPlacesFromSearchKey = function (req, res) { return __awaiter(void 0, 
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 searchKey = req.query.searchKey;
-                proxyUrl = "https://coe-cors-anywhere.herokuapp.com/";
+                proxyUrl = 'https://coe-cors-anywhere.herokuapp.com/';
                 url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=" + searchKey + "&key=" + globals_1.globals.GOOGLE_MAPS_API_KEY + "&components=country:gh|country:ng|country:ke|country:ci|country:gm";
                 return [4 /*yield*/, axios_1.default.get("" + proxyUrl + url)];
             case 1:
                 resp = _a.sent();
-                console.log(resp);
                 return [2 /*return*/, res.status(200).send({ data: resp })];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });

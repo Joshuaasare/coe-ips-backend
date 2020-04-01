@@ -11,5 +11,5 @@ var queries = __importStar(require("./queries"));
 var mutations = __importStar(require("./mutations"));
 exports.default = {
     queries: queries,
-    mutations: mutations
+    mutations: mutations,
 };

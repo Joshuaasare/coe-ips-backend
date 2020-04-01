@@ -18,16 +18,16 @@ var CompanyController = /** @class */ (function () {
     function CompanyController() {
     }
     CompanyController.prototype.registerCompanyController = function (req, res) {
-        service_1.default.mutations.registerCompany(req, res);
+        return service_1.default.mutations.registerCompany(req, res);
     };
     __decorate([
-        decorators_1.post("/register-company"),
+        decorators_1.post('/register-company'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CompanyController.prototype, "registerCompanyController", null);
     CompanyController = __decorate([
-        decorators_1.controller("/company")
+        decorators_1.controller('/company')
     ], CompanyController);
     return CompanyController;
 }());

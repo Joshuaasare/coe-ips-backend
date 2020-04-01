@@ -45,7 +45,7 @@ exports.deleteCompanyArchive = function (req, res) { return __awaiter(void 0, vo
                 _a.trys.push([0, 2, , 3]);
                 dbInstance = req.dbInstance;
                 ids = req.query.ids
-                    .split(",")
+                    .split(',')
                     .map(function (id) { return [parseInt(id, 10)]; });
                 query = "update company_archive set is_deleted = 1 where id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(query, ids, dbInstance)];
@@ -54,8 +54,7 @@ exports.deleteCompanyArchive = function (req, res) { return __awaiter(void 0, vo
                 return [2 /*return*/, res.status(200).send({ data: lastDeleted })];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });

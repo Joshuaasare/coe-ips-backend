@@ -53,7 +53,6 @@ exports.updateStudent = function (req, res) { return __awaiter(void 0, void 0, v
                 _a.trys.push([0, 3, , 4]);
                 dbInstance = req.dbInstance;
                 data = req.body.data;
-                console.log(data);
                 id = data.id, surname = data.surname, otherNames = data.otherNames, indexNumber = data.indexNumber, email = data.email, phone = data.phone;
                 userData = [email, id];
                 studentData = [
@@ -63,7 +62,7 @@ exports.updateStudent = function (req, res) { return __awaiter(void 0, void 0, v
                     indexNumber,
                     phone,
                     Date.parse("" + new Date()),
-                    id
+                    id,
                 ];
                 query1 = "update student set surname = ?, other_names = ?,\n    email = ?, index_number = ?, phone = ?, last_modified = ? where user_id = ? ";
                 query2 = "update user set email = ? where id = ?";
@@ -73,26 +72,24 @@ exports.updateStudent = function (req, res) { return __awaiter(void 0, void 0, v
                 return [4 /*yield*/, services_1.updateEntityRecord(query2, [userData], dbInstance)];
             case 2:
                 _a.sent();
-                return [2 /*return*/, res.status(200).send({ data: "Successful" })];
+                return [2 /*return*/, res.status(200).send({ data: 'Successful' })];
             case 3:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.updateStudentLocation = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, user, data, _a, id, surname, otherNames, indexNumber, email, phone, locationId, _b, locationName, coords, address, route, locality, subLocality, district, region, country, google_place_id, studentData, locationData, userData, query1, query2, query3, error_2;
+    var dbInstance, user, data, _a, id, surname, otherNames, indexNumber, email, phone, locationId, _b, locationName, coords, address, route, locality, district, region, country, google_place_id, studentData, locationData, userData, query1, query2, query3, error_2;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _c.trys.push([0, 4, , 5]);
                 dbInstance = req.dbInstance, user = req.user;
                 data = req.body.data;
-                console.log(data);
                 _a = data.studentDetails, id = _a.id, surname = _a.surname, otherNames = _a.otherNames, indexNumber = _a.indexNumber, email = _a.email, phone = _a.phone, locationId = _a.locationId;
-                _b = data.locationDetails, locationName = _b.name, coords = _b.coords, address = _b.address, route = _b.route, locality = _b.locality, subLocality = _b.subLocality, district = _b.district, region = _b.region, country = _b.country, google_place_id = _b.google_place_id;
+                _b = data.locationDetails, locationName = _b.name, coords = _b.coords, address = _b.address, route = _b.route, locality = _b.locality, district = _b.district, region = _b.region, country = _b.country, google_place_id = _b.google_place_id;
                 studentData = [
                     surname,
                     otherNames,
@@ -105,7 +102,7 @@ exports.updateStudentLocation = function (req, res) { return __awaiter(void 0, v
                     coords.lat,
                     coords.lng,
                     Date.parse("" + new Date()),
-                    id
+                    id,
                 ];
                 locationData = [
                     address,
@@ -117,7 +114,7 @@ exports.updateStudentLocation = function (req, res) { return __awaiter(void 0, v
                     coords.lng,
                     user.userId,
                     Date.parse("" + new Date()),
-                    locationId
+                    locationId,
                 ];
                 userData = [email, id];
                 query1 = "update student set surname = ?, other_names = ?,\n    email = ?, index_number = ?, phone = ?, location = ?, address = ?,\n    google_place_id = ?, latitude = ?, longitude = ?, last_modified = ?\n    where user_id = ? ";
@@ -132,11 +129,10 @@ exports.updateStudentLocation = function (req, res) { return __awaiter(void 0, v
                 return [4 /*yield*/, services_1.updateEntityRecord(query3, [userData], dbInstance)];
             case 3:
                 _c.sent();
-                return [2 /*return*/, res.status(200).send({ data: "Successful" })];
+                return [2 /*return*/, res.status(200).send({ data: 'Successful' })];
             case 4:
                 error_2 = _c.sent();
-                console.log("internal error", error_2);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 5: return [2 /*return*/];
         }
     });

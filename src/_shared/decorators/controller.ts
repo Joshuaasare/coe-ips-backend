@@ -58,7 +58,7 @@ export function controller(routePrefix: string) {
         const validator = bodyValidators(requiredBodyProps);
         const router: Router = AppRouter.getInstance();
         // eslint-disable-next-line no-console
-        console.log(routePrefix + path);
+        // console.log(routePrefix + path);
         if (path) {
           router[method](
             `${routePrefix}${path}`,

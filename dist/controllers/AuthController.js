@@ -28,26 +28,26 @@ var AuthController = /** @class */ (function () {
         return Auth_1.default.verifyWithToken(req, res);
     };
     __decorate([
-        decorators_1.post("/verify-user"),
+        decorators_1.post('/verify-user'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], AuthController.prototype, "verifyUser", null);
     __decorate([
-        decorators_1.put("/reset-password"),
+        decorators_1.put('/reset-password'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], AuthController.prototype, "resetPassword", null);
     __decorate([
-        decorators_1.get("/verify-with-token"),
+        decorators_1.get('/verify-with-token'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], AuthController.prototype, "verifyWithToken", null);
     AuthController = __decorate([
-        decorators_1.controller("/auth")
+        decorators_1.controller('/auth')
     ], AuthController);
     return AuthController;
 }());

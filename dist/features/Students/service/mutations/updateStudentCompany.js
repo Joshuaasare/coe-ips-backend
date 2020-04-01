@@ -35,34 +35,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var bcryptjs_1 = __importDefault(require("bcryptjs"));
-var globals_1 = require("../../../../_shared/globals");
 var services_1 = require("../../../../_shared/services");
 exports.updateStudentCompany = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, _a, companyId, studentUserId, name_1, email, contact, address, repName, repContact, repEmail, locationId, acceptanceLetterUrl, locationDetails, website, supervisorName, supervisorContact, supervisorEmail, hash, locationData, userData, companyData, studentData, updateLocationQuery, updatedLocation, updateUserQuery, updateCompanyQuery, updatedCompany, updateStudentQuery, updatedStudent, error_1;
+    var dbInstance, _a, companyId, studentUserId, name_1, email, contact, address, repName, repContact, repEmail, acceptanceLetterUrl, locationDetails, website, supervisorName, supervisorContact, supervisorEmail, locationData, companyData, studentData, updateLocationQuery, updateCompanyQuery, updateStudentQuery, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 5, , 6]);
+                _b.trys.push([0, 4, , 5]);
                 dbInstance = req.dbInstance;
-                _a = req.body.data, companyId = _a.companyId, studentUserId = _a.studentUserId, name_1 = _a.name, email = _a.email, contact = _a.contact, address = _a.address, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, locationId = _a.locationId, acceptanceLetterUrl = _a.acceptanceLetterUrl, locationDetails = _a.locationDetails, website = _a.website, supervisorName = _a.supervisorName, supervisorContact = _a.supervisorContact, supervisorEmail = _a.supervisorEmail;
-                console.log(req.body.data);
-                return [4 /*yield*/, bcryptjs_1.default.hash(contact, globals_1.globals.SALT_ROUNDS)];
-            case 1:
-                hash = _b.sent();
+                _a = req.body.data, companyId = _a.companyId, studentUserId = _a.studentUserId, name_1 = _a.name, email = _a.email, contact = _a.contact, address = _a.address, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, acceptanceLetterUrl = _a.acceptanceLetterUrl, locationDetails = _a.locationDetails, website = _a.website, supervisorName = _a.supervisorName, supervisorContact = _a.supervisorContact, supervisorEmail = _a.supervisorEmail;
                 locationData = [
                     locationDetails.name,
                     locationDetails.address,
                     locationDetails.coords.lat,
                     locationDetails.coords.lng,
                     Date.parse("" + new Date()),
-                    locationDetails.id
+                    locationDetails.id,
                 ];
-                userData = [email, hash, Date.parse("" + new Date()), companyId];
                 companyData = [
                     name_1,
                     email,
@@ -73,7 +63,7 @@ exports.updateStudentCompany = function (req, res) { return __awaiter(void 0, vo
                     repContact,
                     repEmail,
                     Date.parse("" + new Date()),
-                    companyId
+                    companyId,
                 ];
                 studentData = [
                     acceptanceLetterUrl,
@@ -81,27 +71,25 @@ exports.updateStudentCompany = function (req, res) { return __awaiter(void 0, vo
                     supervisorContact,
                     supervisorEmail,
                     Date.parse("" + new Date()),
-                    studentUserId
+                    studentUserId,
                 ];
                 updateLocationQuery = "update location set name = ?,address = ?,latitude = ?, \n    longitude = ?, last_modified = ? where id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(updateLocationQuery, [locationData], dbInstance)];
-            case 2:
-                updatedLocation = _b.sent();
-                updateUserQuery = "update user set email = ?, password = ?, last_modified = ? where user_id = ?";
+            case 1:
+                _b.sent();
                 updateCompanyQuery = "update company set name = ?,email = ?,\n    phone = ?,postal_address = ?,website = ?,representative_name = ?, representative_phone = ?,\n    representative_email = ?, last_modified = ? where user_id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(updateCompanyQuery, [companyData], dbInstance)];
-            case 3:
-                updatedCompany = _b.sent();
+            case 2:
+                _b.sent();
                 updateStudentQuery = "update student set acceptance_letter_url = ?,supervisor_name = ?,\n    supervisor_contact = ?,supervisor_email = ?, last_modified = ? where user_id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(updateStudentQuery, [studentData], dbInstance)];
+            case 3:
+                _b.sent();
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
             case 4:
-                updatedStudent = _b.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
-            case 5:
                 error_1 = _b.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
-            case 6: return [2 /*return*/];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

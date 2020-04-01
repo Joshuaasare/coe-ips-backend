@@ -38,13 +38,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var globals_1 = require("../../../../_shared/globals");
 exports.getCompanyStudents = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, dbInstance, companyId, studentQuery, locationQuery, subDepartmentQuery, mainDepartmentQuery, join1, join2, join3, condition, mainQuery, students, error_1;
+    var dbInstance, companyId, studentQuery, locationQuery, subDepartmentQuery, mainDepartmentQuery, join1, join2, join3, condition, mainQuery, students, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                user = req.user, dbInstance = req.dbInstance;
-                console.log("query", req.query);
+                dbInstance = req.dbInstance;
                 companyId = req.query.id;
                 studentQuery = "student.user_id, student.index_number,student.surname, \n    student.other_names, student.phone, student.email, student.year_of_study,\n    student.acad_year, student.address , student.location ,student.google_place_id ,\n    student.latitude ,student.longitude ,student.foreign_student, student.want_placement,\n    student.acceptance_letter_url, student.registered_company,student.rejected_placement,\n    student.company_id, student.created_at,student.internship_placement_date ,\n    student.internship_start_date, student.internship_evaluation_date,student.internship_completion_date,\n    student.supervisor_name, student.supervisor_contact,student.supervisor_email";
                 locationQuery = "location.id as location_id, location.name as location_name,\n    location.address as location_address, location.district, location.region,\n    location.latitude as lat, location.longitude as lng";
@@ -55,14 +54,16 @@ exports.getCompanyStudents = function (req, res) { return __awaiter(void 0, void
                 join3 = "(location inner join " + join2 + " on student.location_id = location.id)";
                 condition = "student.acad_year = ? AND student.company_id = ? ";
                 mainQuery = "select " + studentQuery + ", " + subDepartmentQuery + ", " + mainDepartmentQuery + ", " + locationQuery + "\n     from " + join3 + " where " + condition;
-                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [globals_1.globals.school.ACAD_YEAR, companyId])];
+                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [
+                        globals_1.globals.school.ACAD_YEAR,
+                        companyId,
+                    ])];
             case 1:
                 students = _a.sent();
                 return [2 /*return*/, res.status(200).send({ data: students })];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });

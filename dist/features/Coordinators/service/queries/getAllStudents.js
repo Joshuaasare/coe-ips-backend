@@ -54,14 +54,15 @@ exports.getAllStudents = function (req, res) { return __awaiter(void 0, void 0, 
                 join3 = "(location inner join " + join2 + " on student.location_id = location.id)";
                 condition = "student.acad_year = ? AND student.user_id != 1820 AND " + myCondition + " ";
                 mainQuery = "select " + studentQuery + ", " + subDepartmentQuery + ", " + mainDepartmentQuery + ", " + locationQuery + "\n     from " + join3 + " where " + condition;
-                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [globals_1.globals.school.ACAD_YEAR])];
+                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [
+                        globals_1.globals.school.ACAD_YEAR,
+                    ])];
             case 1:
                 students = _a.sent();
                 return [2 /*return*/, res.status(200).send({ data: students })];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });

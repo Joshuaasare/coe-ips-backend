@@ -43,22 +43,21 @@ exports.getAllUsers = function (req, res) { return __awaiter(void 0, void 0, voi
         switch (_a.label) {
             case 0:
                 dbInstance = new Database_1.Database();
-                query = "select * from student where acad_year = 2019";
+                query = 'select * from student where acad_year = 2019';
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(query)];
             case 1:
                 results = _a.sent();
-                res.json(results);
-                return [2 /*return*/];
+                return [2 /*return*/, res.json(results)];
         }
     });
 }); };
 exports.testAuthourized = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, res.send("Congrats! You are authorized")];
+        return [2 /*return*/, res.send('Congrats! You are authorized')];
     });
 }); };
 exports.testAuthenticated = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, res.status(200).send({ data: "You are authorized" })];
+        return [2 /*return*/, res.status(200).send({ data: 'You are authorized' })];
     });
 }); };

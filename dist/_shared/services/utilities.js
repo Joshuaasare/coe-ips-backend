@@ -48,12 +48,14 @@ function checkIfUserExists(dbInstance, query, values) {
                 case 0: return [4 /*yield*/, dbInstance.runPreparedSelectQuery(query, values)];
                 case 1:
                     rows = _a.sent();
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     return [2 /*return*/, !(rows.length === 0)];
             }
         });
     });
 }
 exports.checkIfUserExists = checkIfUserExists;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function arrayHasData(data) {
     return data && data.length;
 }
@@ -62,9 +64,10 @@ exports.arrayHasData = arrayHasData;
  * isEmpty function that will return false for primitive values
  * like numbers and strings, unlike the lodash version
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isEmpty(val) {
     return (val === null ||
-        val === "" ||
+        val === '' ||
         (Array.isArray(val) && !val.length) ||
         (isObject_1.default(val) && !Object.keys(val).length));
 }

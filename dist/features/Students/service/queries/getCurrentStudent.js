@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCurrentStudent = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, dbInstance, studentQuery, subDepartmentQuery, mainDepartmentQuery, locationQuery, companyLocationQuery, companyQuery, join1, join2, join3, join4, condition, mainQuery, student, data, error_1;
+    var user, dbInstance, studentQuery, subDepartmentQuery, mainDepartmentQuery, companyLocationQuery, companyQuery, join1, join2, join3, join4, condition, mainQuery, student, data, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -48,7 +48,6 @@ exports.getCurrentStudent = function (req, res) { return __awaiter(void 0, void 
                 studentQuery = "student.user_id as student_user_id,\n    student.index_number as student_index_number, \n    student.surname as student_surname, \n    student.other_names as student_other_names, \n    student.phone as student_phone, \n    student.email as student_email, \n    student.year_of_study as student_year_of_study,\n    student.acad_year as student_acad_year, \n    student.address as student_address, \n    student.location as student_location,\n    student.google_place_id as student_google_place_id,\n    student.latitude as student_latitude,\n    student.longitude as student_longitude,\n    student.foreign_student as student_foreign_student,\n    student.want_placement as student_want_placement,\n    student.acceptance_letter_url as student_acceptance_letter_url,\n    student.registered_company as student_registered_company,\n    student.rejected_placement as student_rejected_placement,\n    student.company_id as student_company_id,\n    student.created_at as student_created_at,\n    student.internship_placement_date as student_internship_placement_date,\n    student.internship_start_date as student_internship_start_date,\n    student.internship_evaluation_date as student_internship_evaluation_date,\n    student.internship_completion_date as student_internship_completion_date,\n    student.supervisor_name as student_supervisor_name,\n    student.supervisor_contact as student_supervisor_contact,\n    student.supervisor_email as student_supervisor_email";
                 subDepartmentQuery = "sub_department.id as sub_department_id, \n    sub_department.name as sub_department_name";
                 mainDepartmentQuery = "main_department.id as main_department_id,\n    main_department.name as main_department_name";
-                locationQuery = "location.name as location_name, \n    location.address as location_address";
                 companyLocationQuery = "location.id as company_location_id,\n    location.name as company_location_name, \n    location.address as company_location_address,\n    location.latitude as company_location_latitude,\n    location.longitude as company_location_longitude";
                 companyQuery = "company.name as company_name,\n    company.email as company_email,\n    company.postal_address as company_postal_address,\n    company.phone as company_contact,\n    company.location_id as company_location_id,\n    company.website as company_website,\n    company.representative_name as company_rep_name,\n    company.representative_email as company_rep_email,\n    company.representative_phone as company_rep_contact";
                 join1 = "(sub_department inner join student on student.sub_department_id = sub_department.id)";
@@ -57,7 +56,9 @@ exports.getCurrentStudent = function (req, res) { return __awaiter(void 0, void 
                 join4 = "(location right join " + join3 + " on company.location_id = location.id)";
                 condition = "student.user_id = ?";
                 mainQuery = "select " + studentQuery + ", " + subDepartmentQuery + ", " + mainDepartmentQuery + ", \n     " + companyLocationQuery + ", " + companyQuery + " from " + join4 + " where " + condition;
-                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [user.userId])];
+                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [
+                        user.userId,
+                    ])];
             case 2:
                 student = _a.sent();
                 // const mainCompanyLocationQuery = `select ${companyLocationQuery} from location where id = ?`;
@@ -68,8 +69,8 @@ exports.getCurrentStudent = function (req, res) { return __awaiter(void 0, void 
                 if (student.length === 0) {
                     return [2 /*return*/, res.status(404).send({
                             error: {
-                                message: "Student name does not exist"
-                            }
+                                message: 'Student name does not exist',
+                            },
                         })];
                 }
                 data = {
@@ -114,13 +115,12 @@ exports.getCurrentStudent = function (req, res) { return __awaiter(void 0, void 
                     internshipPlacementDate: student[0].student_internship_placement_date,
                     internshipStartDate: student[0].student_internship_start_date,
                     internshipEvaluationDate: student[0].student_internship_evaluation_date,
-                    internshipCompletionDate: student[0].student_internship_completion_date
+                    internshipCompletionDate: student[0].student_internship_completion_date,
                 };
                 return [2 /*return*/, res.status(200).send({ data: data })];
             case 3:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 4: return [2 /*return*/];
         }
     });

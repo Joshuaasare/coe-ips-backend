@@ -45,14 +45,13 @@ exports.getArchivedCompanies = function (req, res) { return __awaiter(void 0, vo
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 dbInstance = req.dbInstance;
-                return [4 /*yield*/, services_1.getAllRecords("company_archive", dbInstance, true)];
+                return [4 /*yield*/, services_1.getAllRecords('company_archive', dbInstance, true)];
             case 1:
                 companies = _a.sent();
                 return [2 /*return*/, res.status(200).send({ data: companies })];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });
@@ -73,15 +72,14 @@ exports.getArchivedCompaniesWithContactMade = function (req, res) { return __awa
                 order = "order by company_archive.name";
                 mainQuery = "select " + archivedCompanyQuery + ", " + contactMadeQuery + ", " + locationQuery + " from " + join2 + " where " + condition + " " + order;
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [
-                        globals_1.globals.school.ACAD_YEAR
+                        globals_1.globals.school.ACAD_YEAR,
                     ])];
             case 1:
                 companies = _a.sent();
                 return [2 /*return*/, res.status(200).send({ data: companies })];
             case 2:
                 error_2 = _a.sent();
-                console.log("internal error", error_2);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });

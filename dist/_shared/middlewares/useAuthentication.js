@@ -44,32 +44,32 @@ var globals_1 = require("../globals");
 var Database_1 = require("../dbWrapper/Database");
 var services_1 = require("../services");
 function useAuthentication() {
-    return function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            var token, payload, dbInstance, checkUserQuery;
-            return __generator(this, function (_a) {
-                try {
-                    token = req.headers.authorization.replace("Bearer ", "");
-                    payload = jsonwebtoken_1.default.verify(token, globals_1.globals.JWT_SECRET_KEY);
-                    // console.log(payload);
-                    req.user = payload;
-                    dbInstance = new Database_1.Database();
-                    checkUserQuery = "select * from user where id = ?";
-                    if (!services_1.checkIfUserExists(dbInstance, checkUserQuery, [payload.userId])) {
-                        return [2 /*return*/, res.status(401).send({ error: "Authentication Failed" })];
-                    }
-                    next();
+    var _this = this;
+    return function (req, res, next
+    // eslint-disable-next-line consistent-return
+    ) { return __awaiter(_this, void 0, void 0, function () {
+        var token, payload, dbInstance, checkUserQuery;
+        return __generator(this, function (_a) {
+            try {
+                token = req.headers.authorization.replace('Bearer ', '');
+                payload = jsonwebtoken_1.default.verify(token, globals_1.globals.JWT_SECRET_KEY);
+                // console.log(payload);
+                req.user = payload;
+                dbInstance = new Database_1.Database();
+                checkUserQuery = "select * from user where id = ?";
+                if (!services_1.checkIfUserExists(dbInstance, checkUserQuery, [req.user.userId])) {
+                    return [2 /*return*/, res.status(401).send({ error: 'Authentication Failed' })];
                 }
-                catch (error) {
-                    console.log(error);
-                    if (error.name && error.name === globals_1.constants.errors.JSON_WEB_TOKEN_ERROR) {
-                        return [2 /*return*/, res.status(401).send({ error: "user could not be verified" })];
-                    }
-                    return [2 /*return*/, res.status(422).send({ error: "request could not be proccessed" })];
+                next();
+            }
+            catch (error) {
+                if (error.name && error.name === globals_1.constants.errors.JSON_WEB_TOKEN_ERROR) {
+                    return [2 /*return*/, res.status(401).send({ error: 'user could not be verified' })];
                 }
-                return [2 /*return*/];
-            });
+                return [2 /*return*/, res.status(422).send({ error: 'request could not be proccessed' })];
+            }
+            return [2 /*return*/];
         });
-    };
+    }); };
 }
 exports.useAuthentication = useAuthentication;

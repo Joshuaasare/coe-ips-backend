@@ -39,31 +39,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable @typescript-eslint/camelcase */
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
+var forEach_1 = __importDefault(require("lodash/forEach"));
 var globals_1 = require("../../../../_shared/globals");
 var services_1 = require("../../../../_shared/services");
-var forEach_1 = __importDefault(require("lodash/forEach"));
 exports.registerCompany = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, _a, id, name_1, email, contact, postal_address, website, repName, repContact, repEmail, locationId, locationDetails, code, departments, locationName, coords, address, route, locality, subLocality, district, region, country, google_place_id, verifyCodeQuery, verifyCodeData, company, hash, locationData, userData, insertedLocation, insertedUser_1, companyData, insertedCompany, departmentsData_1, updateCompanyData, updateCompanyQuery, error_1;
+    var dbInstance, _a, id, name_1, email, contact, postal_address, website, repName, repContact, repEmail, locationDetails, code, departments, locationName, coords, address, route, locality, district, region, country, verifyCodeQuery, verifyCodeData, company, hash, locationData, userData, insertedLocation, insertedUser_1, companyData, departmentsData_1, updateCompanyData, updateCompanyQuery, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 8, , 9]);
                 dbInstance = req.dbInstance;
-                console.log(req.body.data);
-                _a = req.body.data, id = _a.id, name_1 = _a.name, email = _a.email, contact = _a.contact, postal_address = _a.postal_address, website = _a.website, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, locationId = _a.locationId, locationDetails = _a.locationDetails, code = _a.code, departments = _a.departments;
-                locationName = locationDetails.name, coords = locationDetails.coords, address = locationDetails.address, route = locationDetails.route, locality = locationDetails.locality, subLocality = locationDetails.subLocality, district = locationDetails.district, region = locationDetails.region, country = locationDetails.country, google_place_id = locationDetails.google_place_id;
+                _a = req.body.data, id = _a.id, name_1 = _a.name, email = _a.email, contact = _a.contact, postal_address = _a.postal_address, website = _a.website, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, locationDetails = _a.locationDetails, code = _a.code, departments = _a.departments;
+                locationName = locationDetails.name, coords = locationDetails.coords, address = locationDetails.address, route = locationDetails.route, locality = locationDetails.locality, district = locationDetails.district, region = locationDetails.region, country = locationDetails.country;
                 verifyCodeQuery = "select * from company_archive_contact_made  where acad_year = ? AND company_archive_id = ?";
                 verifyCodeData = [globals_1.globals.school.ACAD_YEAR, id];
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(verifyCodeQuery, verifyCodeData)];
             case 1:
                 company = _b.sent();
-                console.log(company[0]);
                 if (!company[0] || (company[0] && company[0].contact_made === 0)) {
-                    return [2 /*return*/, res.status(404).send({ data: "Company has not been contacted" })];
+                    return [2 /*return*/, res.status(404).send({ data: 'Company has not been contacted' })];
                 }
                 if (company[0].code !== parseInt(code, 10)) {
-                    return [2 /*return*/, res.status(401).send({ data: "Not Authenticated" })];
+                    return [2 /*return*/, res.status(401).send({ data: 'Not Authenticated' })];
                 }
                 return [4 /*yield*/, bcryptjs_1.default.hash(contact, globals_1.globals.SALT_ROUNDS)];
             case 2:
@@ -77,20 +76,19 @@ exports.registerCompany = function (req, res) { return __awaiter(void 0, void 0,
                     coords.lat,
                     coords.lng,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
                 userData = [
                     globals_1.constants.user_type_id.COMPANY,
                     email,
                     hash,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
-                console.log(locationData);
-                return [4 /*yield*/, services_1.insertEntityRecord("location", "name,address,detailed_address,district,region,latitude,longitude,created_at,last_modified", "?,?,?,?,?,?,?,?,?", [locationData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('location', 'name,address,detailed_address,district,region,latitude,longitude,created_at,last_modified', '?,?,?,?,?,?,?,?,?', [locationData], dbInstance)];
             case 3:
                 insertedLocation = _b.sent();
-                return [4 /*yield*/, services_1.insertEntityRecord("user", "user_type_id,email,password,created_at, last_modified", "?,?,?,?,?", [userData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('user', 'user_type_id,email,password,created_at, last_modified', '?,?,?,?,?', [userData], dbInstance)];
             case 4:
                 insertedUser_1 = _b.sent();
                 companyData = [
@@ -106,11 +104,11 @@ exports.registerCompany = function (req, res) { return __awaiter(void 0, void 0,
                     repContact,
                     repEmail,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
-                return [4 /*yield*/, services_1.insertEntityRecord("company", "user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at,last_modified", "?,?,?,?,?,?,?,?,?,?,?,?,?", [companyData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('company', 'user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at,last_modified', '?,?,?,?,?,?,?,?,?,?,?,?,?', [companyData], dbInstance)];
             case 5:
-                insertedCompany = _b.sent();
+                _b.sent();
                 departmentsData_1 = [];
                 forEach_1.default(departments, function (department) {
                     var dep = [
@@ -119,11 +117,11 @@ exports.registerCompany = function (req, res) { return __awaiter(void 0, void 0,
                         globals_1.globals.school.ACAD_YEAR,
                         department.number,
                         Date.parse("" + new Date()),
-                        Date.parse("" + new Date())
+                        Date.parse("" + new Date()),
                     ];
                     departmentsData_1.push(dep);
                 });
-                return [4 /*yield*/, services_1.insertEntityRecord("company_sub_department", "company_id,sub_department_id,acad_year,number_needed,created_at,last_modified", "?,?,?,?,?,?", departmentsData_1, dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('company_sub_department', 'company_id,sub_department_id,acad_year,number_needed,created_at,last_modified', '?,?,?,?,?,?', departmentsData_1, dbInstance)];
             case 6:
                 _b.sent();
                 updateCompanyData = [globals_1.globals.school.ACAD_YEAR, id];
@@ -131,11 +129,10 @@ exports.registerCompany = function (req, res) { return __awaiter(void 0, void 0,
                 return [4 /*yield*/, services_1.updateEntityRecord(updateCompanyQuery, [updateCompanyData], dbInstance)];
             case 7:
                 _b.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
             case 8:
                 error_1 = _b.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 9: return [2 /*return*/];
         }
     });

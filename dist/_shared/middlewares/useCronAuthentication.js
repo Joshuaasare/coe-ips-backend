@@ -37,22 +37,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 function useCronAuthentication() {
-    return function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                try {
-                    if (!req.get("X-Appengine-Cron")) {
-                        return [2 /*return*/, res.status(401).send({ error: "Authentication Failed" })];
-                    }
-                    next();
+    var _this = this;
+    return function (req, res, next
+    // eslint-disable-next-line consistent-return
+    ) { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            try {
+                if (!req.get('X-Appengine-Cron')) {
+                    return [2 /*return*/, res.status(401).send({ error: 'Authentication Failed' })];
                 }
-                catch (error) {
-                    console.log("error");
-                    return [2 /*return*/, res.status(422).send({ error: "request could not be proccessed" })];
-                }
-                return [2 /*return*/];
-            });
+                next();
+            }
+            catch (error) {
+                return [2 /*return*/, res.status(422).send({ error: 'request could not be proccessed' })];
+            }
+            return [2 /*return*/];
         });
-    };
+    }); };
 }
 exports.useCronAuthentication = useCronAuthentication;

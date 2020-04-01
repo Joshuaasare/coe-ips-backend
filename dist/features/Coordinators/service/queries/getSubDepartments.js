@@ -44,14 +44,13 @@ exports.getSubDepartments = function (req, res) { return __awaiter(void 0, void 
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 dbInstance = req.dbInstance;
-                return [4 /*yield*/, services_1.getAllRecords("sub_department", dbInstance, false)];
+                return [4 /*yield*/, services_1.getAllRecords('sub_department', dbInstance, false)];
             case 1:
                 subDepartments = _a.sent();
                 return [2 /*return*/, res.status(200).send({ data: subDepartments })];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });

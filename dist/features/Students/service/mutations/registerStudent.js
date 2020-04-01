@@ -43,7 +43,7 @@ var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var globals_1 = require("../../../../_shared/globals");
 var services_1 = require("../../../../_shared/services");
 exports.registerStudent = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, _a, surname, password, phone, department, email, foreignStudent, haveCompany, indexNumber, locationDetails, locationId, otherNames, programme, yearOfStudy, hash, locationName, coords, address, route, locality, subLocality, district, region, country, locationData, userData, user, insertedLocation, insertedUser, studentData, response, error_1;
+    var dbInstance, _a, surname, password, phone, department, email, foreignStudent, haveCompany, indexNumber, locationDetails, locationId, otherNames, programme, yearOfStudy, hash, locationName, coords, address, route, locality, district, region, country, locationData, userData, user, insertedLocation, insertedUser, studentData, response, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -53,7 +53,7 @@ exports.registerStudent = function (req, res) { return __awaiter(void 0, void 0,
                 return [4 /*yield*/, bcryptjs_1.default.hash(password, globals_1.globals.SALT_ROUNDS)];
             case 1:
                 hash = _b.sent();
-                locationName = locationDetails.name, coords = locationDetails.coords, address = locationDetails.address, route = locationDetails.route, locality = locationDetails.locality, subLocality = locationDetails.subLocality, district = locationDetails.district, region = locationDetails.region, country = locationDetails.country;
+                locationName = locationDetails.name, coords = locationDetails.coords, address = locationDetails.address, route = locationDetails.route, locality = locationDetails.locality, district = locationDetails.district, region = locationDetails.region, country = locationDetails.country;
                 locationData = [
                     address,
                     locationName + "," + locality + "," + country,
@@ -63,26 +63,25 @@ exports.registerStudent = function (req, res) { return __awaiter(void 0, void 0,
                     coords.lat,
                     coords.lng,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
                 userData = [
                     globals_1.constants.user_type_id.STUDENT,
                     email,
                     hash,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
-                return [4 /*yield*/, services_1.getEntityRecordFromKey("user", "email", [email], dbInstance)];
+                return [4 /*yield*/, services_1.getEntityRecordFromKey('user', 'email', [email], dbInstance)];
             case 2:
                 user = _b.sent();
                 if (!(user.length === 0)) {
-                    res.status(409).send({ error: "User already exist" });
-                    return [2 /*return*/];
+                    return [2 /*return*/, res.status(409).send({ error: 'User already exist' })];
                 }
-                return [4 /*yield*/, services_1.insertEntityRecord("location", "name, address, detailed_address, district, region, latitude, longitude,created_at, last_modified", "?,?,?,?,?,?,?,?,?", [locationData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('location', 'name, address, detailed_address, district, region, latitude, longitude,created_at, last_modified', '?,?,?,?,?,?,?,?,?', [locationData], dbInstance)];
             case 3:
                 insertedLocation = _b.sent();
-                return [4 /*yield*/, services_1.insertEntityRecord("user", "user_type_id, email,password,created_at, last_modified", "?,?,?,?,?", [userData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('user', 'user_type_id, email,password,created_at, last_modified', '?,?,?,?,?', [userData], dbInstance)];
             case 4:
                 insertedUser = _b.sent();
                 studentData = [
@@ -105,22 +104,20 @@ exports.registerStudent = function (req, res) { return __awaiter(void 0, void 0,
                     insertedLocation.insertId,
                     haveCompany === 0 ? 1 : 0,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
-                return [4 /*yield*/, services_1.insertEntityRecord("student", "user_id,index_number,surname,other_names,main_department_id,sub_department_id,phone,email,year_of_study,acad_year,location,address,google_place_id,latitude,longitude,foreign_student,location_id,want_placement,created_at,last_modified", "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", [studentData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('student', 'user_id,index_number,surname,other_names,main_department_id,sub_department_id,phone,email,year_of_study,acad_year,location,address,google_place_id,latitude,longitude,foreign_student,location_id,want_placement,created_at,last_modified', '?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', [studentData], dbInstance)];
             case 5:
                 response = _b.sent();
                 return [2 /*return*/, res.status(200).send({ data: response })];
             case 6:
                 error_1 = _b.sent();
-                console.error("Internal error");
-                console.log(error_1.code);
-                if (error_1.code === "ER_DUP_ENTRY") {
-                    return [2 /*return*/, res.status(409).send({ error: { message: "User already exist" } })];
+                if (error_1.code === 'ER_DUP_ENTRY') {
+                    return [2 /*return*/, res.status(409).send({ error: { message: 'User already exist' } })];
                 }
                 return [2 /*return*/, res
                         .status(422)
-                        .send({ error: { message: "Could not process request" } })];
+                        .send({ error: { message: 'Could not process request' } })];
             case 7: return [2 /*return*/];
         }
     });

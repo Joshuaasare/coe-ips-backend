@@ -43,7 +43,7 @@ function getEntityRecordFromKey(entity, column, params, dbInstance, hasDeletedCo
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    deletedCondition = hasDeletedColumn ? " AND is_deleted = 0" : "";
+                    deletedCondition = hasDeletedColumn ? ' AND is_deleted = 0' : '';
                     query = "select * from " + entity + " where " + column + " = ? " + deletedCondition;
                     return [4 /*yield*/, dbInstance.runPreparedSelectQuery(query, params)];
                 case 1:
@@ -61,7 +61,7 @@ function getAllRecords(entity, dbInstance, hasDeletedColumn) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    deletedCondition = hasDeletedColumn ? " where is_deleted = 0" : "";
+                    deletedCondition = hasDeletedColumn ? ' where is_deleted = 0' : '';
                     query = "select * from " + entity + " " + deletedCondition;
                     return [4 /*yield*/, dbInstance.runPreparedSelectQuery(query, [])];
                 case 1:

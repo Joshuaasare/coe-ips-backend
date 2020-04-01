@@ -46,58 +46,54 @@ exports.addPreviousStudents = function (req, res) { return __awaiter(void 0, voi
                 dbInstance_1 = req.dbInstance;
                 getStudentsQuery = "select * from student where acad_year = ?";
                 return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(getStudentsQuery, [
-                        2017
+                        2017,
                     ])];
             case 1:
                 students_1 = _a.sent();
-                (function updateStudent(index) {
-                    return __awaiter(this, void 0, void 0, function () {
-                        var currentStudent, updateUserData, updateUserQuery, getLocationQuery, location, getMainDepartmentQuery, subDepartment, updateStudentQuery, updateStudentData;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (!students_1[index]) {
-                                        return [2 /*return*/, res.status(200).send({ data: "successful" })];
-                                    }
-                                    currentStudent = students_1[index];
-                                    console.log(currentStudent);
-                                    updateUserData = [currentStudent.email, currentStudent.user_id];
-                                    updateUserQuery = "update user set email = ? where id = ?";
-                                    return [4 /*yield*/, services_1.updateEntityRecord(updateUserQuery, [updateUserData], dbInstance_1)];
-                                case 1:
-                                    _a.sent();
-                                    getLocationQuery = "select * from location where id = ?";
-                                    return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(getLocationQuery, [currentStudent.location_id])];
-                                case 2:
-                                    location = _a.sent();
-                                    getMainDepartmentQuery = "select * from sub_department where id = ?";
-                                    return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(getMainDepartmentQuery, [currentStudent.sub_department_id])];
-                                case 3:
-                                    subDepartment = _a.sent();
-                                    updateStudentQuery = "update student set main_department_id = ?,location = ?, \n      address = ?,latitude = ?, longitude = ?, created_at = ? where user_id = ?";
-                                    updateStudentData = [
-                                        subDepartment[0].main_department_id,
-                                        location[0].name,
-                                        location[0].address,
-                                        location[0].latitude,
-                                        location[0].longitude,
-                                        currentStudent.last_modified,
-                                        currentStudent.user_id
-                                    ];
-                                    return [4 /*yield*/, services_1.updateEntityRecord(updateStudentQuery, [updateStudentData], dbInstance_1)];
-                                case 4:
-                                    _a.sent();
-                                    updateStudent(++index);
-                                    return [2 /*return*/];
-                            }
+                return [2 /*return*/, (function updateStudent(index) {
+                        return __awaiter(this, void 0, void 0, function () {
+                            var currentStudent, updateUserData, updateUserQuery, getLocationQuery, location, getMainDepartmentQuery, subDepartment, updateStudentQuery, updateStudentData;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        if (!students_1[index]) {
+                                            return [2 /*return*/, res.status(200).send({ data: 'successful' })];
+                                        }
+                                        currentStudent = students_1[index];
+                                        updateUserData = [currentStudent.email, currentStudent.user_id];
+                                        updateUserQuery = "update user set email = ? where id = ?";
+                                        return [4 /*yield*/, services_1.updateEntityRecord(updateUserQuery, [updateUserData], dbInstance_1)];
+                                    case 1:
+                                        _a.sent();
+                                        getLocationQuery = "select * from location where id = ?";
+                                        return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(getLocationQuery, [currentStudent.location_id])];
+                                    case 2:
+                                        location = _a.sent();
+                                        getMainDepartmentQuery = "select * from sub_department where id = ?";
+                                        return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(getMainDepartmentQuery, [currentStudent.sub_department_id])];
+                                    case 3:
+                                        subDepartment = _a.sent();
+                                        updateStudentQuery = "update student set main_department_id = ?,location = ?, \n      address = ?,latitude = ?, longitude = ?, created_at = ? where user_id = ?";
+                                        updateStudentData = [
+                                            subDepartment[0].main_department_id,
+                                            location[0].name,
+                                            location[0].address,
+                                            location[0].latitude,
+                                            location[0].longitude,
+                                            currentStudent.last_modified,
+                                            currentStudent.user_id,
+                                        ];
+                                        return [4 /*yield*/, services_1.updateEntityRecord(updateStudentQuery, [updateStudentData], dbInstance_1)];
+                                    case 4:
+                                        _a.sent();
+                                        return [2 /*return*/, updateStudent(++index)];
+                                }
+                            });
                         });
-                    });
-                })(0);
-                return [3 /*break*/, 3];
+                    })(0)];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });

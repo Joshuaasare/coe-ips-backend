@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var services_1 = require("../../../../_shared/services");
 exports.updateInternshipStart = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, user, studentData, updateStudentQuery, updatedStudent, error_1;
+    var dbInstance, user, studentData, updateStudentQuery, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -48,12 +48,11 @@ exports.updateInternshipStart = function (req, res) { return __awaiter(void 0, v
                 updateStudentQuery = "update student set internship_start_date\n     = ? where user_id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(updateStudentQuery, [studentData], dbInstance)];
             case 1:
-                updatedStudent = _a.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                _a.sent();
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });

@@ -39,7 +39,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Database_1 = require("../../_shared/dbWrapper/Database");
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var saltRounds = 10;
 exports.getCurrentStudent = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -63,7 +62,9 @@ exports.getCurrentStudent = function (req, res) { return __awaiter(void 0, void 
                 join4 = "(company right join " + join3 + " on student.company_id = company.user_id)";
                 condition = "student.user_id = ?";
                 mainQuery = "select " + studentQuery + ", " + subDepartmentQuery + ", " + mainDepartmentQuery + ", \n     " + locationQuery + ", " + companyQuery + " from " + join4 + " where " + condition;
-                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [user.userId])];
+                return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainQuery, [
+                        user.userId,
+                    ])];
             case 2:
                 student = _a.sent();
                 companyLocationQuery = "location.name as location_name, \n    location.address as location_address,\n    location.latitude as location_latitude,\n    location.longitude as location_longitude";
@@ -71,12 +72,11 @@ exports.getCurrentStudent = function (req, res) { return __awaiter(void 0, void 
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainCompanyLocationQuery, [student[0].company_location_id])];
             case 3:
                 companyLocation = _a.sent();
-                console.log(student);
                 if (student.length === 0) {
                     return [2 /*return*/, res.status(404).send({
                             error: {
-                                message: "Student name does not exist"
-                            }
+                                message: 'Student name does not exist',
+                            },
                         })];
                 }
                 data = {
@@ -119,32 +119,30 @@ exports.getCurrentStudent = function (req, res) { return __awaiter(void 0, void 
                     internshipPlacementDate: student[0].student_internship_placement_date,
                     internshipStartDate: student[0].student_internship_start_date,
                     internshipEvaluationDate: student[0].student_internship_evaluation_date,
-                    internshipCompletionDate: student[0].student_internship_completion_date
+                    internshipCompletionDate: student[0].student_internship_completion_date,
                 };
                 return [2 /*return*/, res.status(200).send({ data: data })];
             case 4:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 5: return [2 /*return*/];
         }
     });
 }); };
 exports.addStudentCompany = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, dbInstance, _a, name_1, email, contact, address, repName, repContact, repEmail, locationId, acceptanceLetterUrl, locationDetails, website, hash, addLocationQuery, addUserQuery, addCompanyQuery, updateStudentQuery, locationData, userData, insertedLocation, insertedUser, companyData, insertedCompany, updatedStudentData, rows, error_2;
+    var dbInstance, _a, name_1, email, contact, address, repName, repContact, repEmail, acceptanceLetterUrl, locationDetails, website, hash, addLocationQuery, addUserQuery, addCompanyQuery, updateStudentQuery, locationData, userData, insertedLocation, insertedUser, companyData, updatedStudentData, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 6, , 7]);
-                user = req.user, dbInstance = req.dbInstance;
-                console.log(req.body);
-                _a = req.body.data, name_1 = _a.name, email = _a.email, contact = _a.contact, address = _a.address, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, locationId = _a.locationId, acceptanceLetterUrl = _a.acceptanceLetterUrl, locationDetails = _a.locationDetails, website = _a.website;
+                dbInstance = req.dbInstance;
+                _a = req.body.data, name_1 = _a.name, email = _a.email, contact = _a.contact, address = _a.address, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, acceptanceLetterUrl = _a.acceptanceLetterUrl, locationDetails = _a.locationDetails, website = _a.website;
                 return [4 /*yield*/, bcryptjs_1.default.hash(contact, saltRounds)];
             case 1:
                 hash = _b.sent();
-                addLocationQuery = "insert into location set ?";
-                addUserQuery = "insert into user set ?";
-                addCompanyQuery = "insert into company set ?";
+                addLocationQuery = 'insert into location set ?';
+                addUserQuery = 'insert into user set ?';
+                addCompanyQuery = 'insert into company set ?';
                 updateStudentQuery = "update student set acceptance_letter_url = ?, \n    internship_placement_date = ?, registered_company = ?, want_placement = ?, \n    company_id = ?, last_modified = ?";
                 locationData = {
                     name: locationDetails.name,
@@ -152,14 +150,14 @@ exports.addStudentCompany = function (req, res) { return __awaiter(void 0, void 
                     latitude: locationDetails.coords.lat,
                     longitude: locationDetails.coords.lng,
                     created_at: Date.parse("" + new Date()),
-                    last_modified: Date.parse("" + new Date())
+                    last_modified: Date.parse("" + new Date()),
                 };
                 userData = {
                     user_type_id: 1,
                     email: email,
                     password: hash,
                     created_at: Date.parse("" + new Date()),
-                    last_modified: Date.parse("" + new Date())
+                    last_modified: Date.parse("" + new Date()),
                 };
                 return [4 /*yield*/, dbInstance.runPostQuery(addLocationQuery, locationData)];
             case 2:
@@ -178,53 +176,27 @@ exports.addStudentCompany = function (req, res) { return __awaiter(void 0, void 
                     representative_name: repName,
                     representative_phone: repContact,
                     representative_email: repEmail,
-                    created_at: Date.parse("" + new Date())
+                    created_at: Date.parse("" + new Date()),
                 };
                 return [4 /*yield*/, dbInstance.runPostQuery(addCompanyQuery, companyData)];
             case 4:
-                insertedCompany = _b.sent();
+                _b.sent();
                 updatedStudentData = [
                     acceptanceLetterUrl,
                     Date.parse("" + new Date()),
                     true,
                     false,
                     insertedUser.insertId,
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
-                return [4 /*yield*/, dbInstance.runPreparedQuery(updateStudentQuery, [
-                        updatedStudentData
-                    ])];
+                return [4 /*yield*/, dbInstance.runPreparedQuery(updateStudentQuery, [updatedStudentData])];
             case 5:
-                rows = _b.sent();
-                return [2 /*return*/, res.status(200).send({ data: "Successful" })];
+                _b.sent();
+                return [2 /*return*/, res.status(200).send({ data: 'Successful' })];
             case 6:
                 error_2 = _b.sent();
-                console.log("internal error", error_2);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 7: return [2 /*return*/];
         }
-    });
-}); };
-exports.getAllStudents = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance;
-    return __generator(this, function (_a) {
-        dbInstance = new Database_1.Database();
-        return [2 /*return*/];
-    });
-}); };
-exports.updateSingleStudent = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, user;
-    return __generator(this, function (_a) {
-        dbInstance = new Database_1.Database();
-        user = req.user;
-        return [2 /*return*/];
-    });
-}); };
-exports.deleteSingleStudent = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, user;
-    return __generator(this, function (_a) {
-        dbInstance = new Database_1.Database();
-        user = req.user;
-        return [2 /*return*/];
     });
 }); };

@@ -15,15 +15,15 @@ var app = express_1.default();
 app.use(function (req, res, next) {
     var dbInstance = new Database_1.Database();
     function afterResponse() {
-        res.removeListener("finish", afterResponse);
-        res.removeListener("close", afterResponse);
+        res.removeListener('finish', afterResponse);
+        res.removeListener('close', afterResponse);
         /**
          * if there is an active database connection, end it...
          */
         req.dbInstance.endDbConnection();
     }
-    res.on("finish", afterResponse);
-    res.on("close", afterResponse);
+    res.on('finish', afterResponse);
+    res.on('close', afterResponse);
     /**
      * code below will run **before** the request
      */

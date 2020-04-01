@@ -54,30 +54,29 @@ exports.registerStudent = function (req, res) { return __awaiter(void 0, void 0,
             case 1:
                 hash = _b.sent();
                 checkEmailAddressQuery = "select * from user where email = ?";
-                addStudentQuery = "insert into student set ?";
-                addUserQuery = "insert into user set ?";
-                addLocationQuery = "insert into location set ?";
+                addStudentQuery = 'insert into student set ?';
+                addUserQuery = 'insert into user set ?';
+                addLocationQuery = 'insert into location set ?';
                 locationData = {
                     name: locationDetails.name,
                     address: locationDetails.address,
                     latitude: locationDetails.coords.lat,
                     longitude: locationDetails.coords.lng,
                     created_at: Date.parse("" + new Date()),
-                    last_modified: Date.parse("" + new Date())
+                    last_modified: Date.parse("" + new Date()),
                 };
                 userData = {
                     user_type_id: 1,
                     email: email,
                     password: hash,
                     created_at: Date.parse("" + new Date()),
-                    last_modified: Date.parse("" + new Date())
+                    last_modified: Date.parse("" + new Date()),
                 };
                 return [4 /*yield*/, services_1.checkIfUserExists(dbInstance, checkEmailAddressQuery, [email])];
             case 2:
                 emailExists = _b.sent();
                 if (emailExists) {
-                    res.status(409).send({ error: "User already exist" });
-                    return [2 /*return*/];
+                    return [2 /*return*/, res.status(409).send({ error: 'User already exist' })];
                 }
                 return [4 /*yield*/, dbInstance.runPostQuery(addLocationQuery, locationData)];
             case 3:
@@ -105,23 +104,20 @@ exports.registerStudent = function (req, res) { return __awaiter(void 0, void 0,
                     location_id: insertedLocation.insertId,
                     want_placement: haveCompany === 0 ? 1 : 0,
                     created_at: Date.parse("" + new Date()),
-                    last_modified: Date.parse("" + new Date())
+                    last_modified: Date.parse("" + new Date()),
                 };
                 return [4 /*yield*/, dbInstance.runPostQuery(addStudentQuery, studentData)];
             case 5:
                 response = _b.sent();
-                res.status(200).send({ data: response });
-                return [2 /*return*/];
+                return [2 /*return*/, res.status(200).send({ data: response })];
             case 6:
                 error_1 = _b.sent();
-                console.error("Internal error");
-                console.log(error_1.code);
-                if (error_1.code === "ER_DUP_ENTRY") {
-                    return [2 /*return*/, res.status(409).send({ error: { message: "User already exist" } })];
+                if (error_1.code === 'ER_DUP_ENTRY') {
+                    return [2 /*return*/, res.status(409).send({ error: { message: 'User already exist' } })];
                 }
                 return [2 /*return*/, res
                         .status(422)
-                        .send({ error: { message: "Could not process request" } })];
+                        .send({ error: { message: 'Could not process request' } })];
             case 7: return [2 /*return*/];
         }
     });

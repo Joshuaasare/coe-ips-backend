@@ -44,26 +44,26 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var globals_1 = require("../../_shared/globals");
 var services_1 = require("../../_shared/services");
 exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, _a, email, password, userTypeId, query, user, isPasswordMatch, userQuery, userTypeQuery, join, condition, mainUserQuery, data, payload, token, userDetails, _b, studentQuery, subDepartmentQuery, mainDepartmentQuery, join1, join2, condition_1, mainStudentQuery, student, error_1;
+    var dbInstance, _a, email, password, userTypeId, query, user, isPasswordMatch, userQuery, userTypeQuery, join, condition, mainUserQuery, data, payload, token, userDetails, _b, studentQuery, subDepartmentQuery, mainDepartmentQuery, join1, join2, studentQueryCondition, mainStudentQuery, student, error_1;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _c.trys.push([0, 9, , 10]);
                 dbInstance = req.dbInstance;
                 _a = req.body.data, email = _a.email, password = _a.password, userTypeId = _a.userTypeId;
-                console.log(req.body.data);
                 query = "select * from user where email = ? AND user_type_id = ?";
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(query, [
                         email,
-                        userTypeId
+                        userTypeId,
                     ])];
             case 1:
                 user = _c.sent();
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 if (user.length === 0) {
                     return [2 /*return*/, res.status(404).send({
                             error: {
-                                message: "User name does not exist"
-                            }
+                                message: 'User name does not exist',
+                            },
                         })];
                 }
                 return [4 /*yield*/, bcryptjs_1.default.compare(password, user[0].password)];
@@ -72,24 +72,24 @@ exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void
                 if (!isPasswordMatch) {
                     return [2 /*return*/, res.status(401).send({
                             error: {
-                                message: "Password is incorrect"
-                            }
+                                message: 'Password is incorrect',
+                            },
                         })];
                 }
                 userQuery = "user.id as user_id, user.email as user_email";
                 userTypeQuery = "user_type.id as user_type_id, user_type.name as user_type_name";
-                join = "user_type inner join user on user_type.id = user.user_type_id";
+                join = 'user_type inner join user on user_type.id = user.user_type_id';
                 condition = "user.id = ?";
                 mainUserQuery = "select " + userQuery + ", " + userTypeQuery + " from " + join + " where " + condition + " ";
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainUserQuery, [
-                        user[0].id
+                        user[0].id,
                     ])];
             case 3:
                 data = _c.sent();
                 payload = {
                     userId: data[0].user_id,
                     userType: data[0].user_type_name,
-                    userTypeId: data[0].user_type_id
+                    userTypeId: data[0].user_type_id,
                 };
                 token = jsonwebtoken_1.default.sign(payload, globals_1.globals.JWT_SECRET_KEY);
                 userDetails = {
@@ -97,7 +97,7 @@ exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void
                     email: data[0].user_email,
                     userTypeId: data[0].user_type_id,
                     userTypeName: data[0].user_type_name,
-                    authToken: token
+                    authToken: token,
                 };
                 _b = userDetails.userTypeId;
                 switch (_b) {
@@ -111,8 +111,8 @@ exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void
                 mainDepartmentQuery = "main_department.id as main_department_id,\n        main_department.name as main_department_name";
                 join1 = "(student inner join sub_department on student.sub_department_id = sub_department.id)";
                 join2 = "(main_department inner join " + join1 + " on sub_department.main_department_id = main_department.id)";
-                condition_1 = "student.user_id = ?";
-                mainStudentQuery = "select " + studentQuery + ", " + subDepartmentQuery + ", " + mainDepartmentQuery + " from " + join2 + " where " + condition_1;
+                studentQueryCondition = "student.user_id = ?";
+                mainStudentQuery = "select " + studentQuery + ", " + subDepartmentQuery + ", " + mainDepartmentQuery + " from " + join2 + " where " + studentQueryCondition;
                 return [4 /*yield*/, dbInstance.runPreparedSelectQuery(mainStudentQuery, [userDetails.userId])];
             case 5:
                 student = _c.sent();
@@ -130,11 +130,10 @@ exports.verifyUser = function (req, res) { return __awaiter(void 0, void 0, void
             case 8: return [2 /*return*/, res.status(200).send({ data: userDetails })];
             case 9:
                 error_1 = _c.sent();
-                console.error("Internal error");
-                if (error_1.code === "ER_DUP_ENTRY") {
-                    return [2 /*return*/, res.status(409).send({ error: "User already exist" })];
+                if (error_1.code === 'ER_DUP_ENTRY') {
+                    return [2 /*return*/, res.status(409).send({ error: 'User already exist' })];
                 }
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 10: return [2 /*return*/];
         }
     });
@@ -152,25 +151,29 @@ exports.resetPassword = function (req, res) { return __awaiter(void 0, void 0, v
                 _b.trys.push([0, 4, , 5]);
                 _a = req.body.data, email = _a.email, newPassword = _a.newPassword;
                 dbInstance = req.dbInstance;
-                return [4 /*yield*/, services_1.getEntityRecordFromKey("user", "email", [email], dbInstance)];
+                return [4 /*yield*/, services_1.getEntityRecordFromKey('user', 'email', [email], dbInstance)];
             case 1:
                 user = _b.sent();
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 if (!user.length) {
-                    return [2 /*return*/, res.status(404).send({ error: { message: "user not found" } })];
+                    return [2 /*return*/, res.status(404).send({ error: { message: 'user not found' } })];
                 }
                 return [4 /*yield*/, bcryptjs_1.default.hash(newPassword, globals_1.globals.SALT_ROUNDS)];
             case 2:
                 hash = _b.sent();
-                userData = [hash, Date.parse("" + new Date()), email];
+                userData = [
+                    hash,
+                    Date.parse("" + new Date()),
+                    email,
+                ];
                 updatePasswordQuery = "update user set password = ?, last_modified = ? where email = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(updatePasswordQuery, [userData], dbInstance)];
             case 3:
                 _b.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
             case 4:
                 error_2 = _b.sent();
-                console.log(error_2);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 5: return [2 /*return*/];
         }
     });

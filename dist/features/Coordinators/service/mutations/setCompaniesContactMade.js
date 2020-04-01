@@ -39,8 +39,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var services_1 = require("../../../../_shared/services");
 var forEach_1 = __importDefault(require("lodash/forEach"));
+var services_1 = require("../../../../_shared/services");
 exports.setCompanyContactStatusToFalse = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var dbInstance, companies, allCompanyData_1, currDate_1, query, result, error_1;
     return __generator(this, function (_a) {
@@ -48,7 +48,7 @@ exports.setCompanyContactStatusToFalse = function (req, res) { return __awaiter(
             case 0:
                 _a.trys.push([0, 3, , 4]);
                 dbInstance = req.dbInstance;
-                return [4 /*yield*/, services_1.getAllRecords("company_archive", dbInstance, true)];
+                return [4 /*yield*/, services_1.getAllRecords('company_archive', dbInstance, true)];
             case 1:
                 companies = _a.sent();
                 allCompanyData_1 = [];
@@ -59,7 +59,7 @@ exports.setCompanyContactStatusToFalse = function (req, res) { return __awaiter(
                         currDate_1.getFullYear(),
                         0,
                         Date.parse("" + new Date()),
-                        Date.parse("" + new Date())
+                        Date.parse("" + new Date()),
                     ];
                     allCompanyData_1.push(singleCompanyData);
                 });
@@ -70,8 +70,7 @@ exports.setCompanyContactStatusToFalse = function (req, res) { return __awaiter(
                 return [2 /*return*/, res.status(200).send({ result: result, data: allCompanyData_1 })];
             case 3:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 4: return [2 /*return*/];
         }
     });

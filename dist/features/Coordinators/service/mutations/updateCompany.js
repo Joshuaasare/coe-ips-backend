@@ -46,43 +46,41 @@ exports.updateCompany = function (req, res) { return __awaiter(void 0, void 0, v
                 _a.trys.push([0, 2, , 3]);
                 dbInstance = req.dbInstance;
                 data = req.body.data;
-                console.log(data);
                 id = data.id, email = data.email, placementLetterUrl = data.placementLetterUrl;
                 companyData = [
                     email,
                     placementLetterUrl,
                     id,
-                    globals_1.globals.school.ACAD_YEAR
+                    globals_1.globals.school.ACAD_YEAR,
                 ];
                 query1 = "update company set email = ?, placement_letter_url = ? where user_id = ? AND acad_year = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(query1, [companyData], dbInstance)];
             case 1:
                 _a.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 exports.updateCompanyLocation = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var dbInstance, user, data, _a, id, name_1, email, placementLetterUrl, locationId, companyData, _b, locationName, coords, address, route, locality, subLocality, district, region, country, google_place_id, locationData, query1, query2, error_2;
+    var dbInstance, user, data, _a, id, email, placementLetterUrl, locationId, companyData, _b, locationName, coords, address, route, locality, district, region, country, locationData, query1, query2, error_2;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _c.trys.push([0, 3, , 4]);
                 dbInstance = req.dbInstance, user = req.user;
                 data = req.body.data;
-                _a = data.companyDetails, id = _a.id, name_1 = _a.name, email = _a.email, placementLetterUrl = _a.placementLetterUrl, locationId = _a.locationId;
+                _a = data.companyDetails, id = _a.id, email = _a.email, placementLetterUrl = _a.placementLetterUrl, locationId = _a.locationId;
                 companyData = [
                     email,
                     placementLetterUrl,
                     id,
-                    globals_1.globals.school.ACAD_YEAR
+                    globals_1.globals.school.ACAD_YEAR,
                 ];
-                _b = data.locationDetails, locationName = _b.name, coords = _b.coords, address = _b.address, route = _b.route, locality = _b.locality, subLocality = _b.subLocality, district = _b.district, region = _b.region, country = _b.country, google_place_id = _b.google_place_id;
+                _b = data.locationDetails, locationName = _b.name, coords = _b.coords, address = _b.address, route = _b.route, locality = _b.locality, district = _b.district, region = _b.region, country = _b.country;
                 locationData = [
                     address,
                     locationName + "," + locality + "," + country,
@@ -93,7 +91,7 @@ exports.updateCompanyLocation = function (req, res) { return __awaiter(void 0, v
                     coords.lng,
                     user.userId,
                     Date.parse("" + new Date()),
-                    locationId
+                    locationId,
                 ];
                 query1 = "update company set email = ?, placement_letter_url = ? where user_id = ? AND acad_year = ?";
                 query2 = "update location set name = ?, address = ?, detailed_address = ?,\n    district = ?, region = ?, latitude = ?, longitude = ?, updated_by = ?, last_modified = ? where id = ?";
@@ -103,12 +101,10 @@ exports.updateCompanyLocation = function (req, res) { return __awaiter(void 0, v
                 return [4 /*yield*/, services_1.updateEntityRecord(query2, [locationData], dbInstance)];
             case 2:
                 _c.sent();
-                console.log(data);
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
             case 3:
                 error_2 = _c.sent();
-                console.log("internal error", error_2);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 4: return [2 /*return*/];
         }
     });

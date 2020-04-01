@@ -1,17 +1,21 @@
-import { IRequestWithUser } from "../../../../_shared/middlewares";
-import bcrypt from "bcryptjs";
-import { Response } from "express";
-import { globals, constants } from "../../../../_shared/globals";
+/* eslint-disable @typescript-eslint/camelcase */
+import bcrypt from 'bcryptjs';
+import { Response } from 'express';
+import forEach from 'lodash/forEach';
+import { RequestWithUser } from '../../../../_shared/middlewares';
+import { globals, constants } from '../../../../_shared/globals';
 import {
   insertEntityRecord,
-  updateEntityRecord
-} from "../../../../_shared/services";
-import forEach from "lodash/forEach";
+  updateEntityRecord,
+} from '../../../../_shared/services';
+import { PostRows } from '../../../../_shared/dbWrapper/Database';
 
-export const registerCompany = async (req: IRequestWithUser, res: Response) => {
+export const registerCompany = async (
+  req: RequestWithUser,
+  res: Response
+): Promise<Response> => {
   try {
     const { dbInstance } = req;
-    console.log(req.body.data);
     const {
       id,
       name,
@@ -22,10 +26,9 @@ export const registerCompany = async (req: IRequestWithUser, res: Response) => {
       repName,
       repContact,
       repEmail,
-      locationId,
       locationDetails,
       code,
-      departments
+      departments,
     } = req.body.data;
 
     const {
@@ -34,11 +37,9 @@ export const registerCompany = async (req: IRequestWithUser, res: Response) => {
       address,
       route,
       locality,
-      subLocality,
       district,
       region,
       country,
-      google_place_id
     } = locationDetails;
 
     const verifyCodeQuery = `select * from company_archive_contact_made  where acad_year = ? AND company_archive_id = ?`;
@@ -49,14 +50,12 @@ export const registerCompany = async (req: IRequestWithUser, res: Response) => {
       verifyCodeData
     );
 
-    console.log(company[0]);
-
     if (!company[0] || (company[0] && company[0].contact_made === 0)) {
-      return res.status(404).send({ data: "Company has not been contacted" });
+      return res.status(404).send({ data: 'Company has not been contacted' });
     }
 
     if (company[0].code !== parseInt(code, 10)) {
-      return res.status(401).send({ data: "Not Authenticated" });
+      return res.status(401).send({ data: 'Not Authenticated' });
     }
 
     const hash = await bcrypt.hash(contact, globals.SALT_ROUNDS);
@@ -70,7 +69,7 @@ export const registerCompany = async (req: IRequestWithUser, res: Response) => {
       coords.lat,
       coords.lng,
       Date.parse(`${new Date()}`),
-      Date.parse(`${new Date()}`)
+      Date.parse(`${new Date()}`),
     ];
 
     const userData = [
@@ -78,69 +77,67 @@ export const registerCompany = async (req: IRequestWithUser, res: Response) => {
       email,
       hash,
       Date.parse(`${new Date()}`),
-      Date.parse(`${new Date()}`)
+      Date.parse(`${new Date()}`),
     ];
 
-    console.log(locationData);
-
     const insertedLocation = await insertEntityRecord(
-      "location",
-      "name,address,detailed_address,district,region,latitude,longitude,created_at,last_modified",
-      "?,?,?,?,?,?,?,?,?",
+      'location',
+      'name,address,detailed_address,district,region,latitude,longitude,created_at,last_modified',
+      '?,?,?,?,?,?,?,?,?',
       [locationData],
       dbInstance
     );
 
     const insertedUser = await insertEntityRecord(
-      "user",
-      "user_type_id,email,password,created_at, last_modified",
-      "?,?,?,?,?",
+      'user',
+      'user_type_id,email,password,created_at, last_modified',
+      '?,?,?,?,?',
       [userData],
       dbInstance
     );
 
     const companyData = [
-      insertedUser.insertId,
+      (insertedUser as PostRows).insertId,
       name,
       email,
       contact,
       globals.school.ACAD_YEAR,
-      insertedLocation.insertId,
+      (insertedLocation as PostRows).insertId,
       postal_address,
       website,
       repName,
       repContact,
       repEmail,
       Date.parse(`${new Date()}`),
-      Date.parse(`${new Date()}`)
+      Date.parse(`${new Date()}`),
     ];
 
-    const insertedCompany = await insertEntityRecord(
-      "company",
-      "user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at,last_modified",
-      "?,?,?,?,?,?,?,?,?,?,?,?,?",
+    await insertEntityRecord(
+      'company',
+      'user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at,last_modified',
+      '?,?,?,?,?,?,?,?,?,?,?,?,?',
       [companyData],
       dbInstance
     );
 
     const departmentsData = [];
 
-    forEach(departments, department => {
+    forEach(departments, (department) => {
       const dep = [
-        insertedUser.insertId,
+        (insertedUser as PostRows).insertId,
         department.id,
         globals.school.ACAD_YEAR,
         department.number,
         Date.parse(`${new Date()}`),
-        Date.parse(`${new Date()}`)
+        Date.parse(`${new Date()}`),
       ];
       departmentsData.push(dep);
     });
 
     await insertEntityRecord(
-      "company_sub_department",
-      "company_id,sub_department_id,acad_year,number_needed,created_at,last_modified",
-      "?,?,?,?,?,?",
+      'company_sub_department',
+      'company_id,sub_department_id,acad_year,number_needed,created_at,last_modified',
+      '?,?,?,?,?,?',
       departmentsData,
       dbInstance
     );
@@ -156,9 +153,8 @@ export const registerCompany = async (req: IRequestWithUser, res: Response) => {
       dbInstance
     );
 
-    return res.status(200).send({ data: "successful" });
+    return res.status(200).send({ data: 'successful' });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

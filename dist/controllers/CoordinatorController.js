@@ -19,175 +19,175 @@ var CoordinatorController = /** @class */ (function () {
     function CoordinatorController() {
     }
     CoordinatorController.prototype.addCompanyArchiveController = function (req, res) {
-        service_1.default.mutations.addCompanyArchive(req, res);
+        return service_1.default.mutations.addCompanyArchive(req, res);
     };
     CoordinatorController.prototype.getStudentsController = function (req, res) {
-        service_1.default.queries.getAllStudents(req, res);
+        return service_1.default.queries.getAllStudents(req, res);
     };
     CoordinatorController.prototype.archivedCompaniesController = function (req, res) {
-        service_1.default.queries.getArchivedCompanies(req, res);
+        return service_1.default.queries.getArchivedCompanies(req, res);
     };
     CoordinatorController.prototype.archivedCompaniesWithContactMadeController = function (req, res) {
-        service_1.default.queries.getArchivedCompaniesWithContactMade(req, res);
+        return service_1.default.queries.getArchivedCompaniesWithContactMade(req, res);
     };
     CoordinatorController.prototype.getSubDepartmentsController = function (req, res) {
-        service_1.default.queries.getSubDepartments(req, res);
+        return service_1.default.queries.getSubDepartments(req, res);
     };
     CoordinatorController.prototype.deleteCompanyArchiveController = function (req, res) {
-        service_1.default.mutations.deleteCompanyArchive(req, res);
+        return service_1.default.mutations.deleteCompanyArchive(req, res);
     };
     CoordinatorController.prototype.sendPlacementRequestController = function (req, res) {
-        service_1.default.mutations.sendPlacementRequest(req, res);
+        return service_1.default.mutations.sendPlacementRequest(req, res);
     };
     CoordinatorController.prototype.updateCompanyArchiveController = function (req, res) {
-        service_1.default.mutations.updateCompanyArchive(req, res);
+        return service_1.default.mutations.updateCompanyArchive(req, res);
     };
     CoordinatorController.prototype.updateCompanyArchiveLocationController = function (req, res) {
-        service_1.default.mutations.updateCompanyArchiveLocation(req, res);
+        return service_1.default.mutations.updateCompanyArchiveLocation(req, res);
     };
     CoordinatorController.prototype.updateStudentController = function (req, res) {
-        service_1.default.mutations.updateStudent(req, res);
+        return service_1.default.mutations.updateStudent(req, res);
     };
     CoordinatorController.prototype.updateStudentLocationController = function (req, res) {
-        service_1.default.mutations.updateStudentLocation(req, res);
+        return service_1.default.mutations.updateStudentLocation(req, res);
     };
     CoordinatorController.prototype.getCompaniesWithSlotsController = function (req, res) {
-        service_1.default.queries.getCompaniesWithSlots(req, res);
+        return service_1.default.queries.getCompaniesWithSlots(req, res);
     };
     CoordinatorController.prototype.updatePlacementController = function (req, res) {
-        service_1.default.mutations.updatePlacement(req, res);
+        return service_1.default.mutations.updatePlacement(req, res);
     };
     CoordinatorController.prototype.updateCompanyController = function (req, res) {
-        service_1.default.mutations.updateCompany(req, res);
+        return service_1.default.mutations.updateCompany(req, res);
     };
     CoordinatorController.prototype.updateCompanyLocationController = function (req, res) {
-        service_1.default.mutations.updateCompanyLocation(req, res);
+        return service_1.default.mutations.updateCompanyLocation(req, res);
     };
     CoordinatorController.prototype.getCompanyStudentsController = function (req, res) {
-        service_1.default.queries.getCompanyStudents(req, res);
+        return service_1.default.queries.getCompanyStudents(req, res);
     };
     CoordinatorController.prototype.sendPlacementLetterController = function (req, res) {
-        service_1.default.mutations.sendPlacementLetter(req, res);
+        return service_1.default.mutations.sendPlacementLetter(req, res);
     };
     __decorate([
-        decorators_1.post("/add-company-archive"),
+        decorators_1.post('/add-company-archive'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "addCompanyArchiveController", null);
     __decorate([
-        decorators_1.get("/students"),
+        decorators_1.get('/students'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "getStudentsController", null);
     __decorate([
-        decorators_1.get("/archived-companies"),
+        decorators_1.get('/archived-companies'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "archivedCompaniesController", null);
     __decorate([
-        decorators_1.get("/archived-companies-contact-made"),
+        decorators_1.get('/archived-companies-contact-made'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "archivedCompaniesWithContactMadeController", null);
     __decorate([
-        decorators_1.get("/sub-departments"),
+        decorators_1.get('/sub-departments'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "getSubDepartmentsController", null);
     __decorate([
-        decorators_1.del("/delete-company-archive"),
+        decorators_1.del('/delete-company-archive'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "deleteCompanyArchiveController", null);
     __decorate([
-        decorators_1.put("/placement-request"),
+        decorators_1.put('/placement-request'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "sendPlacementRequestController", null);
     __decorate([
-        decorators_1.put("/update-company-archive"),
+        decorators_1.put('/update-company-archive'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "updateCompanyArchiveController", null);
     __decorate([
-        decorators_1.put("/update-company-archive-location"),
+        decorators_1.put('/update-company-archive-location'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "updateCompanyArchiveLocationController", null);
     __decorate([
-        decorators_1.put("/update-student"),
+        decorators_1.put('/update-student'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "updateStudentController", null);
     __decorate([
-        decorators_1.put("/update-student-location"),
+        decorators_1.put('/update-student-location'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "updateStudentLocationController", null);
     __decorate([
-        decorators_1.get("/companies-with-slots"),
+        decorators_1.get('/companies-with-slots'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "getCompaniesWithSlotsController", null);
     __decorate([
-        decorators_1.put("/update-placement"),
+        decorators_1.put('/update-placement'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "updatePlacementController", null);
     __decorate([
-        decorators_1.put("/update-company"),
+        decorators_1.put('/update-company'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "updateCompanyController", null);
     __decorate([
-        decorators_1.put("/update-company-location"),
+        decorators_1.put('/update-company-location'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "updateCompanyLocationController", null);
     __decorate([
-        decorators_1.get("/company-students"),
+        decorators_1.get('/company-students'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "getCompanyStudentsController", null);
     __decorate([
-        decorators_1.put("/placement-letter"),
+        decorators_1.put('/placement-letter'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], CoordinatorController.prototype, "sendPlacementLetterController", null);
     CoordinatorController = __decorate([
-        decorators_1.controller("/coordinator")
+        decorators_1.controller('/coordinator')
     ], CoordinatorController);
     return CoordinatorController;
 }());

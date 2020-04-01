@@ -39,34 +39,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var services_1 = require("../../../../_shared/services");
 var globals_1 = require("../../../../_shared/globals");
 exports.updateCompanyArchiveLocation = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, dbInstance, data, _a, id, name_1, email, phone, postalAddress, requestLetterUrl, locationId, _b, locationName, coords, address, route, locality, subLocality, district, region, country, compData, query1, updated, compArchiveContactMadeData, query2, locationData, query3, insertedLocation, query6, error_1;
+    var user, dbInstance, data, _a, id, name_1, email, phone, postalAddress, requestLetterUrl, locationId, _b, locationName, coords, address, route, locality, district, region, country, compData, query1, compArchiveContactMadeData, query2, locationData, query3, insertedLocation, query6, error_1;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _c.trys.push([0, 8, , 9]);
                 user = req.user, dbInstance = req.dbInstance;
                 data = req.body.data;
-                console.log(data);
                 _a = data.companyDetails, id = _a.id, name_1 = _a.name, email = _a.email, phone = _a.phone, postalAddress = _a.postalAddress, requestLetterUrl = _a.requestLetterUrl, locationId = _a.locationId;
-                _b = data.locationDetails, locationName = _b.name, coords = _b.coords, address = _b.address, route = _b.route, locality = _b.locality, subLocality = _b.subLocality, district = _b.district, region = _b.region, country = _b.country;
+                _b = data.locationDetails, locationName = _b.name, coords = _b.coords, address = _b.address, route = _b.route, locality = _b.locality, district = _b.district, region = _b.region, country = _b.country;
                 compData = [
                     name_1,
                     phone,
                     email,
                     postalAddress,
                     Date.parse("" + new Date()),
-                    id
+                    id,
                 ];
                 query1 = "update company_archive set name = ?, phone = ?, email = ?, postal_address = ?,\n    last_modified = ? where id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(query1, [compData], dbInstance)];
             case 1:
-                updated = _c.sent();
+                _c.sent();
                 if (!!services_1.isEmpty(requestLetterUrl)) return [3 /*break*/, 3];
                 compArchiveContactMadeData = [
                     requestLetterUrl,
                     Date.parse("" + new Date()),
                     id,
-                    globals_1.globals.school.ACAD_YEAR
+                    globals_1.globals.school.ACAD_YEAR,
                 ];
                 query2 = "update company_archive_contact_made set request_letter_url = ?,\n      last_modified = ? where company_archive_id = ? and acad_year = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(query2, [compArchiveContactMadeData], dbInstance)];
@@ -83,31 +82,28 @@ exports.updateCompanyArchiveLocation = function (req, res) { return __awaiter(vo
                     coords.lat,
                     coords.lng,
                     user.userId,
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
                 if (!locationId) return [3 /*break*/, 5];
                 locationData.push(locationId);
-                console.log(locationData);
                 query3 = "update location set name = ?, address = ?, detailed_address = ?,\n      district = ?, region = ?, latitude = ?, longitude = ?, updated_by = ?, last_modified = ? where id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(query3, [locationData], dbInstance)];
             case 4:
                 _c.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
             case 5:
                 locationData.push(Date.parse("" + new Date()));
-                console.log(locationData);
-                return [4 /*yield*/, services_1.insertEntityRecord("location", "name, address, detailed_address, district,region,latitude, longitude,updated_by, created_at, last_modified", "?,?,?,?,?,?,?,?,?,?", [locationData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('location', 'name, address, detailed_address, district,region,latitude, longitude,updated_by, created_at, last_modified', '?,?,?,?,?,?,?,?,?,?', [locationData], dbInstance)];
             case 6:
                 insertedLocation = _c.sent();
                 query6 = "update company_archive set location_id = ? where id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(query6, [[insertedLocation.insertId, id]], dbInstance)];
             case 7:
                 _c.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
             case 8:
                 error_1 = _c.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 9: return [2 /*return*/];
         }
     });

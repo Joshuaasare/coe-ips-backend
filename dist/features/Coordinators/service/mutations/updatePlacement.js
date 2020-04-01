@@ -42,150 +42,126 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var nodemailer_1 = __importDefault(require("nodemailer"));
 var services_1 = require("../../../../_shared/services");
 var globals_1 = require("../../../../_shared/globals");
+function setStudentCompany(data, dbInstance, studentData, companyName, companyLocation, callback, index, companyChange) {
+    var _this = this;
+    if (companyChange === void 0) { companyChange = false; }
+    var transporter = nodemailer_1.default.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'vacationtraining.knust.coe@gmail.com',
+            pass: 'coe-vac-training-2019',
+        },
+    });
+    services_1.updateEntityRecord('update student set company_id = ?, internship_placement_date = ? where user_id = ?', data, dbInstance);
+    var mailOptions = companyChange
+        ? {
+            from: 'knustcoeindustrialtraining@gmail.com',
+            to: studentData[0].email,
+            subject: 'Vacation Training Placement Change',
+            text: "Hello " + studentData[0].surname + " " + studentData[0].other_names + "," +
+                '\n\nYour placement has been changed to' +
+                ("\n\n" + companyName + " - " + companyLocation) +
+                ("\n\nfor vacation training in the " + globals_1.globals.school.ACAD_YEAR + "/" + (globals_1.globals.school.ACAD_YEAR + 1) + " academic year. Kindly Login to the internship platform, ") +
+                'print the acceptance letter and send it in person to your new company. ' +
+                'Consult the internship guide on the platform or contact your coordinator if you have any questions',
+        }
+        : {
+            from: 'knustcoeindustrialtraining@gmail.com',
+            to: studentData[0].email,
+            subject: 'Vacation Training Placement',
+            text: "Hello " + studentData[0].surname + " " + studentData[0].other_names + "," +
+                '\n\nYou have been placed to' +
+                ("\n\n" + companyName + " - " + companyLocation) +
+                ("\n\nfor vacation training in the " + globals_1.globals.school.ACAD_YEAR + "/" + (globals_1.globals.school.ACAD_YEAR + 1) + " academic year. Kindly Login to the internship platform, ") +
+                'print the acceptance letter and send it in person to your company. ' +
+                'Consult the internship guide on the platform or contact your coordinator if you have any questions',
+        };
+    transporter.sendMail(mailOptions, function (err) { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            if (err) {
+                return [2 /*return*/, callback(++index)];
+            }
+            return [2 /*return*/, callback(++index)];
+        });
+    }); });
+}
+exports.setStudentCompany = setStudentCompany;
 exports.updatePlacement = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, dbInstance_1, data_1;
+    var dbInstance_1, data_1;
     return __generator(this, function (_a) {
         try {
-            user = req.user, dbInstance_1 = req.dbInstance;
+            dbInstance_1 = req.dbInstance;
             data_1 = req.body.data;
-            (function runCompanyPlacement(index) {
-                return __awaiter(this, void 0, void 0, function () {
-                    var _a, companyId, companyName, students, companyLocation;
-                    return __generator(this, function (_b) {
-                        if (!data_1[index]) {
-                            return [2 /*return*/, (function runPlacementRemove(i) {
+            return [2 /*return*/, (function runCompanyPlacement(index) {
+                    return __awaiter(this, void 0, void 0, function () {
+                        var _a, companyId, companyName, students, companyLocation;
+                        return __generator(this, function (_b) {
+                            if (!data_1[index]) {
+                                return [2 /*return*/, (function runPlacementRemove(i) {
+                                        return __awaiter(this, void 0, void 0, function () {
+                                            var companyStudents, studentsToChange;
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0:
+                                                        if (!data_1[i]) {
+                                                            return [2 /*return*/, res.status(200).send({ data: 'successful' })];
+                                                        }
+                                                        return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery('Select * from student where company_id = ? AND sub_department_id = ? AND acad_year =  ?', [
+                                                                data_1[i].companyId,
+                                                                data_1[i].subDepartmentId,
+                                                                globals_1.globals.school.ACAD_YEAR,
+                                                            ])];
+                                                    case 1:
+                                                        companyStudents = _a.sent();
+                                                        studentsToChange = companyStudents
+                                                            .map(function (item) { return item.user_id; })
+                                                            .filter(function (stud) { return !data_1[i].students.includes(stud); })
+                                                            .map(function (stud) { return [null, stud]; });
+                                                        return [4 /*yield*/, services_1.updateEntityRecord('update student set company_id = ? where user_id = ?', studentsToChange, dbInstance_1)];
+                                                    case 2:
+                                                        _a.sent();
+                                                        return [2 /*return*/, runPlacementRemove(++i)];
+                                                }
+                                            });
+                                        });
+                                    })(0)];
+                            }
+                            _a = data_1[index], companyId = _a.companyId, companyName = _a.companyName, students = _a.students, companyLocation = _a.companyLocation;
+                            return [2 /*return*/, (function runStudentPlacement(i) {
                                     return __awaiter(this, void 0, void 0, function () {
-                                        var companyStudents, studentsToChange;
+                                        var student, studentUpdateData, studentData;
                                         return __generator(this, function (_a) {
                                             switch (_a.label) {
                                                 case 0:
-                                                    if (!data_1[i]) {
-                                                        return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                                                    student = students[i];
+                                                    if (!student) {
+                                                        return [2 /*return*/, runCompanyPlacement(++index)];
                                                     }
-                                                    return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery("Select * from student where company_id = ? AND sub_department_id = ? AND acad_year =  ?", [
-                                                            data_1[i].companyId,
-                                                            data_1[i].subDepartmentId,
-                                                            globals_1.globals.school.ACAD_YEAR
-                                                        ])];
+                                                    studentUpdateData = [
+                                                        [data_1[index].companyId, Date.parse("" + new Date()), student],
+                                                    ];
+                                                    return [4 /*yield*/, services_1.getEntityRecordFromKey('student', 'user_id', [student], dbInstance_1)];
                                                 case 1:
-                                                    companyStudents = _a.sent();
-                                                    studentsToChange = companyStudents
-                                                        .map(function (item) { return item.user_id; })
-                                                        .filter(function (stud) { return !data_1[i].students.includes(stud); })
-                                                        .map(function (stud) { return [null, stud]; });
-                                                    console.log(studentsToChange);
-                                                    return [4 /*yield*/, services_1.updateEntityRecord("update student set company_id = ? where user_id = ?", studentsToChange, dbInstance_1)];
-                                                case 2:
-                                                    _a.sent();
-                                                    runPlacementRemove(++i);
-                                                    return [2 /*return*/];
+                                                    studentData = _a.sent();
+                                                    if (!studentData[0].company_id) {
+                                                        setStudentCompany(studentUpdateData, dbInstance_1, studentData, companyName, companyLocation, runStudentPlacement, i);
+                                                    }
+                                                    if (studentData[0].company_id &&
+                                                        studentData[0].company_id !== companyId) {
+                                                        setStudentCompany(studentUpdateData, dbInstance_1, studentData, companyName, companyLocation, runStudentPlacement, i, true);
+                                                    }
+                                                    return [2 /*return*/, runStudentPlacement(++i)];
                                             }
                                         });
                                     });
                                 })(0)];
-                        }
-                        _a = data_1[index], companyId = _a.companyId, companyName = _a.companyName, students = _a.students, companyLocation = _a.companyLocation;
-                        (function runStudentPlacement(i) {
-                            return __awaiter(this, void 0, void 0, function () {
-                                var student, studentUpdateData, studentData;
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            student = students[i];
-                                            if (!student) {
-                                                return [2 /*return*/, runCompanyPlacement(++index)];
-                                            }
-                                            studentUpdateData = [
-                                                [data_1[index].companyId, Date.parse("" + new Date()), student]
-                                            ];
-                                            return [4 /*yield*/, services_1.getEntityRecordFromKey("student", "user_id", [student], dbInstance_1)];
-                                        case 1:
-                                            studentData = _a.sent();
-                                            if (!studentData[0].company_id) {
-                                                return [2 /*return*/, setStudentCompany(studentUpdateData, dbInstance_1, studentData, companyName, companyLocation, runStudentPlacement, i)];
-                                            }
-                                            if (studentData[0].company_id &&
-                                                studentData[0].company_id !== companyId) {
-                                                return [2 /*return*/, setStudentCompany(studentUpdateData, dbInstance_1, studentData, companyName, companyLocation, runStudentPlacement, i, true)];
-                                            }
-                                            runStudentPlacement(++i);
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            });
-                        })(0);
-                        return [2 /*return*/];
+                        });
                     });
-                });
-            })(0);
+                })(0)];
         }
         catch (error) {
-            console.log("internal error", error);
-            return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+            return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
         }
         return [2 /*return*/];
     });
 }); };
-function setStudentCompany(data, dbInstance, studentData, companyName, companyLocation, callback, index, companyChange) {
-    if (companyChange === void 0) { companyChange = false; }
-    return __awaiter(this, void 0, void 0, function () {
-        var transporter, mailOptions;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    transporter = nodemailer_1.default.createTransport({
-                        service: "gmail",
-                        auth: {
-                            user: "vacationtraining.knust.coe@gmail.com",
-                            pass: "coe-vac-training-2019"
-                        }
-                    });
-                    return [4 /*yield*/, services_1.updateEntityRecord("update student set company_id = ?, internship_placement_date = ? where user_id = ?", data, dbInstance)];
-                case 1:
-                    _a.sent();
-                    mailOptions = companyChange
-                        ? {
-                            from: "knustcoeindustrialtraining@gmail.com",
-                            to: studentData[0].email,
-                            subject: "Vacation Training Placement Change",
-                            text: "Hello " + studentData[0].surname + " " + studentData[0].other_names + "," +
-                                "\n\nYour placement has been changed to" +
-                                ("\n\n" + companyName + " - " + companyLocation) +
-                                ("\n\nfor vacation training in the " + globals_1.globals.school.ACAD_YEAR + "/" + (globals_1.globals.school.ACAD_YEAR +
-                                    1) + " academic year. Kindly Login to the internship platform, ") +
-                                "print the acceptance letter and send it in person to your new company. " +
-                                "Consult the internship guide on the platform or contact your coordinator if you have any questions"
-                        }
-                        : {
-                            from: "knustcoeindustrialtraining@gmail.com",
-                            to: studentData[0].email,
-                            subject: "Vacation Training Placement",
-                            text: "Hello " + studentData[0].surname + " " + studentData[0].other_names + "," +
-                                "\n\nYou have been placed to" +
-                                ("\n\n" + companyName + " - " + companyLocation) +
-                                ("\n\nfor vacation training in the " + globals_1.globals.school.ACAD_YEAR + "/" + (globals_1.globals.school.ACAD_YEAR +
-                                    1) + " academic year. Kindly Login to the internship platform, ") +
-                                "print the acceptance letter and send it in person to your company. " +
-                                "Consult the internship guide on the platform or contact your coordinator if you have any questions"
-                        };
-                    transporter.sendMail(mailOptions, function (err, info) {
-                        return __awaiter(this, void 0, void 0, function () {
-                            return __generator(this, function (_a) {
-                                if (err) {
-                                    console.log(err);
-                                    callback(++index);
-                                }
-                                else {
-                                    console.log(info);
-                                    callback(++index);
-                                }
-                                return [2 /*return*/];
-                            });
-                        });
-                    });
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.setStudentCompany = setStudentCompany;

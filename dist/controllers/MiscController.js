@@ -19,7 +19,7 @@ var MiscController = /** @class */ (function () {
     function MiscController() {
     }
     MiscController.prototype.root = function (req, res) {
-        res.send("hello world");
+        return res.send('hello world');
     };
     MiscController.prototype.testAuthenticated = function (req, res) {
         return Misc_1.default.testAuthenticated(req, res);
@@ -28,27 +28,27 @@ var MiscController = /** @class */ (function () {
         return Misc_1.default.testAuthourized(req, res);
     };
     __decorate([
-        decorators_1.get("/"),
+        decorators_1.get('/'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], MiscController.prototype, "root", null);
     __decorate([
-        decorators_1.get("/testAuth"),
+        decorators_1.get('/testAuth'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], MiscController.prototype, "testAuthenticated", null);
     __decorate([
-        decorators_1.get("/authorized"),
+        decorators_1.get('/authorized'),
         decorators_1.use(middlewares_1.useAuthorization()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], MiscController.prototype, "testAuthorized", null);
     MiscController = __decorate([
-        decorators_1.controller("")
+        decorators_1.controller('')
     ], MiscController);
     return MiscController;
 }());

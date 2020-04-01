@@ -56,53 +56,50 @@ exports.getCompaniesWithSlots = function (req, res) { return __awaiter(void 0, v
                 condition = "company_sub_department.acad_year = ?";
                 mainQuery = "select " + companyQuery + ", " + companySubDepartmentQuery + ", " + subDepartmentQuery + ", \n    " + mainDepartmentQuery + ", " + locationQuery + " from " + join4 + " where " + condition + " order by name";
                 return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(mainQuery, [
-                        globals_1.globals.school.ACAD_YEAR
+                        globals_1.globals.school.ACAD_YEAR,
                     ])];
             case 1:
                 companies_1 = _a.sent();
-                (function getPlacedStudents(index) {
-                    return __awaiter(this, void 0, void 0, function () {
-                        var studentQuery, studentLocationQuery, join, studentQueryCondition, mainStudentQuery, studentData, students, studentOptionData, studentOptionQuery, studentOptions;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (!companies_1[index]) {
-                                        return [2 /*return*/, res.status(200).send({ data: companies_1 })];
-                                    }
-                                    studentQuery = "student.user_id, student.index_number, \n      student.surname,student.other_names,student.phone,\n      student.email,student.year_of_study,student.acad_year,\n      student.address,student.location,student.google_place_id,\n      student.foreign_student,student.want_placement,student.company_id";
-                                    studentLocationQuery = "location.id as location_id, location.name as location_name,\n      location.address as location_address, location.district, location.region,\n      location.latitude as lat, location.longitude as lng";
-                                    join = "(student inner join location on student.location_id = location.id)";
-                                    studentQueryCondition = "student.company_id = ? AND student.sub_department_id = ? AND student.acad_year = ?";
-                                    mainStudentQuery = "select " + studentQuery + ", " + studentLocationQuery + " from " + join + " where " + studentQueryCondition;
-                                    studentData = [
-                                        companies_1[index].company_id,
-                                        companies_1[index].sub_department_id,
-                                        globals_1.globals.school.ACAD_YEAR
-                                    ];
-                                    return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(mainStudentQuery, studentData)];
-                                case 1:
-                                    students = _a.sent();
-                                    studentOptionData = [
-                                        companies_1[index].sub_department_id,
-                                        globals_1.globals.school.ACAD_YEAR
-                                    ];
-                                    studentOptionQuery = "select " + studentQuery + ", " + studentLocationQuery + " from " + join + " where want_placement = 1 AND sub_department_id = ? AND acad_year = ?";
-                                    return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(studentOptionQuery, studentOptionData)];
-                                case 2:
-                                    studentOptions = _a.sent();
-                                    companies_1[index].students = students;
-                                    companies_1[index].student_options = studentOptions;
-                                    getPlacedStudents(++index);
-                                    return [2 /*return*/];
-                            }
+                return [2 /*return*/, (function getPlacedStudents(index) {
+                        return __awaiter(this, void 0, void 0, function () {
+                            var studentQuery, studentLocationQuery, join, studentQueryCondition, mainStudentQuery, studentData, students, studentOptionData, studentOptionQuery, studentOptions;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        if (!companies_1[index]) {
+                                            return [2 /*return*/, res.status(200).send({ data: companies_1 })];
+                                        }
+                                        studentQuery = "student.user_id, student.index_number, \n      student.surname,student.other_names,student.phone,\n      student.email,student.year_of_study,student.acad_year,\n      student.address,student.location,student.google_place_id,\n      student.foreign_student,student.want_placement,student.company_id";
+                                        studentLocationQuery = "location.id as location_id, location.name as location_name,\n      location.address as location_address, location.district, location.region,\n      location.latitude as lat, location.longitude as lng";
+                                        join = "(student inner join location on student.location_id = location.id)";
+                                        studentQueryCondition = "student.company_id = ? AND student.sub_department_id = ? AND student.acad_year = ?";
+                                        mainStudentQuery = "select " + studentQuery + ", " + studentLocationQuery + " from " + join + " where " + studentQueryCondition;
+                                        studentData = [
+                                            companies_1[index].company_id,
+                                            companies_1[index].sub_department_id,
+                                            globals_1.globals.school.ACAD_YEAR,
+                                        ];
+                                        return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(mainStudentQuery, studentData)];
+                                    case 1:
+                                        students = _a.sent();
+                                        studentOptionData = [
+                                            companies_1[index].sub_department_id,
+                                            globals_1.globals.school.ACAD_YEAR,
+                                        ];
+                                        studentOptionQuery = "select " + studentQuery + ", " + studentLocationQuery + " from " + join + " where want_placement = 1 AND sub_department_id = ? AND acad_year = ?";
+                                        return [4 /*yield*/, dbInstance_1.runPreparedSelectQuery(studentOptionQuery, studentOptionData)];
+                                    case 2:
+                                        studentOptions = _a.sent();
+                                        companies_1[index].students = students;
+                                        companies_1[index].student_options = studentOptions;
+                                        return [2 /*return*/, getPlacedStudents(++index)];
+                                }
+                            });
                         });
-                    });
-                })(0);
-                return [3 /*break*/, 3];
+                    })(0)];
             case 2:
                 error_1 = _a.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 3: return [2 /*return*/];
         }
     });

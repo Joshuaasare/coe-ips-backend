@@ -38,17 +38,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var isAuthorized = true;
 function useAuthorization() {
-    return function (req, res, next) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                if (!isAuthorized) {
-                    res.send(" GEt away not authorized");
-                    return [2 /*return*/];
-                }
-                next();
+    var _this = this;
+    return function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            if (!isAuthorized) {
+                res.send(' GEt away not authorized');
                 return [2 /*return*/];
-            });
+            }
+            next();
+            return [2 /*return*/];
         });
-    };
+    }); };
 }
 exports.useAuthorization = useAuthorization;

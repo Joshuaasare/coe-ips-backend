@@ -18,13 +18,13 @@ var LocationController = /** @class */ (function () {
         return services_1.getPlacesFromSearchKey(req, res);
     };
     __decorate([
-        decorators_1.get("/places-autocomplete"),
+        decorators_1.get('/places-autocomplete'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], LocationController.prototype, "getPlacesController", null);
     LocationController = __decorate([
-        decorators_1.controller("/location")
+        decorators_1.controller('/location')
     ], LocationController);
     return LocationController;
 }());

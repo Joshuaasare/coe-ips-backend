@@ -34,41 +34,41 @@ var StudentController = /** @class */ (function () {
         return service_1.default.mutations.updateInternshipStart(req, res);
     };
     __decorate([
-        decorators_1.post("/register"),
+        decorators_1.post('/register'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], StudentController.prototype, "registerController", null);
     __decorate([
-        decorators_1.get("/current-student"),
+        decorators_1.get('/current-student'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], StudentController.prototype, "currentStudentkController", null);
     __decorate([
-        decorators_1.post("/add-student-company"),
+        decorators_1.post('/add-student-company'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], StudentController.prototype, "addStudentCompanyController", null);
     __decorate([
-        decorators_1.put("/update-student-company"),
+        decorators_1.put('/update-student-company'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], StudentController.prototype, "updateStudentCompanyController", null);
     __decorate([
-        decorators_1.put("/update-internship-start"),
+        decorators_1.put('/update-internship-start'),
         decorators_1.use(middlewares_1.useAuthentication()),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], StudentController.prototype, "updateInternshipStartController", null);
     StudentController = __decorate([
-        decorators_1.controller("/student")
+        decorators_1.controller('/student')
     ], StudentController);
     return StudentController;
 }());

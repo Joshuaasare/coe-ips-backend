@@ -43,14 +43,13 @@ var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var globals_1 = require("../../../../_shared/globals");
 var services_1 = require("../../../../_shared/services");
 exports.addStudentCompany = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, dbInstance, _a, studentUserId, name_1, email, contact, address, repName, repContact, repEmail, locationId, acceptanceLetterUrl, locationDetails, website, hash, locationData, userData, insertedLocation, insertedUser, companyData, insertedCompany, updatedStudentData, updateStudentQuery, rows, error_1;
+    var dbInstance, _a, studentUserId, name_1, email, contact, address, repName, repContact, repEmail, acceptanceLetterUrl, locationDetails, website, hash, locationData, userData, insertedLocation, insertedUser, companyData, updatedStudentData, updateStudentQuery, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 6, , 7]);
-                user = req.user, dbInstance = req.dbInstance;
-                console.log(req.body);
-                _a = req.body.data, studentUserId = _a.studentUserId, name_1 = _a.name, email = _a.email, contact = _a.contact, address = _a.address, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, locationId = _a.locationId, acceptanceLetterUrl = _a.acceptanceLetterUrl, locationDetails = _a.locationDetails, website = _a.website;
+                dbInstance = req.dbInstance;
+                _a = req.body.data, studentUserId = _a.studentUserId, name_1 = _a.name, email = _a.email, contact = _a.contact, address = _a.address, repName = _a.repName, repContact = _a.repContact, repEmail = _a.repEmail, acceptanceLetterUrl = _a.acceptanceLetterUrl, locationDetails = _a.locationDetails, website = _a.website;
                 return [4 /*yield*/, bcryptjs_1.default.hash(contact, globals_1.globals.SALT_ROUNDS)];
             case 1:
                 hash = _b.sent();
@@ -60,19 +59,19 @@ exports.addStudentCompany = function (req, res) { return __awaiter(void 0, void 
                     locationDetails.coords.lat,
                     locationDetails.coords.lng,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
                 userData = [
                     globals_1.constants.user_type_id.COMPANY,
                     email,
                     hash,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
-                return [4 /*yield*/, services_1.insertEntityRecord("location", "name,address,latitude,longitude,created_at, last_modified", "?,?,?,?,?,?", [locationData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('location', 'name,address,latitude,longitude,created_at, last_modified', '?,?,?,?,?,?', [locationData], dbInstance)];
             case 2:
                 insertedLocation = _b.sent();
-                return [4 /*yield*/, services_1.insertEntityRecord("user", "user_type_id,email,password,created_at, last_modified", "?,?,?,?,?", [userData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('user', 'user_type_id,email,password,created_at, last_modified', '?,?,?,?,?', [userData], dbInstance)];
             case 3:
                 insertedUser = _b.sent();
                 companyData = [
@@ -88,11 +87,11 @@ exports.addStudentCompany = function (req, res) { return __awaiter(void 0, void 
                     repContact,
                     repEmail,
                     Date.parse("" + new Date()),
-                    Date.parse("" + new Date())
+                    Date.parse("" + new Date()),
                 ];
-                return [4 /*yield*/, services_1.insertEntityRecord("company", "user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at, last_modified", "?,?,?,?,?,?,?,?,?,?,?,?,?", [companyData], dbInstance)];
+                return [4 /*yield*/, services_1.insertEntityRecord('company', 'user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at, last_modified', '?,?,?,?,?,?,?,?,?,?,?,?,?', [companyData], dbInstance)];
             case 4:
-                insertedCompany = _b.sent();
+                _b.sent();
                 updatedStudentData = [
                     acceptanceLetterUrl,
                     Date.parse("" + new Date()),
@@ -100,17 +99,16 @@ exports.addStudentCompany = function (req, res) { return __awaiter(void 0, void 
                     false,
                     insertedUser.insertId,
                     Date.parse("" + new Date()),
-                    studentUserId
+                    studentUserId,
                 ];
                 updateStudentQuery = "update student set acceptance_letter_url = ?, \n    internship_placement_date = ?, registered_company = ?, want_placement = ?, \n    company_id = ?, last_modified = ? where user_id = ?";
                 return [4 /*yield*/, services_1.updateEntityRecord(updateStudentQuery, [updatedStudentData], dbInstance)];
             case 5:
-                rows = _b.sent();
-                return [2 /*return*/, res.status(200).send({ data: "successful" })];
+                _b.sent();
+                return [2 /*return*/, res.status(200).send({ data: 'successful' })];
             case 6:
                 error_1 = _b.sent();
-                console.log("internal error", error_1);
-                return [2 /*return*/, res.status(422).send({ error: "Could not process request" })];
+                return [2 /*return*/, res.status(422).send({ error: 'Could not process request' })];
             case 7: return [2 /*return*/];
         }
     });

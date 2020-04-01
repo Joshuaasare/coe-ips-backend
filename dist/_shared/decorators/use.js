@@ -7,10 +7,11 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable @typescript-eslint/no-explicit-any */
 require("reflect-metadata");
 var globals_1 = require("../globals");
 function use(middleware) {
-    return function (target, key, desc) {
+    return function (target, key) {
         var middlewares = Reflect.getMetadata(globals_1.MetadataKeys.middleware, target, key) || [];
         Reflect.defineMetadata(globals_1.MetadataKeys.middleware, __spreadArrays(middlewares, [middleware]), target, key);
     };
