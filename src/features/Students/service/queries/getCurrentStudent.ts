@@ -1,10 +1,10 @@
-import { Response } from "express";
-import { IRequestWithUser } from "../../../../_shared/middlewares";
+import { Response } from 'express';
+import { RequestWithUser } from '../../../../_shared/middlewares';
 
 export const getCurrentStudent = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-): Promise<any> => {
+): Promise<Response> => {
   const { user, dbInstance } = req;
   try {
     const studentQuery = `student.user_id as student_user_id,
@@ -41,8 +41,8 @@ export const getCurrentStudent = async (
     const mainDepartmentQuery = `main_department.id as main_department_id,
     main_department.name as main_department_name`;
 
-    const locationQuery = `location.name as location_name, 
-    location.address as location_address`;
+    // const locationQuery = `location.name as location_name,
+    // location.address as location_address`;
 
     const companyLocationQuery = `location.id as company_location_id,
     location.name as company_location_name, 
@@ -69,10 +69,9 @@ export const getCurrentStudent = async (
     const mainQuery = `select ${studentQuery}, ${subDepartmentQuery}, ${mainDepartmentQuery}, 
      ${companyLocationQuery}, ${companyQuery} from ${join4} where ${condition}`;
 
-    const student: Array<any> = await dbInstance.runPreparedSelectQuery(
-      mainQuery,
-      [user.userId]
-    );
+    const student = await dbInstance.runPreparedSelectQuery(mainQuery, [
+      user.userId,
+    ]);
 
     // const mainCompanyLocationQuery = `select ${companyLocationQuery} from location where id = ?`;
 
@@ -81,11 +80,11 @@ export const getCurrentStudent = async (
     //   [student[0].company_location_id]
     // );
 
-    if (student.length === 0) {
+    if ((student as Record<string, string | boolean | number>[]).length === 0) {
       return res.status(404).send({
         error: {
-          message: "Student name does not exist"
-        }
+          message: 'Student name does not exist',
+        },
       });
     }
 
@@ -131,12 +130,11 @@ export const getCurrentStudent = async (
       internshipPlacementDate: student[0].student_internship_placement_date,
       internshipStartDate: student[0].student_internship_start_date,
       internshipEvaluationDate: student[0].student_internship_evaluation_date,
-      internshipCompletionDate: student[0].student_internship_completion_date
+      internshipCompletionDate: student[0].student_internship_completion_date,
     };
 
     return res.status(200).send({ data });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

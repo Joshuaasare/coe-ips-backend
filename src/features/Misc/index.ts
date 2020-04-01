@@ -1,5 +1,5 @@
-import * as Users from "./Users";
+import * as Users from './Users';
 
 export default {
-  ...Users
+  ...Users,
 };

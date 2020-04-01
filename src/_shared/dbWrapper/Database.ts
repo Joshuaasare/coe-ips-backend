@@ -1,11 +1,25 @@
-import msql from "mysql2";
-import { globals, constants } from "../globals";
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable no-empty */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-param-reassign */
+import msql from 'mysql2';
+import { globals, constants } from '../globals';
 
-export interface PostRows extends Error {
+export interface PostRows {
   insertId?: number;
 }
 
+export interface MysqlQueryError {
+  code: string;
+}
+
+export interface Rec {
+  string: string | boolean | number;
+}
+
 export class Database {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private dbConnectionInstance: any;
 
   constructor() {
@@ -15,26 +29,23 @@ export class Database {
     }
   }
 
-  handleDisconnect() {
-    this.dbConnectionInstance.connect(function(err) {
+  handleDisconnect(): void {
+    this.dbConnectionInstance.connect((err: Error) => {
       if (err) {
-        console.log("error when connecting to db:", err);
       }
     });
 
-    this.dbConnectionInstance.on("error", function(err) {
-      console.log("db error", err);
-    });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.dbConnectionInstance.on('error', (err: Error) => {});
   }
 
   endDbConnection(): void {
-    console.log("ending connection");
     this.dbConnectionInstance.end();
   }
 
-  runQuery(query: string): any {
+  runQuery(query: string): Promise<PostRows[]> {
     return new Promise((resolve, reject) => {
-      this.dbConnectionInstance.query(query, (err: Error, rows: PostRows) => {
+      this.dbConnectionInstance.query(query, (err: Error, rows: PostRows[]) => {
         if (err) reject(err);
         resolve(rows);
       });
@@ -58,11 +69,11 @@ export class Database {
   runPreparedQuery(
     preparedQuery: string,
     params: Array<Array<string | number | boolean>>
-  ): any {
+  ): Promise<PostRows | MysqlQueryError> {
     let lastInsertedRow = null;
     return new Promise((resolve, reject) => {
-      const runQuery = (statement: any, i: number) => {
-        //console.log('i is ', i, 'params are ', params[i])
+      const runQuery = (statement: any, i: number): void => {
+        // console.log('i is ', i, 'params are ', params[i])
         if (params[i]) {
           /**
            * we have to use this kind of recursive calls
@@ -72,13 +83,16 @@ export class Database {
            * so it is only in the callback that we can know if each query was successful
            * TODO: look for a faster way, maybe??
            */
-          statement.execute(params[i], (err: Error, results, fields) => {
-            lastInsertedRow = results;
-            if (err) {
-              console.log("rejects here", err);
-              reject(err);
-            } else runQuery(statement, ++i);
-          });
+          statement.execute(
+            params[i],
+            (err: MysqlQueryError, results: PostRows) => {
+              lastInsertedRow = results;
+              if (err) {
+                reject(err);
+              }
+              runQuery(statement, ++i);
+            }
+          );
         } else resolve(lastInsertedRow);
       };
 
@@ -105,11 +119,11 @@ export class Database {
   runPreparedQueryForCron(
     preparedQuery: string,
     params: Array<Array<string | number | boolean>>
-  ): any {
+  ): Promise<PostRows | MysqlQueryError> {
     let lastInsertedRow = null;
     return new Promise((resolve, reject) => {
-      const runQuery = (statement: any, i: number) => {
-        //console.log('i is ', i, 'params are ', params[i])
+      const runQuery = (statement: any, i: number): void => {
+        // console.log('i is ', i, 'params are ', params[i])
         if (params[i]) {
           /**
            * we have to use this kind of recursive calls
@@ -119,16 +133,19 @@ export class Database {
            * so it is only in the callback that we can know if each query was successful
            * TODO: look for a faster way, maybe??
            */
-          statement.execute(params[i], (err, results, fields) => {
-            lastInsertedRow = results;
-            if (err) {
-              if (err.code === constants.errors.SQL_DUP_ENTRY) {
-                runQuery(statement, ++i);
-              } else {
-                reject(err);
-              }
-            } else runQuery(statement, ++i);
-          });
+          statement.execute(
+            params[i],
+            (err: MysqlQueryError, results: PostRows) => {
+              lastInsertedRow = results;
+              if (err) {
+                if (err.code === constants.errors.SQL_DUP_ENTRY) {
+                  runQuery(statement, ++i);
+                } else {
+                  reject(err);
+                }
+              } else runQuery(statement, ++i);
+            }
+          );
         } else resolve(lastInsertedRow);
       };
 
@@ -146,12 +163,12 @@ export class Database {
   runPreparedSelectQuery(
     preparedQuery: string,
     params?: Array<string | number | boolean>
-  ): Promise<any> {
+  ): Promise<MysqlQueryError | Record<string, any>[]> {
     return new Promise((resolve, reject) => {
       this.dbConnectionInstance.execute(
         preparedQuery,
         params,
-        (err: Error, rows: Object[]) => {
+        (err: MysqlQueryError, rows: Record<string, any>[]) => {
           if (err) reject(err);
           else resolve(rows);
         }
@@ -159,14 +176,16 @@ export class Database {
     });
   }
 
-  runPostQuery(query: string, values: Object): Promise<PostRows> {
+  runPostQuery(
+    query: string,
+    values: Record<string, any>
+  ): Promise<PostRows | MysqlQueryError> {
     return new Promise((resolve, reject) => {
       this.dbConnectionInstance.query(
         query,
         values,
-        (err: Error, rows: PostRows) => {
+        (err: MysqlQueryError, rows: PostRows) => {
           if (err) {
-            console.log("sql error" + err);
             reject(err);
           }
           resolve(rows);

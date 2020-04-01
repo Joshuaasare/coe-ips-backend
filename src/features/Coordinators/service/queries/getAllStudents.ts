@@ -1,8 +1,11 @@
-import { IRequestWithUser } from "../../../../_shared/middlewares";
-import { Response } from "express";
-import { globals } from "../../../../_shared/globals";
+import { Response } from 'express';
+import { RequestWithUser } from '../../../../_shared/middlewares';
+import { globals } from '../../../../_shared/globals';
 
-export const getAllStudents = async (req: IRequestWithUser, res: Response) => {
+export const getAllStudents = async (
+  req: RequestWithUser,
+  res: Response
+): Promise<Response> => {
   try {
     const { dbInstance } = req;
     const studentQuery = `student.user_id, student.index_number,student.surname, 
@@ -34,14 +37,12 @@ export const getAllStudents = async (req: IRequestWithUser, res: Response) => {
     const mainQuery = `select ${studentQuery}, ${subDepartmentQuery}, ${mainDepartmentQuery}, ${locationQuery}
      from ${join3} where ${condition}`;
 
-    const students: Array<any> = await dbInstance.runPreparedSelectQuery(
-      mainQuery,
-      [globals.school.ACAD_YEAR]
-    );
+    const students = await dbInstance.runPreparedSelectQuery(mainQuery, [
+      globals.school.ACAD_YEAR,
+    ]);
 
     return res.status(200).send({ data: students });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

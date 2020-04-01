@@ -1,14 +1,13 @@
-import { IRequestWithUser } from "../../../../_shared/middlewares";
-import { Response } from "express";
-import { globals } from "../../../../_shared/globals";
+import { Response } from 'express';
+import { RequestWithUser } from '../../../../_shared/middlewares';
+import { globals } from '../../../../_shared/globals';
 
 export const getCompanyStudents = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-) => {
+): Promise<Response> => {
   try {
-    const { user, dbInstance } = req;
-    console.log("query", req.query);
+    const { dbInstance } = req;
     const companyId = req.query.id;
 
     const studentQuery = `student.user_id, student.index_number,student.surname, 
@@ -40,14 +39,13 @@ export const getCompanyStudents = async (
     const mainQuery = `select ${studentQuery}, ${subDepartmentQuery}, ${mainDepartmentQuery}, ${locationQuery}
      from ${join3} where ${condition}`;
 
-    const students: Array<any> = await dbInstance.runPreparedSelectQuery(
-      mainQuery,
-      [globals.school.ACAD_YEAR, companyId]
-    );
+    const students = await dbInstance.runPreparedSelectQuery(mainQuery, [
+      globals.school.ACAD_YEAR,
+      companyId,
+    ]);
 
     return res.status(200).send({ data: students });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

@@ -1,19 +1,19 @@
-import { IRequestWithUser } from "../../../../_shared/middlewares";
-import { Response } from "express";
-import bcrypt from "bcryptjs";
-import { globals, constants } from "../../../../_shared/globals";
+import { Response } from 'express';
+import bcrypt from 'bcryptjs';
+import { RequestWithUser } from '../../../../_shared/middlewares';
+import { globals, constants } from '../../../../_shared/globals';
 import {
   insertEntityRecord,
-  updateEntityRecord
-} from "../../../../_shared/services";
+  updateEntityRecord,
+} from '../../../../_shared/services';
+import { PostRows } from '../../../../_shared/dbWrapper/Database';
 
 export const addStudentCompany = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-) => {
+): Promise<Response> => {
   try {
-    const { user, dbInstance } = req;
-    console.log(req.body);
+    const { dbInstance } = req;
     const {
       studentUserId,
       name,
@@ -23,10 +23,9 @@ export const addStudentCompany = async (
       repName,
       repContact,
       repEmail,
-      locationId,
       acceptanceLetterUrl,
       locationDetails,
-      website
+      website,
     } = req.body.data;
 
     const hash = await bcrypt.hash(contact, globals.SALT_ROUNDS);
@@ -36,7 +35,7 @@ export const addStudentCompany = async (
       locationDetails.coords.lat,
       locationDetails.coords.lng,
       Date.parse(`${new Date()}`),
-      Date.parse(`${new Date()}`)
+      Date.parse(`${new Date()}`),
     ];
 
     const userData = [
@@ -44,45 +43,45 @@ export const addStudentCompany = async (
       email,
       hash,
       Date.parse(`${new Date()}`),
-      Date.parse(`${new Date()}`)
+      Date.parse(`${new Date()}`),
     ];
 
     const insertedLocation = await insertEntityRecord(
-      "location",
-      "name,address,latitude,longitude,created_at, last_modified",
-      "?,?,?,?,?,?",
+      'location',
+      'name,address,latitude,longitude,created_at, last_modified',
+      '?,?,?,?,?,?',
       [locationData],
       dbInstance
     );
 
     const insertedUser = await insertEntityRecord(
-      "user",
-      "user_type_id,email,password,created_at, last_modified",
-      "?,?,?,?,?",
+      'user',
+      'user_type_id,email,password,created_at, last_modified',
+      '?,?,?,?,?',
       [userData],
       dbInstance
     );
 
     const companyData = [
-      insertedUser.insertId,
+      (insertedUser as PostRows).insertId,
       name,
       email,
       contact,
       globals.school.ACAD_YEAR,
-      insertedLocation.insertId,
+      (insertedLocation as PostRows).insertId,
       address,
       website,
       repName,
       repContact,
       repEmail,
       Date.parse(`${new Date()}`),
-      Date.parse(`${new Date()}`)
+      Date.parse(`${new Date()}`),
     ];
 
-    const insertedCompany = await insertEntityRecord(
-      "company",
-      "user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at, last_modified",
-      "?,?,?,?,?,?,?,?,?,?,?,?,?",
+    await insertEntityRecord(
+      'company',
+      'user_id,name,email,phone,acad_year,location_id,postal_address,website,representative_name,representative_phone,representative_email,created_at, last_modified',
+      '?,?,?,?,?,?,?,?,?,?,?,?,?',
       [companyData],
       dbInstance
     );
@@ -92,23 +91,22 @@ export const addStudentCompany = async (
       Date.parse(`${new Date()}`),
       true,
       false,
-      insertedUser.insertId,
+      (insertedUser as PostRows).insertId,
       Date.parse(`${new Date()}`),
-      studentUserId
+      studentUserId,
     ];
 
     const updateStudentQuery = `update student set acceptance_letter_url = ?, 
     internship_placement_date = ?, registered_company = ?, want_placement = ?, 
     company_id = ?, last_modified = ? where user_id = ?`;
-    const rows = await updateEntityRecord(
+    await updateEntityRecord(
       updateStudentQuery,
       [updatedStudentData],
       dbInstance
     );
 
-    return res.status(200).send({ data: "successful" });
+    return res.status(200).send({ data: 'successful' });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

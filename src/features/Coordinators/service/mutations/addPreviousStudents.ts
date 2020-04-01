@@ -1,25 +1,24 @@
-import { IRequestWithUser } from "../../../../_shared/middlewares";
-import { Response } from "express";
-import { updateEntityRecord } from "../../../../_shared/services";
+import { Response } from 'express';
+import { RequestWithUser } from '../../../../_shared/middlewares';
+import { updateEntityRecord } from '../../../../_shared/services';
 
 export const addPreviousStudents = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-) => {
+): Promise<Response> => {
   try {
     const { dbInstance } = req;
     const getStudentsQuery = `select * from student where acad_year = ?`;
     const students = await dbInstance.runPreparedSelectQuery(getStudentsQuery, [
-      2017
+      2017,
     ]);
 
-    (async function updateStudent(index: number) {
+    return (async function updateStudent(index: number): Promise<Response> {
       if (!students[index]) {
-        return res.status(200).send({ data: "successful" });
+        return res.status(200).send({ data: 'successful' });
       }
 
       const currentStudent = students[index];
-      console.log(currentStudent);
 
       const updateUserData = [currentStudent.email, currentStudent.user_id];
       const updateUserQuery = `update user set email = ? where id = ?`;
@@ -48,7 +47,7 @@ export const addPreviousStudents = async (
         location[0].latitude,
         location[0].longitude,
         currentStudent.last_modified,
-        currentStudent.user_id
+        currentStudent.user_id,
       ];
 
       await updateEntityRecord(
@@ -57,10 +56,9 @@ export const addPreviousStudents = async (
         dbInstance
       );
 
-      updateStudent(++index);
+      return updateStudent(++index);
     })(0);
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

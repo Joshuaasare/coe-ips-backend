@@ -1,26 +1,25 @@
-import { Response } from "express";
-import { getAllRecords } from "../../../../_shared/services";
-import { IRequestWithUser } from "../../../../_shared/middlewares";
-import { globals } from "../../../../_shared/globals";
+import { Response } from 'express';
+import { getAllRecords } from '../../../../_shared/services';
+import { RequestWithUser } from '../../../../_shared/middlewares';
+import { globals } from '../../../../_shared/globals';
 
 export const getArchivedCompanies = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-): Promise<any> => {
+): Promise<Response> => {
   try {
     const { dbInstance } = req;
-    const companies = await getAllRecords("company_archive", dbInstance, true);
+    const companies = await getAllRecords('company_archive', dbInstance, true);
     return res.status(200).send({ data: companies });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };
 
 export const getArchivedCompaniesWithContactMade = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-): Promise<any> => {
+): Promise<Response> => {
   try {
     const { dbInstance } = req;
     const archivedCompanyQuery = `company_archive.id as id,
@@ -46,11 +45,10 @@ export const getArchivedCompaniesWithContactMade = async (
 
     const mainQuery = `select ${archivedCompanyQuery}, ${contactMadeQuery}, ${locationQuery} from ${join2} where ${condition} ${order}`;
     const companies = await dbInstance.runPreparedSelectQuery(mainQuery, [
-      globals.school.ACAD_YEAR
+      globals.school.ACAD_YEAR,
     ]);
     return res.status(200).send({ data: companies });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

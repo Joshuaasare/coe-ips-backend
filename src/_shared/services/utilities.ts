@@ -1,21 +1,18 @@
-import { Database } from "../dbWrapper/Database";
-import isObject from "lodash/isObject";
-import { IRequestWithUser } from "../middlewares";
-import { Response } from "express";
+import isObject from 'lodash/isObject';
+import { Database } from '../dbWrapper/Database';
 
 export async function checkIfUserExists(
   dbInstance: Database,
   query: string,
   values: Array<string | number | boolean>
 ): Promise<boolean> {
-  const rows: Array<any> = await dbInstance.runPreparedSelectQuery(
-    query,
-    values
-  );
-  return !(rows.length === 0);
+  const rows = await dbInstance.runPreparedSelectQuery(query, values);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return !((rows as Record<string, any>).length === 0);
 }
 
-export function arrayHasData(data?: Array<any>) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function arrayHasData(data?: Array<any>): number {
   return data && data.length;
 }
 
@@ -23,10 +20,11 @@ export function arrayHasData(data?: Array<any>) {
  * isEmpty function that will return false for primitive values
  * like numbers and strings, unlike the lodash version
  */
-export function isEmpty(val: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function isEmpty(val: any): boolean {
   return (
     val === null ||
-    val === "" ||
+    val === '' ||
     (Array.isArray(val) && !val.length) ||
     (isObject(val) && !Object.keys(val).length)
   );

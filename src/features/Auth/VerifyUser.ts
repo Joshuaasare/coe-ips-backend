@@ -1,40 +1,65 @@
-import { Request, Response } from "express";
-import { Database } from "../../_shared/dbWrapper/Database";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { globals, constants } from "../../_shared/globals";
-import { IRequestWithUser } from "../../_shared/middlewares";
+import { Response } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { globals, constants } from '../../_shared/globals';
+import { RequestWithUser } from '../../_shared/middlewares';
 import {
   getEntityRecordFromKey,
-  updateEntityRecord
-} from "../../_shared/services";
+  updateEntityRecord,
+} from '../../_shared/services';
+
+export interface UserDetails {
+  userId: number;
+  email: string;
+  userTypeId: number;
+  userTypeName: string;
+  authToken: string;
+  otherNames?: string;
+  lastName?: string;
+}
+
+export interface StudentDetails extends UserDetails {
+  indexNumber?: number;
+  yearOfStudy?: number;
+  acadYear?: number;
+  mainDepartment?: number;
+  subDepartment?: number;
+  address?: string;
+}
+
+export type JWTpayload = {
+  userId: number;
+  userType: string;
+  userTypeId: number;
+};
 
 export const verifyUser = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-): Promise<any> => {
+): Promise<Response> => {
   try {
-    const dbInstance: Database = req.dbInstance;
+    const { dbInstance } = req;
     const {
       email,
       password,
-      userTypeId
+      userTypeId,
     }: {
       email: string;
       password: string;
       userTypeId: number;
     } = req.body.data;
-    console.log(req.body.data);
     const query = `select * from user where email = ? AND user_type_id = ?`;
-    const user: Array<any> = await dbInstance.runPreparedSelectQuery(query, [
+    const user = await dbInstance.runPreparedSelectQuery(query, [
       email,
-      userTypeId
+      userTypeId,
     ]);
-    if (user.length === 0) {
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((user as Record<string, any>[]).length === 0) {
       return res.status(404).send({
         error: {
-          message: "User name does not exist"
-        }
+          message: 'User name does not exist',
+        },
       });
     }
     const isPasswordMatch: boolean = await bcrypt.compare(
@@ -44,8 +69,8 @@ export const verifyUser = async (
     if (!isPasswordMatch) {
       return res.status(401).send({
         error: {
-          message: "Password is incorrect"
-        }
+          message: 'Password is incorrect',
+        },
       });
     }
 
@@ -53,33 +78,33 @@ export const verifyUser = async (
     const userTypeQuery = `user_type.id as user_type_id, user_type.name as user_type_name`;
 
     const join =
-      "user_type inner join user on user_type.id = user.user_type_id";
+      'user_type inner join user on user_type.id = user.user_type_id';
     const condition = `user.id = ?`;
     const mainUserQuery = `select ${userQuery}, ${userTypeQuery} from ${join} where ${condition} `;
 
     const data = await dbInstance.runPreparedSelectQuery(mainUserQuery, [
-      user[0].id
+      user[0].id,
     ]);
 
-    const payload = {
+    const payload: JWTpayload = {
       userId: data[0].user_id,
       userType: data[0].user_type_name,
-      userTypeId: data[0].user_type_id
+      userTypeId: data[0].user_type_id,
     };
 
     const token = jwt.sign(payload, globals.JWT_SECRET_KEY);
 
-    const userDetails: any = {
+    const userDetails: StudentDetails = {
       userId: data[0].user_id,
       email: data[0].user_email,
       userTypeId: data[0].user_type_id,
       userTypeName: data[0].user_type_name,
-      authToken: token
+      authToken: token,
     };
 
     switch (userDetails.userTypeId) {
-      case constants.user_type_id.STUDENT:
-        //student
+      case constants.user_type_id.STUDENT: {
+        // student
         const studentQuery = `student.index_number as student_index_number, 
         student.surname as student_surname, 
         student.other_names as student_other_names, 
@@ -98,9 +123,9 @@ export const verifyUser = async (
 
         const join1 = `(student inner join sub_department on student.sub_department_id = sub_department.id)`;
         const join2 = `(main_department inner join ${join1} on sub_department.main_department_id = main_department.id)`;
-        const condition = `student.user_id = ?`;
+        const studentQueryCondition = `student.user_id = ?`;
 
-        const mainStudentQuery = `select ${studentQuery}, ${subDepartmentQuery}, ${mainDepartmentQuery} from ${join2} where ${condition}`;
+        const mainStudentQuery = `select ${studentQuery}, ${subDepartmentQuery}, ${mainDepartmentQuery} from ${join2} where ${studentQueryCondition}`;
         const student = await dbInstance.runPreparedSelectQuery(
           mainStudentQuery,
           [userDetails.userId]
@@ -116,6 +141,7 @@ export const verifyUser = async (
         userDetails.subDepartment = student[0].sub_department_name;
 
         break;
+      }
 
       case constants.user_type_id.COORDINATOR:
         break;
@@ -124,41 +150,50 @@ export const verifyUser = async (
     }
     return res.status(200).send({ data: userDetails });
   } catch (error) {
-    console.error(`Internal error`);
-    if (error.code === "ER_DUP_ENTRY") {
-      return res.status(409).send({ error: "User already exist" });
+    if (error.code === 'ER_DUP_ENTRY') {
+      return res.status(409).send({ error: 'User already exist' });
     }
 
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };
 
-export const verifyWithToken = async (req: IRequestWithUser, res: Response) => {
+export const verifyWithToken = async (
+  req: RequestWithUser,
+  res: Response
+): Promise<Response> => {
   return res.status(200).send({ data: req.user });
 };
 
-export const resetPassword = async (req: IRequestWithUser, res: Response) => {
+export const resetPassword = async (
+  req: RequestWithUser,
+  res: Response
+): Promise<Response> => {
   try {
     const { email, newPassword } = req.body.data;
     const { dbInstance } = req;
 
     const user = await getEntityRecordFromKey(
-      "user",
-      "email",
+      'user',
+      'email',
       [email],
       dbInstance
     );
-    if (!user.length) {
-      return res.status(404).send({ error: { message: "user not found" } });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (!(user as Record<string, any>[]).length) {
+      return res.status(404).send({ error: { message: 'user not found' } });
     }
 
     const hash = await bcrypt.hash(newPassword, globals.SALT_ROUNDS);
-    const userData = [hash, Date.parse(`${new Date()}`), email];
+    const userData: [string, number, string] = [
+      hash,
+      Date.parse(`${new Date()}`),
+      email,
+    ];
     const updatePasswordQuery = `update user set password = ?, last_modified = ? where email = ?`;
     await updateEntityRecord(updatePasswordQuery, [userData], dbInstance);
-    return res.status(200).send({ data: "successful" });
+    return res.status(200).send({ data: 'successful' });
   } catch (error) {
-    console.log(error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

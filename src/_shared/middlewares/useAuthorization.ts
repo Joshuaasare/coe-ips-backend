@@ -1,10 +1,14 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 
-const isAuthorized: boolean = true;
+const isAuthorized = true;
 export function useAuthorization() {
-  return async function(req: Request, res: Response, next: NextFunction) {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | RequestHandler> => {
     if (!isAuthorized) {
-      res.send(" GEt away not authorized");
+      res.send(' GEt away not authorized');
       return;
     }
     next();

@@ -1,6 +1,7 @@
-import { IRequestWithUser } from "../../../../_shared/middlewares";
-import { Response } from "express";
-import { updateEntityRecord } from "../../../../_shared/services";
+/* eslint-disable @typescript-eslint/camelcase */
+import { Response } from 'express';
+import { RequestWithUser } from '../../../../_shared/middlewares';
+import { updateEntityRecord } from '../../../../_shared/services';
 
 /**
  * update student without location details
@@ -10,11 +11,13 @@ import { updateEntityRecord } from "../../../../_shared/services";
  * @param req request
  * @param res response
  */
-export const updateStudent = async (req: IRequestWithUser, res: Response) => {
+export const updateStudent = async (
+  req: RequestWithUser,
+  res: Response
+): Promise<Response> => {
   try {
     const { dbInstance } = req;
     const { data } = req.body;
-    console.log(data);
     const { id, surname, otherNames, indexNumber, email, phone } = data;
 
     const userData = [email, id];
@@ -26,7 +29,7 @@ export const updateStudent = async (req: IRequestWithUser, res: Response) => {
       indexNumber,
       phone,
       Date.parse(`${new Date()}`),
-      id
+      id,
     ];
 
     const query1 = `update student set surname = ?, other_names = ?,
@@ -37,22 +40,19 @@ export const updateStudent = async (req: IRequestWithUser, res: Response) => {
     await updateEntityRecord(query1, [studentData], dbInstance);
     await updateEntityRecord(query2, [userData], dbInstance);
 
-    return res.status(200).send({ data: "Successful" });
+    return res.status(200).send({ data: 'Successful' });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };
 
 export const updateStudentLocation = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-) => {
+): Promise<Response> => {
   try {
     const { dbInstance, user } = req;
     const { data } = req.body;
-
-    console.log(data);
 
     const {
       id,
@@ -61,7 +61,7 @@ export const updateStudentLocation = async (
       indexNumber,
       email,
       phone,
-      locationId
+      locationId,
     } = data.studentDetails;
 
     const {
@@ -70,11 +70,10 @@ export const updateStudentLocation = async (
       address,
       route,
       locality,
-      subLocality,
       district,
       region,
       country,
-      google_place_id
+      google_place_id,
     } = data.locationDetails;
 
     const studentData = [
@@ -89,7 +88,7 @@ export const updateStudentLocation = async (
       coords.lat,
       coords.lng,
       Date.parse(`${new Date()}`),
-      id
+      id,
     ];
 
     const locationData = [
@@ -102,7 +101,7 @@ export const updateStudentLocation = async (
       coords.lng,
       user.userId,
       Date.parse(`${new Date()}`),
-      locationId
+      locationId,
     ];
 
     const userData = [email, id];
@@ -121,9 +120,8 @@ export const updateStudentLocation = async (
     await updateEntityRecord(query2, [locationData], dbInstance);
     await updateEntityRecord(query3, [userData], dbInstance);
 
-    return res.status(200).send({ data: "Successful" });
+    return res.status(200).send({ data: 'Successful' });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

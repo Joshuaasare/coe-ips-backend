@@ -1,1 +1,1 @@
-export * from "./getCurrentStudent";
+export * from './getCurrentStudent';

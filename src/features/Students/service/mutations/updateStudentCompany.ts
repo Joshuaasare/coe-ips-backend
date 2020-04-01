@@ -1,13 +1,11 @@
-import { IRequestWithUser } from "../../../../_shared/middlewares";
-import { Response } from "express";
-import bcrypt from "bcryptjs";
-import { globals } from "../../../../_shared/globals";
-import { updateEntityRecord } from "../../../../_shared/services";
+import { Response } from 'express';
+import { RequestWithUser } from '../../../../_shared/middlewares';
+import { updateEntityRecord } from '../../../../_shared/services';
 
 export const updateStudentCompany = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-) => {
+): Promise<Response> => {
   try {
     const { dbInstance } = req;
     const {
@@ -20,28 +18,22 @@ export const updateStudentCompany = async (
       repName,
       repContact,
       repEmail,
-      locationId,
       acceptanceLetterUrl,
       locationDetails,
       website,
       supervisorName,
       supervisorContact,
-      supervisorEmail
+      supervisorEmail,
     } = req.body.data;
 
-    console.log(req.body.data);
-
-    const hash = await bcrypt.hash(contact, globals.SALT_ROUNDS);
     const locationData = [
       locationDetails.name,
       locationDetails.address,
       locationDetails.coords.lat,
       locationDetails.coords.lng,
       Date.parse(`${new Date()}`),
-      locationDetails.id
+      locationDetails.id,
     ];
-
-    const userData = [email, hash, Date.parse(`${new Date()}`), companyId];
 
     const companyData = [
       name,
@@ -53,7 +45,7 @@ export const updateStudentCompany = async (
       repContact,
       repEmail,
       Date.parse(`${new Date()}`),
-      companyId
+      companyId,
     ];
 
     const studentData = [
@@ -62,41 +54,26 @@ export const updateStudentCompany = async (
       supervisorContact,
       supervisorEmail,
       Date.parse(`${new Date()}`),
-      studentUserId
+      studentUserId,
     ];
 
     const updateLocationQuery = `update location set name = ?,address = ?,latitude = ?, 
     longitude = ?, last_modified = ? where id = ?`;
-    const updatedLocation = await updateEntityRecord(
-      updateLocationQuery,
-      [locationData],
-      dbInstance
-    );
-
-    const updateUserQuery = `update user set email = ?, password = ?, last_modified = ? where user_id = ?`;
+    await updateEntityRecord(updateLocationQuery, [locationData], dbInstance);
 
     const updateCompanyQuery = `update company set name = ?,email = ?,
     phone = ?,postal_address = ?,website = ?,representative_name = ?, representative_phone = ?,
     representative_email = ?, last_modified = ? where user_id = ?`;
 
-    const updatedCompany = await updateEntityRecord(
-      updateCompanyQuery,
-      [companyData],
-      dbInstance
-    );
+    await updateEntityRecord(updateCompanyQuery, [companyData], dbInstance);
 
     const updateStudentQuery = `update student set acceptance_letter_url = ?,supervisor_name = ?,
     supervisor_contact = ?,supervisor_email = ?, last_modified = ? where user_id = ?`;
 
-    const updatedStudent = await updateEntityRecord(
-      updateStudentQuery,
-      [studentData],
-      dbInstance
-    );
+    await updateEntityRecord(updateStudentQuery, [studentData], dbInstance);
 
-    return res.status(200).send({ data: "successful" });
+    return res.status(200).send({ data: 'successful' });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

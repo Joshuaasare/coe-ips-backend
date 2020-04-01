@@ -1,14 +1,15 @@
-import "reflect-metadata";
-import { Methods, MetadataKeys } from "../globals";
-import { RequestHandler } from "express";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import 'reflect-metadata';
+import { RequestHandler } from 'express';
+import { Methods, MetadataKeys } from '../globals';
 
 interface RouteHandlerDescriptor extends PropertyDescriptor {
   value?: RequestHandler;
 }
 
 function routeBinder(method: string) {
-  return function(path: string) {
-    return function(target: any, key: string, desc: RouteHandlerDescriptor) {
+  return (path: string) => {
+    return (target: Record<string, any>, key: string): void => {
       Reflect.defineMetadata(MetadataKeys.path, path, target, key);
       Reflect.defineMetadata(MetadataKeys.method, method, target, key);
     };

@@ -1,13 +1,12 @@
-import { IRequestWithUser } from "../../../../_shared/middlewares";
-import { Response } from "express";
-import { getAllRecords } from "../../../../_shared/services";
-import forEach from "lodash/forEach";
-import { globals } from "../../../../_shared/globals";
+/* eslint-disable @typescript-eslint/camelcase */
+import { Response } from 'express';
+import { RequestWithUser } from '../../../../_shared/middlewares';
+import { globals } from '../../../../_shared/globals';
 
 export const getCompaniesWithSlots = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-) => {
+): Promise<Response> => {
   try {
     const { dbInstance } = req;
     const companyQuery = `company.user_id as company_id,
@@ -39,10 +38,10 @@ export const getCompaniesWithSlots = async (
     ${mainDepartmentQuery}, ${locationQuery} from ${join4} where ${condition} order by name`;
 
     const companies = await dbInstance.runPreparedSelectQuery(mainQuery, [
-      globals.school.ACAD_YEAR
+      globals.school.ACAD_YEAR,
     ]);
 
-    (async function getPlacedStudents(index: number) {
+    return (async function getPlacedStudents(index: number): Promise<Response> {
       if (!companies[index]) {
         return res.status(200).send({ data: companies });
       }
@@ -66,7 +65,7 @@ export const getCompaniesWithSlots = async (
       const studentData = [
         companies[index].company_id,
         companies[index].sub_department_id,
-        globals.school.ACAD_YEAR
+        globals.school.ACAD_YEAR,
       ];
       const students = await dbInstance.runPreparedSelectQuery(
         mainStudentQuery,
@@ -75,7 +74,7 @@ export const getCompaniesWithSlots = async (
 
       const studentOptionData = [
         companies[index].sub_department_id,
-        globals.school.ACAD_YEAR
+        globals.school.ACAD_YEAR,
       ];
 
       const studentOptionQuery = `select ${studentQuery}, ${studentLocationQuery} from ${join} where want_placement = 1 AND sub_department_id = ? AND acad_year = ?`;
@@ -86,10 +85,9 @@ export const getCompaniesWithSlots = async (
 
       companies[index].students = students;
       companies[index].student_options = studentOptions;
-      getPlacedStudents(++index);
+      return getPlacedStudents(++index);
     })(0);
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };

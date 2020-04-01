@@ -1,15 +1,16 @@
-import { Response } from "express";
-import { Database, PostRows } from "../../_shared/dbWrapper/Database";
-import bcrypt from "bcryptjs";
-import { IRequestWithUser } from "../../_shared/middlewares";
+/* eslint-disable @typescript-eslint/camelcase */
+import { Response } from 'express';
+import bcrypt from 'bcryptjs';
+import { Database, PostRows } from '../../_shared/dbWrapper/Database';
+import { RequestWithUser } from '../../_shared/middlewares';
 
 const saltRounds = 10;
 
 export const getCurrentStudent = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-): Promise<any> => {
-  const dbInstance: Database = req.dbInstance;
+): Promise<Response> => {
+  const { dbInstance } = req;
   const { user } = req;
   try {
     const studentQuery = `student.user_id as student_user_id,
@@ -67,10 +68,9 @@ export const getCurrentStudent = async (
     const mainQuery = `select ${studentQuery}, ${subDepartmentQuery}, ${mainDepartmentQuery}, 
      ${locationQuery}, ${companyQuery} from ${join4} where ${condition}`;
 
-    const student: Array<any> = await dbInstance.runPreparedSelectQuery(
-      mainQuery,
-      [user.userId]
-    );
+    const student = await dbInstance.runPreparedSelectQuery(mainQuery, [
+      user.userId,
+    ]);
 
     const companyLocationQuery = `location.name as location_name, 
     location.address as location_address,
@@ -79,18 +79,16 @@ export const getCurrentStudent = async (
 
     const mainCompanyLocationQuery = `select ${companyLocationQuery} from location where id = ?`;
 
-    const companyLocation: Array<any> = await dbInstance.runPreparedSelectQuery(
+    const companyLocation = await dbInstance.runPreparedSelectQuery(
       mainCompanyLocationQuery,
       [student[0].company_location_id]
     );
 
-    console.log(student);
-
-    if (student.length === 0) {
+    if ((student as Record<string, string | number | boolean>[]).length === 0) {
       return res.status(404).send({
         error: {
-          message: "Student name does not exist"
-        }
+          message: 'Student name does not exist',
+        },
       });
     }
 
@@ -134,24 +132,21 @@ export const getCurrentStudent = async (
       internshipPlacementDate: student[0].student_internship_placement_date,
       internshipStartDate: student[0].student_internship_start_date,
       internshipEvaluationDate: student[0].student_internship_evaluation_date,
-      internshipCompletionDate: student[0].student_internship_completion_date
+      internshipCompletionDate: student[0].student_internship_completion_date,
     };
 
     return res.status(200).send({ data });
   } catch (error) {
-    console.log(`internal error`, error);
-
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };
 
 export const addStudentCompany = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-) => {
+): Promise<Response> => {
   try {
-    const { user, dbInstance } = req;
-    console.log(req.body);
+    const { dbInstance } = req;
     const {
       name,
       email,
@@ -160,17 +155,16 @@ export const addStudentCompany = async (
       repName,
       repContact,
       repEmail,
-      locationId,
       acceptanceLetterUrl,
       locationDetails,
-      website
+      website,
     } = req.body.data;
 
     const hash = await bcrypt.hash(contact, saltRounds);
 
-    const addLocationQuery = "insert into location set ?";
-    const addUserQuery = "insert into user set ?";
-    const addCompanyQuery = "insert into company set ?";
+    const addLocationQuery = 'insert into location set ?';
+    const addUserQuery = 'insert into user set ?';
+    const addCompanyQuery = 'insert into company set ?';
     const updateStudentQuery = `update student set acceptance_letter_url = ?, 
     internship_placement_date = ?, registered_company = ?, want_placement = ?, 
     company_id = ?, last_modified = ?`;
@@ -181,7 +175,7 @@ export const addStudentCompany = async (
       latitude: locationDetails.coords.lat,
       longitude: locationDetails.coords.lng,
       created_at: Date.parse(`${new Date()}`),
-      last_modified: Date.parse(`${new Date()}`)
+      last_modified: Date.parse(`${new Date()}`),
     };
 
     const userData = {
@@ -189,78 +183,45 @@ export const addStudentCompany = async (
       email,
       password: hash,
       created_at: Date.parse(`${new Date()}`),
-      last_modified: Date.parse(`${new Date()}`)
+      last_modified: Date.parse(`${new Date()}`),
     };
 
-    const insertedLocation: PostRows = await dbInstance.runPostQuery(
+    const insertedLocation = await dbInstance.runPostQuery(
       addLocationQuery,
       locationData
     );
 
-    const insertedUser: PostRows = await dbInstance.runPostQuery(
-      addUserQuery,
-      userData
-    );
+    const insertedUser = await dbInstance.runPostQuery(addUserQuery, userData);
 
     const companyData = {
-      user_id: insertedUser.insertId,
+      user_id: (insertedUser as PostRows).insertId,
       name,
       email,
       phone: contact,
-      location_id: insertedLocation.insertId,
+      location_id: (insertedLocation as PostRows).insertId,
       postal_address: address,
       website,
       representative_name: repName,
       representative_phone: repContact,
       representative_email: repEmail,
-      created_at: Date.parse(`${new Date()}`)
+      created_at: Date.parse(`${new Date()}`),
     };
 
-    const insertedCompany: PostRows = await dbInstance.runPostQuery(
-      addCompanyQuery,
-      companyData
-    );
+    await dbInstance.runPostQuery(addCompanyQuery, companyData);
 
     const updatedStudentData = [
       acceptanceLetterUrl,
       Date.parse(`${new Date()}`),
       true,
       false,
-      insertedUser.insertId,
-      Date.parse(`${new Date()}`)
+      (insertedUser as PostRows).insertId,
+      Date.parse(`${new Date()}`),
     ];
 
-    const rows = await dbInstance.runPreparedQuery(updateStudentQuery, [
-      updatedStudentData
-    ]);
+    await dbInstance.runPreparedQuery(updateStudentQuery, [updatedStudentData]);
 
-    return res.status(200).send({ data: "Successful" });
+    return res.status(200).send({ data: 'Successful' });
   } catch (error) {
-    console.log(`internal error`, error);
-
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
-};
-
-export const getAllStudents = async (
-  req: IRequestWithUser,
-  res: Response
-): Promise<any> => {
-  const dbInstance: Database = new Database();
-};
-
-export const updateSingleStudent = async (
-  req: IRequestWithUser,
-  res: Response
-): Promise<any> => {
-  const dbInstance: Database = new Database();
-  const { user } = req;
-};
-
-export const deleteSingleStudent = async (
-  req: IRequestWithUser,
-  res: Response
-): Promise<any> => {
-  const dbInstance: Database = new Database();
-  const { user } = req;
 };

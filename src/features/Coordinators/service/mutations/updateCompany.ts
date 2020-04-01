@@ -1,13 +1,15 @@
-import { IRequestWithUser } from "../../../../_shared/middlewares";
-import { Response } from "express";
-import { globals } from "../../../../_shared/globals";
-import { updateEntityRecord } from "../../../../_shared/services";
+import { Response } from 'express';
+import { RequestWithUser } from '../../../../_shared/middlewares';
+import { globals } from '../../../../_shared/globals';
+import { updateEntityRecord } from '../../../../_shared/services';
 
-export const updateCompany = async (req: IRequestWithUser, res: Response) => {
+export const updateCompany = async (
+  req: RequestWithUser,
+  res: Response
+): Promise<Response> => {
   try {
     const { dbInstance } = req;
     const { data } = req.body;
-    console.log(data);
 
     const { id, email, placementLetterUrl } = data;
 
@@ -15,41 +17,34 @@ export const updateCompany = async (req: IRequestWithUser, res: Response) => {
       email,
       placementLetterUrl,
       id,
-      globals.school.ACAD_YEAR
+      globals.school.ACAD_YEAR,
     ];
 
     const query1 = `update company set email = ?, placement_letter_url = ? where user_id = ? AND acad_year = ?`;
 
     await updateEntityRecord(query1, [companyData], dbInstance);
 
-    return res.status(200).send({ data: "successful" });
+    return res.status(200).send({ data: 'successful' });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };
 
 export const updateCompanyLocation = async (
-  req: IRequestWithUser,
+  req: RequestWithUser,
   res: Response
-) => {
+): Promise<Response> => {
   try {
     const { dbInstance, user } = req;
     const { data } = req.body;
 
-    const {
-      id,
-      name,
-      email,
-      placementLetterUrl,
-      locationId
-    } = data.companyDetails;
+    const { id, email, placementLetterUrl, locationId } = data.companyDetails;
 
-    const companyData = [
+    const companyData: [string, string, number, number] = [
       email,
       placementLetterUrl,
       id,
-      globals.school.ACAD_YEAR
+      globals.school.ACAD_YEAR,
     ];
 
     const {
@@ -58,11 +53,9 @@ export const updateCompanyLocation = async (
       address,
       route,
       locality,
-      subLocality,
       district,
       region,
       country,
-      google_place_id
     } = data.locationDetails;
 
     const locationData = [
@@ -75,7 +68,7 @@ export const updateCompanyLocation = async (
       coords.lng,
       user.userId,
       Date.parse(`${new Date()}`),
-      locationId
+      locationId,
     ];
 
     const query1 = `update company set email = ?, placement_letter_url = ? where user_id = ? AND acad_year = ?`;
@@ -85,10 +78,8 @@ export const updateCompanyLocation = async (
     await updateEntityRecord(query1, [companyData], dbInstance);
     await updateEntityRecord(query2, [locationData], dbInstance);
 
-    console.log(data);
-    return res.status(200).send({ data: "successful" });
+    return res.status(200).send({ data: 'successful' });
   } catch (error) {
-    console.log(`internal error`, error);
-    return res.status(422).send({ error: "Could not process request" });
+    return res.status(422).send({ error: 'Could not process request' });
   }
 };
