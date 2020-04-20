@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-param-reassign */
 import msql from 'mysql2';
 import { globals, constants } from '../globals';
 
